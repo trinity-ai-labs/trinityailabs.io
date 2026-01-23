@@ -235,10 +235,10 @@ function StepCard({ number, title, description, code }: {
   code: string;
 }) {
   return (
-    <div>
+    <div className="flex flex-col h-full">
       <div className="text-5xl font-bold text-emerald-500/20 mb-4 font-mono">{number}</div>
       <h3 className="text-xl font-semibold mb-2">{title}</h3>
-      <p className="text-muted-foreground mb-4">{description}</p>
+      <p className="text-muted-foreground mb-4 flex-grow">{description}</p>
       <div className="rounded-lg border border-border bg-card p-4 font-mono text-xs">
         <pre className="text-muted-foreground whitespace-pre-wrap">{code}</pre>
       </div>
