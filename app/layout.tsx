@@ -13,9 +13,39 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Trinity AI Labs | Autonomous AI Development Loops",
-  description: "Point at a project, define your stories, let AI build while you're AFK. Parallel features, smart orchestration, crash recovery.",
-  keywords: ["AI", "development", "autonomous", "coding", "Claude", "automation"],
+  title: "Trinity AI Labs | Autonomous AI Development Orchestrator",
+  description:
+    "Describe what you want to build. Trinity plans it, orchestrates AI agents to write and review code in parallel, and ships PRs — autonomously. Available for macOS, Windows & Linux.",
+  keywords: [
+    "AI",
+    "development",
+    "autonomous",
+    "coding",
+    "orchestrator",
+    "AI agents",
+    "code generation",
+    "parallel execution",
+    "Tauri",
+    "desktop app",
+  ],
+  openGraph: {
+    title: "Trinity AI Labs | Build While You're AFK",
+    description:
+      "Autonomous AI development orchestrator. Plan, execute, review, and ship — while you sleep.",
+    url: "https://trinityailabs.io",
+    siteName: "Trinity AI Labs",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Trinity AI Labs | Build While You're AFK",
+    description:
+      "Autonomous AI development orchestrator. Plan, execute, review, and ship — while you sleep.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
@@ -24,7 +54,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className="dark scroll-smooth">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
       >
