@@ -1,11 +1,15 @@
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+let _resend: Resend | null = null;
+function getResend() {
+  if (!_resend) _resend = new Resend(process.env.RESEND_API_KEY);
+  return _resend;
+}
 
 const FROM_ADDRESS = "Trinity AI Labs <info@trinityailabs.com>";
 
 export async function sendVerificationEmail(to: string, url: string) {
-  await resend.emails.send({
+  await getResend().emails.send({
     from: FROM_ADDRESS,
     to,
     subject: "Verify your email - Trinity AI Labs",
@@ -27,7 +31,7 @@ export async function sendVerificationEmail(to: string, url: string) {
 }
 
 export async function sendInviteEmail(to: string, inviteUrl: string) {
-  await resend.emails.send({
+  await getResend().emails.send({
     from: FROM_ADDRESS,
     to,
     subject: "You're invited to Trinity AI Labs",
@@ -49,7 +53,7 @@ export async function sendInviteEmail(to: string, inviteUrl: string) {
 }
 
 export async function sendWelcomeEmail(to: string, name: string) {
-  await resend.emails.send({
+  await getResend().emails.send({
     from: FROM_ADDRESS,
     to,
     subject: "Welcome to Trinity AI Labs",
