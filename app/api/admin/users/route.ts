@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { getAdminSession } from "@/lib/admin";
-import { ensureSubscriptionsTable } from "@/lib/ensure-tables";
+import {
+  ensureSubscriptionsTable,
+  ensureRoleColumn,
+} from "@/lib/ensure-tables";
 
 const PAGE_SIZE = 20;
 
@@ -11,7 +14,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
-  await ensureSubscriptionsTable();
+  await Promise.all([ensureSubscriptionsTable(), ensureRoleColumn()]);
 
   const search = req.nextUrl.searchParams.get("search") ?? "";
   const page = Math.max(1, Number(req.nextUrl.searchParams.get("page") ?? "1"));
@@ -29,7 +32,7 @@ export async function GET(req: NextRequest) {
       args,
     }),
     db.execute({
-      sql: `SELECT u.id, u.name, u.email, u.role, u.banned, u.createdAt,
+      sql: `SELECT u.id, u.name, u.email, u.role, u.createdAt,
                    s.status as sub_status, s.lemonsqueezy_subscription_id, s.lemonsqueezy_customer_id
             FROM user u
             LEFT JOIN subscriptions s ON s.user_id = u.id

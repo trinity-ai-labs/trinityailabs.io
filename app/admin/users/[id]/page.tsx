@@ -17,8 +17,6 @@ interface UserDetail {
   name: string;
   email: string;
   role: string | null;
-  banned: number | null;
-  banReason: string | null;
   createdAt: string;
 }
 
@@ -111,16 +109,6 @@ export default function UserDetailPage({
                 : "—"
             }
           />
-          {user.banned ? (
-            <Row
-              label="Status"
-              value={
-                <Badge variant="destructive">
-                  Banned{user.banReason ? `: ${user.banReason}` : ""}
-                </Badge>
-              }
-            />
-          ) : null}
         </CardContent>
       </Card>
 

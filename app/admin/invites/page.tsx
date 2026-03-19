@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, use } from "react";
+import { useState, use, Suspense, useCallback } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "@/components/ui/data-table";
 import { Badge } from "@/components/ui/badge";
@@ -24,35 +24,34 @@ function fetchInvitesData(): Promise<Invite[]> {
     .then((data) => data.invites ?? []);
 }
 
-export default function AdminInvitesPage() {
-  const [invitesPromise, setInvitesPromise] = useState(() => fetchInvitesData());
+function InvitesSkeleton() {
+  return (
+    <div className="rounded-md border">
+      <div className="h-12 border-b bg-muted/30" />
+      {Array.from({ length: 3 }).map((_, i) => (
+        <div key={i} className="h-14 border-b flex items-center gap-4 px-4">
+          <div className="h-4 w-48 bg-muted animate-pulse rounded" />
+          <div className="h-5 w-12 bg-muted animate-pulse rounded-full" />
+          <div className="h-5 w-16 bg-muted animate-pulse rounded-full" />
+          <div className="h-4 w-24 bg-muted animate-pulse rounded" />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function InvitesTable({
+  invitesPromise,
+  onRefresh,
+}: {
+  invitesPromise: Promise<Invite[]>;
+  onRefresh: () => void;
+}) {
   const invites = use(invitesPromise);
-  const [email, setEmail] = useState("");
-  const [freeAccess, setFreeAccess] = useState(false);
-  const [sending, setSending] = useState(false);
-
-  function refresh() {
-    setInvitesPromise(fetchInvitesData());
-  }
-
-  async function sendInvite(e: React.FormEvent) {
-    e.preventDefault();
-    if (!email) return;
-    setSending(true);
-    await fetch("/api/admin/invites", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, freeAccess }),
-    });
-    setEmail("");
-    setFreeAccess(false);
-    setSending(false);
-    refresh();
-  }
 
   async function revokeInvite(id: string) {
     await fetch(`/api/admin/invites/${id}`, { method: "DELETE" });
-    refresh();
+    onRefresh();
   }
 
   const columns: ColumnDef<Invite>[] = [
@@ -110,6 +109,43 @@ export default function AdminInvitesPage() {
   ];
 
   return (
+    <DataTable
+      columns={columns}
+      data={invites}
+      searchKey="email"
+      searchPlaceholder="Search by email..."
+    />
+  );
+}
+
+export default function AdminInvitesPage() {
+  const [invitesPromise, setInvitesPromise] = useState(() =>
+    fetchInvitesData()
+  );
+  const [email, setEmail] = useState("");
+  const [freeAccess, setFreeAccess] = useState(false);
+  const [sending, setSending] = useState(false);
+
+  const refresh = useCallback(() => {
+    setInvitesPromise(fetchInvitesData());
+  }, []);
+
+  async function sendInvite(e: React.FormEvent) {
+    e.preventDefault();
+    if (!email) return;
+    setSending(true);
+    await fetch("/api/admin/invites", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, freeAccess }),
+    });
+    setEmail("");
+    setFreeAccess(false);
+    setSending(false);
+    refresh();
+  }
+
+  return (
     <div className="space-y-6">
       <h1 className="text-2xl font-bold">Invitations</h1>
 
@@ -144,12 +180,9 @@ export default function AdminInvitesPage() {
         </Button>
       </form>
 
-      <DataTable
-        columns={columns}
-        data={invites}
-        searchKey="email"
-        searchPlaceholder="Search by email..."
-      />
+      <Suspense fallback={<InvitesSkeleton />}>
+        <InvitesTable invitesPromise={invitesPromise} onRefresh={refresh} />
+      </Suspense>
     </div>
   );
 }

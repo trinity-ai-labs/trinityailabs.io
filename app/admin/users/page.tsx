@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, use } from "react";
+import { useState, use, Suspense, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "@/components/ui/data-table";
@@ -19,7 +19,6 @@ interface UserRow {
   name: string;
   email: string;
   role: string | null;
-  banned: number | null;
   createdAt: string;
   sub_status: string | null;
   lemonsqueezy_subscription_id: string | null;
@@ -48,25 +47,47 @@ function subBadge(status: string | null) {
   return <Badge variant={map[status] ?? "outline"}>{status}</Badge>;
 }
 
-export default function AdminUsersPage() {
-  const router = useRouter();
-  const [usersPromise, setUsersPromise] = useState(() => fetchUsersData());
-  const users = use(usersPromise);
+function UsersSkeleton() {
+  return (
+    <div className="space-y-6">
+      <div className="h-8 w-24 bg-muted animate-pulse rounded" />
+      <div className="h-10 w-80 bg-muted animate-pulse rounded" />
+      <div className="rounded-md border">
+        <div className="h-12 border-b bg-muted/30" />
+        {Array.from({ length: 5 }).map((_, i) => (
+          <div key={i} className="h-14 border-b flex items-center gap-4 px-4">
+            <div className="h-4 w-32 bg-muted animate-pulse rounded" />
+            <div className="h-4 w-48 bg-muted animate-pulse rounded" />
+            <div className="h-5 w-16 bg-muted animate-pulse rounded-full" />
+            <div className="h-5 w-16 bg-muted animate-pulse rounded-full" />
+            <div className="h-4 w-24 bg-muted animate-pulse rounded" />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
-  function refresh() {
-    setUsersPromise(fetchUsersData());
-  }
+function UsersTable({
+  usersPromise,
+  onRefresh,
+}: {
+  usersPromise: Promise<UserRow[]>;
+  onRefresh: () => void;
+}) {
+  const router = useRouter();
+  const users = use(usersPromise);
 
   async function compUser(userId: string) {
     await fetch(`/api/admin/users/${userId}/comp`, { method: "POST" });
-    refresh();
+    onRefresh();
   }
 
   async function cancelSub(subId: string) {
     await fetch(`/api/admin/subscriptions/${subId}/cancel`, {
       method: "POST",
     });
-    refresh();
+    onRefresh();
   }
 
   const columns: ColumnDef<UserRow>[] = [
@@ -140,14 +161,28 @@ export default function AdminUsersPage() {
   ];
 
   return (
+    <DataTable
+      columns={columns}
+      data={users}
+      searchKey="email"
+      searchPlaceholder="Search by email..."
+    />
+  );
+}
+
+export default function AdminUsersPage() {
+  const [usersPromise, setUsersPromise] = useState(() => fetchUsersData());
+
+  const refresh = useCallback(() => {
+    setUsersPromise(fetchUsersData());
+  }, []);
+
+  return (
     <div className="space-y-6">
       <h1 className="text-2xl font-bold">Users</h1>
-      <DataTable
-        columns={columns}
-        data={users}
-        searchKey="email"
-        searchPlaceholder="Search by email..."
-      />
+      <Suspense fallback={<UsersSkeleton />}>
+        <UsersTable usersPromise={usersPromise} onRefresh={refresh} />
+      </Suspense>
     </div>
   );
 }

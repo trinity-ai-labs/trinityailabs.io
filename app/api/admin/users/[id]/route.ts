@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { getAdminSession } from "@/lib/admin";
-import { ensureSubscriptionsTable } from "@/lib/ensure-tables";
+import {
+  ensureSubscriptionsTable,
+  ensureRoleColumn,
+} from "@/lib/ensure-tables";
 
 export async function GET(
   req: NextRequest,
@@ -15,9 +18,11 @@ export async function GET(
   const { id } = await params;
   await ensureSubscriptionsTable();
 
+  await ensureRoleColumn();
+
   const [userResult, subResult] = await Promise.all([
     db.execute({
-      sql: `SELECT id, name, email, role, banned, banReason, createdAt FROM user WHERE id = ?`,
+      sql: `SELECT id, name, email, role, createdAt FROM user WHERE id = ?`,
       args: [id],
     }),
     db.execute({

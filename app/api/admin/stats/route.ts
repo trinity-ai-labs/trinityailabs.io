@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { getAdminSession } from "@/lib/admin";
-import { ensureSubscriptionsTable } from "@/lib/ensure-tables";
+import {
+  ensureSubscriptionsTable,
+  ensureRoleColumn,
+} from "@/lib/ensure-tables";
 
 export async function GET(req: NextRequest) {
   const session = await getAdminSession(req.headers);
@@ -9,7 +12,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
-  await ensureSubscriptionsTable();
+  await Promise.all([ensureSubscriptionsTable(), ensureRoleColumn()]);
 
   const [usersResult, subsResult, signupsResult] = await Promise.all([
     db.execute("SELECT COUNT(*) as count FROM user"),
