@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, use } from "react";
+import { useState, use, Suspense } from "react";
 import { useRouter } from "next/navigation";
 import {
   Card,
@@ -29,27 +29,60 @@ interface Subscription {
   current_period_end: string | null;
 }
 
-export default function UserDetailPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const { id } = use(params);
-  const router = useRouter();
-  const [user, setUser] = useState<UserDetail | null>(null);
-  const [subscription, setSubscription] = useState<Subscription | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [acting, setActing] = useState(false);
+interface UserData {
+  user: UserDetail;
+  subscription: Subscription | null;
+}
 
-  useEffect(() => {
-    fetch(`/api/admin/users/${id}`)
-      .then((r) => r.json())
-      .then((data) => {
-        setUser(data.user);
-        setSubscription(data.subscription);
-      })
-      .finally(() => setLoading(false));
-  }, [id]);
+function fetchUserData(id: string): Promise<UserData> {
+  return fetch(`/api/admin/users/${id}`).then((r) => r.json());
+}
+
+function UserDetailSkeleton() {
+  return (
+    <div className="space-y-6 max-w-2xl">
+      <div className="h-8 w-32 bg-muted animate-pulse rounded" />
+      <Card>
+        <CardHeader>
+          <div className="h-5 w-20 bg-muted animate-pulse rounded" />
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="flex items-center justify-between">
+              <div className="h-4 w-16 bg-muted animate-pulse rounded" />
+              <div className="h-4 w-40 bg-muted animate-pulse rounded" />
+            </div>
+          ))}
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <div className="h-5 w-28 bg-muted animate-pulse rounded" />
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="h-4 w-48 bg-muted animate-pulse rounded" />
+          <div className="flex gap-2 pt-4 border-t">
+            <div className="h-8 w-20 bg-muted animate-pulse rounded" />
+            <div className="h-8 w-20 bg-muted animate-pulse rounded" />
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+function UserDetailContent({
+  dataPromise,
+  id,
+}: {
+  dataPromise: Promise<UserData>;
+  id: string;
+}) {
+  const router = useRouter();
+  const initialData = use(dataPromise);
+  const [user, setUser] = useState(initialData.user);
+  const [subscription, setSubscription] = useState(initialData.subscription);
+  const [acting, setActing] = useState(false);
 
   async function act(url: string, method = "POST") {
     setActing(true);
@@ -58,14 +91,6 @@ export default function UserDetailPage({
     setUser(data.user);
     setSubscription(data.subscription);
     setActing(false);
-  }
-
-  if (loading || !user) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <p className="text-muted-foreground">Loading...</p>
-      </div>
-    );
   }
 
   const subId = subscription?.lemonsqueezy_subscription_id;
@@ -228,5 +253,20 @@ function Row({
       <span className="text-sm text-muted-foreground">{label}</span>
       <span className="text-sm font-medium">{value}</span>
     </div>
+  );
+}
+
+export default function UserDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = use(params);
+  const [dataPromise] = useState(() => fetchUserData(id));
+
+  return (
+    <Suspense fallback={<UserDetailSkeleton />}>
+      <UserDetailContent dataPromise={dataPromise} id={id} />
+    </Suspense>
   );
 }
