@@ -59,10 +59,8 @@ function getAuth(): AuthInstance {
 }
 
 export const auth = new Proxy({} as AuthInstance, {
-  get(_target, prop, receiver) {
-    const instance = getAuth();
-    const value = Reflect.get(instance, prop, receiver);
-    return typeof value === "function" ? value.bind(instance) : value;
+  get(_target, prop) {
+    return Reflect.get(getAuth(), prop);
   },
   has(_target, prop) {
     return prop in getAuth();

@@ -23,8 +23,8 @@ export async function GET() {
     }
 
     return NextResponse.json(result.rows[0]);
-  } catch {
-    // Table may not exist yet
+  } catch (err) {
+    console.error("[billing/status] DB error:", err);
     return NextResponse.json(null);
   }
 }
