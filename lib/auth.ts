@@ -58,10 +58,17 @@ function getAuth(): AuthInstance {
   return holder.instance;
 }
 
-export const auth = new Proxy({} as AuthInstance, {
+// Proxy over a function target so both property access and function calls work
+// (Better Auth's handler is callable via toNextJsHandler)
+const noop = function () {} as unknown as AuthInstance;
+export const auth = new Proxy(noop, {
   get(_target, prop, receiver) {
     const instance = getAuth();
     const value = Reflect.get(instance, prop, receiver);
     return typeof value === "function" ? value.bind(instance) : value;
   },
-});
+  apply(_target, thisArg, args) {
+    const instance = getAuth();
+    return Reflect.apply(instance as unknown as CallableFunction, thisArg, args);
+  },
+}) as unknown as AuthInstance;
