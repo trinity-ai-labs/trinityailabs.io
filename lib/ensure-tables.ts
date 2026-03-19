@@ -42,3 +42,27 @@ export async function ensureInvitesTable() {
     )
   `);
 }
+
+export async function ensureDeviceCodesTable() {
+  await db.execute(`
+    CREATE TABLE IF NOT EXISTS device_codes (
+      code TEXT PRIMARY KEY,
+      user_id TEXT,
+      status TEXT NOT NULL DEFAULT 'pending',
+      created_at TEXT DEFAULT (datetime('now')),
+      expires_at TEXT NOT NULL
+    )
+  `);
+}
+
+export async function ensureRefreshTokensTable() {
+  await db.execute(`
+    CREATE TABLE IF NOT EXISTS refresh_tokens (
+      token TEXT PRIMARY KEY,
+      user_id TEXT NOT NULL,
+      expires_at TEXT NOT NULL,
+      revoked INTEGER NOT NULL DEFAULT 0,
+      created_at TEXT DEFAULT (datetime('now'))
+    )
+  `);
+}

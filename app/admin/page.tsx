@@ -37,7 +37,14 @@ const subChartConfig: ChartConfig = {
   past_due: { label: "Past Due", color: "#8b5cf6" },
 };
 
-const PIE_COLORS = ["#10b981", "#06b6d4", "#ef4444", "#f59e0b", "#8b5cf6"];
+const STATUS_COLORS: Record<string, string> = {
+  active: "#10b981",
+  comp: "#06b6d4",
+  cancelled: "#ef4444",
+  paused: "#f59e0b",
+  past_due: "#8b5cf6",
+  inactive: "#6b7280",
+};
 
 function fetchStats(): Promise<Stats> {
   return fetch("/api/admin/stats").then((r) => r.json());
@@ -163,31 +170,47 @@ function OverviewContent({
           </CardHeader>
           <CardContent>
             {pieData.length > 0 ? (
-              <ChartContainer
-                config={subChartConfig}
-                className="h-[250px] w-full !aspect-auto"
-              >
-                <PieChart>
-                  <ChartTooltip content={<ChartTooltipContent />} />
-                  <Pie
-                    data={pieData}
-                    dataKey="value"
-                    nameKey="name"
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={60}
-                    outerRadius={100}
-                    paddingAngle={2}
-                  >
-                    {pieData.map((_, i) => (
-                      <Cell
-                        key={i}
-                        fill={PIE_COLORS[i % PIE_COLORS.length]}
+              <div className="space-y-4">
+                <ChartContainer
+                  config={subChartConfig}
+                  className="h-[200px] w-full !aspect-auto"
+                >
+                  <PieChart>
+                    <ChartTooltip content={<ChartTooltipContent />} />
+                    <Pie
+                      data={pieData}
+                      dataKey="value"
+                      nameKey="name"
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={50}
+                      outerRadius={85}
+                      paddingAngle={pieData.length > 1 ? 2 : 0}
+                    >
+                      {pieData.map((entry) => (
+                        <Cell
+                          key={entry.name}
+                          fill={STATUS_COLORS[entry.name] ?? "#6b7280"}
+                        />
+                      ))}
+                    </Pie>
+                  </PieChart>
+                </ChartContainer>
+                <div className="flex flex-wrap justify-center gap-x-4 gap-y-1">
+                  {pieData.map((entry) => (
+                    <div key={entry.name} className="flex items-center gap-1.5 text-xs">
+                      <span
+                        className="inline-block w-2.5 h-2.5 rounded-full"
+                        style={{ backgroundColor: STATUS_COLORS[entry.name] ?? "#6b7280" }}
                       />
-                    ))}
-                  </Pie>
-                </PieChart>
-              </ChartContainer>
+                      <span className="text-muted-foreground capitalize">
+                        {entry.name.replace("_", " ")}
+                      </span>
+                      <span className="font-medium">{entry.value}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
             ) : (
               <p className="text-sm text-muted-foreground text-center py-12">
                 No subscriptions yet
