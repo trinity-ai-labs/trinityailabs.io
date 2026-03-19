@@ -2,8 +2,11 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { authClient } from "@/lib/auth-client";
+import { Menu, X, User, LogOut, LayoutDashboard } from "lucide-react";
 
 const navLinks = [
   { label: "Features", href: "#features" },
@@ -13,8 +16,11 @@ const navLinks = [
 ];
 
 export function Nav() {
+  const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const { data: session } = authClient.useSession();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -32,10 +38,16 @@ export function Nav() {
     >
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
         {/* Logo */}
-        <a href="/" className="flex items-center gap-2.5">
-          <Image src="/app-icon.png" alt="Trinity" width={32} height={32} className="rounded-lg" />
+        <Link href="/" className="flex items-center gap-2.5">
+          <Image
+            src="/app-icon.png"
+            alt="Trinity"
+            width={32}
+            height={32}
+            className="rounded-lg"
+          />
           <span className="font-mono font-bold text-lg">trinity</span>
-        </a>
+        </Link>
 
         {/* Desktop links */}
         <div className="hidden md:flex items-center gap-8">
@@ -51,13 +63,66 @@ export function Nav() {
         </div>
 
         {/* Desktop CTA */}
-        <div className="hidden md:block">
-          <Button
-            asChild
-            className="font-mono bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white"
-          >
-            <a href="#downloads">Download</a>
-          </Button>
+        <div className="hidden md:flex items-center gap-3">
+          {session ? (
+            <div className="relative">
+              <button
+                onClick={() => setUserMenuOpen(!userMenuOpen)}
+                className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center text-white text-sm font-medium hover:opacity-90 transition-opacity"
+              >
+                {session.user.name?.[0]?.toUpperCase() ?? "U"}
+              </button>
+
+              {userMenuOpen && (
+                <>
+                  <div
+                    className="fixed inset-0 z-40"
+                    onClick={() => setUserMenuOpen(false)}
+                  />
+                  <div className="absolute right-0 mt-2 w-48 rounded-lg border border-border bg-card shadow-lg z-50 py-1">
+                    <div className="px-3 py-2 border-b border-border">
+                      <p className="text-sm font-medium truncate">
+                        {session.user.name}
+                      </p>
+                      <p className="text-xs text-muted-foreground truncate">
+                        {session.user.email}
+                      </p>
+                    </div>
+                    <a
+                      href="/dashboard"
+                      className="flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
+                    >
+                      <LayoutDashboard className="w-4 h-4" />
+                      Dashboard
+                    </a>
+                    <button
+                      onClick={async () => {
+                        await authClient.signOut();
+                        setUserMenuOpen(false);
+                        router.push("/");
+                      }}
+                      className="flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors w-full text-left"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      Sign out
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+          ) : (
+            <>
+              <Button asChild variant="ghost" className="font-mono">
+                <a href="/login">Sign In</a>
+              </Button>
+              <Button
+                asChild
+                className="font-mono bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white"
+              >
+                <a href="#downloads">Download</a>
+              </Button>
+            </>
+          )}
         </div>
 
         {/* Mobile menu button */}
@@ -66,7 +131,11 @@ export function Nav() {
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-label="Toggle menu"
         >
-          {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          {mobileOpen ? (
+            <X className="w-5 h-5" />
+          ) : (
+            <Menu className="w-5 h-5" />
+          )}
         </button>
       </div>
 
@@ -83,12 +152,45 @@ export function Nav() {
               {link.label}
             </a>
           ))}
-          <Button
-            asChild
-            className="w-full font-mono bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white"
-          >
-            <a href="#downloads">Download</a>
-          </Button>
+          {session ? (
+            <>
+              <a
+                href="/dashboard"
+                className="flex items-center gap-2 text-sm py-2"
+                onClick={() => setMobileOpen(false)}
+              >
+                <User className="w-4 h-4" />
+                Dashboard
+              </a>
+              <Button
+                variant="outline"
+                className="w-full font-mono"
+                onClick={async () => {
+                  await authClient.signOut();
+                  setMobileOpen(false);
+                  router.push("/");
+                }}
+              >
+                Sign out
+              </Button>
+            </>
+          ) : (
+            <>
+              <a
+                href="/login"
+                className="block text-sm text-muted-foreground hover:text-foreground py-2"
+                onClick={() => setMobileOpen(false)}
+              >
+                Sign In
+              </a>
+              <Button
+                asChild
+                className="w-full font-mono bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white"
+              >
+                <a href="#downloads">Download</a>
+              </Button>
+            </>
+          )}
         </div>
       )}
     </nav>
