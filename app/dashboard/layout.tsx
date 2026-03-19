@@ -39,8 +39,38 @@ export default function DashboardLayout({
 
   if (isPending) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-muted-foreground">Loading...</p>
+      <div className="min-h-screen flex">
+        <aside className="w-64 border-r border-border flex flex-col shrink-0">
+          <div className="h-16 flex items-center px-6 border-b border-border">
+            <div className="h-7 w-7 bg-muted animate-pulse rounded-lg" />
+            <div className="h-5 w-16 bg-muted animate-pulse rounded ml-2.5" />
+          </div>
+          <nav className="flex-1 p-3 space-y-1">
+            {Array.from({ length: 2 }).map((_, i) => (
+              <div key={i} className="flex items-center gap-3 px-3 py-2">
+                <div className="h-4 w-4 bg-muted animate-pulse rounded" />
+                <div className="h-4 w-20 bg-muted animate-pulse rounded" />
+              </div>
+            ))}
+          </nav>
+        </aside>
+        <div className="flex-1 flex flex-col">
+          <div className="h-16 flex items-center justify-end px-8 border-b border-border">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-muted animate-pulse" />
+              <div className="h-4 w-24 bg-muted animate-pulse rounded" />
+            </div>
+          </div>
+          <main className="flex-1 p-8">
+            <div className="max-w-2xl space-y-6">
+              <div className="space-y-2">
+                <div className="h-8 w-52 bg-muted animate-pulse rounded" />
+                <div className="h-4 w-72 bg-muted animate-pulse rounded" />
+              </div>
+              <div className="h-40 bg-muted/50 animate-pulse rounded-lg border" />
+            </div>
+          </main>
+        </div>
       </div>
     );
   }
