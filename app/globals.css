@@ -150,3 +150,399 @@
 .animate-accordion-up {
   animation: accordion-up 0.2s ease-out;
 }
+
+/* ------------------------------------------------------------------ */
+/* Documentation — premium prose & components                         */
+/* ------------------------------------------------------------------ */
+
+/* Base prose -------------------------------------------------------- */
+
+.docs-prose {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: oklch(0.88 0 0);
+  letter-spacing: -0.005em;
+}
+
+.docs-prose > *:first-child {
+  margin-top: 0;
+}
+
+/* Headings ---------------------------------------------------------- */
+
+.docs-prose h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-top: 3rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.625rem;
+  border-bottom: 1px solid oklch(1 0 0 / 8%);
+  scroll-margin-top: 5rem;
+}
+
+.docs-prose h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  margin-top: 2.25rem;
+  margin-bottom: 0.75rem;
+  scroll-margin-top: 5rem;
+}
+
+.docs-prose h4 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-top: 1.75rem;
+  margin-bottom: 0.5rem;
+  scroll-margin-top: 5rem;
+}
+
+/* Anchor links on headings */
+.docs-prose h2 a,
+.docs-prose h3 a,
+.docs-prose h4 a {
+  color: inherit;
+  text-decoration: none;
+  position: relative;
+}
+
+.docs-prose h2 a:hover::before,
+.docs-prose h3 a:hover::before,
+.docs-prose h4 a:hover::before {
+  content: "#";
+  position: absolute;
+  left: -1.5rem;
+  color: oklch(0.72 0.17 163);
+  font-weight: 500;
+}
+
+/* Paragraphs & text ------------------------------------------------- */
+
+.docs-prose p {
+  margin-bottom: 1.125rem;
+}
+
+.docs-prose a {
+  color: oklch(0.72 0.17 163);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.15s, text-decoration-color 0.15s;
+  text-underline-offset: 3px;
+}
+
+.docs-prose a:hover {
+  color: oklch(0.82 0.17 163);
+  text-decoration: underline;
+  text-decoration-color: oklch(0.72 0.17 163 / 40%);
+}
+
+.docs-prose strong {
+  font-weight: 600;
+  color: oklch(0.95 0 0);
+}
+
+/* Lists ------------------------------------------------------------- */
+
+.docs-prose ul {
+  list-style: none;
+  padding-left: 1.25rem;
+  margin-bottom: 1.125rem;
+}
+
+.docs-prose ul > li {
+  position: relative;
+  padding-left: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.docs-prose ul > li::before {
+  content: "";
+  position: absolute;
+  left: -0.75rem;
+  top: 0.7em;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: oklch(0.72 0.17 163);
+}
+
+.docs-prose ol {
+  list-style: none;
+  padding-left: 1.25rem;
+  margin-bottom: 1.125rem;
+  counter-reset: docs-ol;
+}
+
+.docs-prose ol > li {
+  position: relative;
+  padding-left: 0.75rem;
+  margin-bottom: 0.625rem;
+  counter-increment: docs-ol;
+}
+
+.docs-prose ol > li::before {
+  content: counter(docs-ol) ".";
+  position: absolute;
+  left: -1rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: oklch(0.72 0.17 163);
+  font-variant-numeric: tabular-nums;
+}
+
+.docs-prose li > ul,
+.docs-prose li > ol {
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+}
+
+/* Nested list bullets are dimmer */
+.docs-prose li > ul > li::before {
+  background: oklch(0.5 0 0);
+  width: 4px;
+  height: 4px;
+}
+
+/* Code -------------------------------------------------------------- */
+
+.docs-prose code {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.85em;
+  background: oklch(0.2 0 0);
+  border: 1px solid oklch(1 0 0 / 8%);
+  border-radius: 0.3rem;
+  padding: 0.2em 0.4em;
+  color: oklch(0.82 0.12 163);
+  font-weight: 450;
+}
+
+.docs-prose pre {
+  position: relative;
+  background: oklch(0.14 0.005 260);
+  border: 1px solid oklch(1 0 0 / 8%);
+  border-radius: 0.625rem;
+  padding: 1.25rem 1.5rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  font-size: 0.875rem;
+  line-height: 1.7;
+}
+
+.docs-prose pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: inherit;
+  color: inherit;
+  font-weight: inherit;
+}
+
+/* rehype-pretty-code overrides */
+.docs-prose [data-rehype-pretty-code-figure] pre {
+  background: oklch(0.14 0.005 260);
+}
+
+.docs-prose [data-rehype-pretty-code-figure] code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: inherit;
+}
+
+.docs-prose [data-rehype-pretty-code-figure] [data-line] {
+  padding: 0 1.5rem;
+  margin: 0 -1.5rem;
+}
+
+/* Blockquotes ------------------------------------------------------- */
+
+.docs-prose blockquote {
+  position: relative;
+  border-left: 3px solid oklch(0.72 0.17 163 / 40%);
+  background: oklch(0.72 0.17 163 / 4%);
+  padding: 1rem 1.25rem;
+  margin: 1.5rem 0;
+  border-radius: 0 0.5rem 0.5rem 0;
+  color: oklch(0.78 0 0);
+  font-style: italic;
+}
+
+.docs-prose blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+/* Tables ------------------------------------------------------------ */
+
+.docs-prose table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 1.5rem 0;
+  font-size: 0.9rem;
+  border: 1px solid oklch(1 0 0 / 8%);
+  border-radius: 0.625rem;
+  overflow: hidden;
+}
+
+.docs-prose thead {
+  background: oklch(1 0 0 / 3%);
+}
+
+.docs-prose th {
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: oklch(0.65 0 0);
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid oklch(1 0 0 / 8%);
+}
+
+.docs-prose td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid oklch(1 0 0 / 5%);
+}
+
+.docs-prose tr:last-child td {
+  border-bottom: none;
+}
+
+.docs-prose tbody tr:hover {
+  background: oklch(1 0 0 / 2%);
+}
+
+/* Horizontal rules -------------------------------------------------- */
+
+.docs-prose hr {
+  border: none;
+  border-top: 1px solid oklch(1 0 0 / 8%);
+  margin: 2.5rem 0;
+}
+
+/* Images ------------------------------------------------------------ */
+
+.docs-prose img {
+  max-width: 100%;
+  border-radius: 0.625rem;
+  border: 1px solid oklch(1 0 0 / 8%);
+  margin: 1.5rem 0;
+}
+
+/* ------------------------------------------------------------------ */
+/* Callout boxes (Tip, Note, Important, Warning)                      */
+/* ------------------------------------------------------------------ */
+
+.docs-callout {
+  position: relative;
+  border-radius: 0.625rem;
+  padding: 1rem 1.25rem;
+  margin: 1.5rem 0;
+  font-size: 0.925rem;
+  line-height: 1.65;
+  border: 1px solid;
+}
+
+.docs-callout-label {
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.375rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.docs-callout-label::before {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.docs-callout-content {
+  color: inherit;
+  opacity: 0.9;
+}
+
+/* Tip — emerald */
+.docs-callout-tip {
+  background: oklch(0.72 0.17 163 / 6%);
+  border-color: oklch(0.72 0.17 163 / 20%);
+  color: oklch(0.82 0.12 163);
+}
+.docs-callout-tip .docs-callout-label {
+  color: oklch(0.72 0.17 163);
+}
+.docs-callout-tip .docs-callout-label::before {
+  content: "💡";
+}
+
+/* Note — blue */
+.docs-callout-note {
+  background: oklch(0.55 0.2 260 / 6%);
+  border-color: oklch(0.55 0.2 260 / 20%);
+  color: oklch(0.78 0.1 260);
+}
+.docs-callout-note .docs-callout-label {
+  color: oklch(0.65 0.2 260);
+}
+.docs-callout-note .docs-callout-label::before {
+  content: "ℹ️";
+}
+
+/* Important — amber */
+.docs-callout-important {
+  background: oklch(0.75 0.18 75 / 6%);
+  border-color: oklch(0.75 0.18 75 / 20%);
+  color: oklch(0.82 0.12 75);
+}
+.docs-callout-important .docs-callout-label {
+  color: oklch(0.75 0.18 75);
+}
+.docs-callout-important .docs-callout-label::before {
+  content: "⚡";
+}
+
+/* Warning — red */
+.docs-callout-warning {
+  background: oklch(0.65 0.22 25 / 6%);
+  border-color: oklch(0.65 0.22 25 / 20%);
+  color: oklch(0.82 0.1 25);
+}
+.docs-callout-warning .docs-callout-label {
+  color: oklch(0.65 0.22 25);
+}
+.docs-callout-warning .docs-callout-label::before {
+  content: "⚠️";
+}
+
+/* ------------------------------------------------------------------ */
+/* Definition labels (When, What you see, Actions)                    */
+/* ------------------------------------------------------------------ */
+
+.docs-def {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.docs-def-label {
+  font-weight: 700;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: oklch(0.72 0.17 163);
+  background: oklch(0.72 0.17 163 / 10%);
+  padding: 0.15rem 0.5rem;
+  border-radius: 0.3rem;
+  white-space: nowrap;
+  height: fit-content;
+  margin-top: 0.1rem;
+}
+
+.docs-def-content {
+  color: oklch(0.85 0 0);
+}
