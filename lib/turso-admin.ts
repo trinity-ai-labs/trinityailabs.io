@@ -30,6 +30,20 @@ export async function createDatabase(
   });
 
   if (!res.ok) {
+    // 409 = already exists — fetch existing DB info instead
+    if (res.status === 409) {
+      const existing = await fetch(
+        `${API_BASE}/organizations/${ORG}/databases/${name}`,
+        { headers: headers() }
+      );
+      if (existing.ok) {
+        const data = (await existing.json()) as { database: TursoDatabase };
+        return {
+          dbName: data.database.name,
+          dbUrl: `libsql://${data.database.hostname}`,
+        };
+      }
+    }
     const text = await res.text();
     throw new Error(`Turso createDatabase failed (${res.status}): ${text}`);
   }
