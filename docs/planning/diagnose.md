@@ -1,13 +1,34 @@
-# Project Diagnosis
+# Align & Diagnose
 
-The Diagnose feature performs a health check on your project, identifying issues, risks, and areas for improvement.
+This feature adapts to your project's phase, offering two modes:
 
-## Running a Diagnosis
+- **Align** (pre-PRD) — evaluates your roadmap for consistency, completeness, and clarity before generating your first PRD
+- **Diagnose** (post-PRD) — performs a health check on your project, identifying issues, risks, and areas for improvement
 
-1. Navigate to **Plan**
-2. Click **Diagnose**
+Trinity automatically selects the right mode based on whether your project has a PRD yet.
 
-You can run a diagnosis in two modes:
+## Align Mode (Pre-PRD)
+
+Available before you've generated your first PRD. Navigate to **Plan** and click **Align**.
+
+### How It Works
+
+Align scans your roadmap sections and evaluates them for:
+
+- Consistency between phases and goals
+- Completeness of scope and requirements
+- Clarity of descriptions and acceptance criteria
+- Feasibility for a first release
+
+### Acting on Findings
+
+Select findings and click **Refine Roadmap** to go back to your onboarding roadmap with the selected issues highlighted, so you can address them before generating a PRD.
+
+## Diagnose Mode (Post-PRD)
+
+Available after your first PRD is generated. Navigate to **Plan** and click **Diagnose**.
+
+You can run a diagnosis in two ways:
 
 ### Zero-Input Mode
 
@@ -26,7 +47,7 @@ Type a specific concern into the chat (e.g., "The API response times have been s
 
 ## Understanding Results
 
-Diagnose returns structured findings:
+Both modes return structured findings:
 
 ### Health Score
 
@@ -46,35 +67,27 @@ Each finding includes:
 
 A high-level narrative summarizing the project's state and the most important actions to take.
 
-## Acting on Findings
+## Acting on Diagnose Findings
 
-Findings aren't just informational — you can act on them directly:
+Select findings and click **Send to Add Feature** to generate stories that address the issues. The finding context is passed to the Add Feature flow, so generated stories are specifically targeted at the problem.
 
-### Send to Add Feature
-
-Click **Send to Add Feature** on any finding to generate stories that address the issue. The finding context is passed to the Add Feature flow, so generated stories are specifically targeted at the problem.
-
-### Manual Review
-
-Use findings as input for your own planning. They're especially useful for:
-
-- Prioritizing technical debt
-- Identifying security issues before they become problems
-- Understanding areas where the codebase needs attention
+You can also use findings for manual review — they're especially useful for prioritizing technical debt, identifying security issues, and understanding areas that need attention.
 
 ## Chat Follow-Up
 
-After the initial diagnosis, you can ask follow-up questions in the chat:
+After the initial analysis, you can ask follow-up questions in the chat:
 
 - "Tell me more about the authentication finding"
 - "What's the impact of not fixing the deprecated dependency?"
 - "How would you prioritize these findings?"
 
-The chat maintains context from the diagnosis, so follow-ups are informed by the full scan results.
+The chat maintains context from the analysis, so follow-ups are informed by the full scan results.
 
-## When to Run Diagnose
+## When to Use Each Mode
 
-Good times to run a diagnosis:
+**Align** — run before generating your first PRD to catch roadmap issues early. Cheaper to fix scope problems before stories are created.
+
+**Diagnose** — good times to run:
 
 - **Before a new PRD** — understand the current state before planning new work
 - **After a checkpoint** — verify the release is healthy

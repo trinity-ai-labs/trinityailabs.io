@@ -33,7 +33,7 @@ The planning dashboard is your command center for PRD management:
 - **PRD tabs** — switch between PRDs using numbered tabs at the top
 - **Phase progress** — visual progress bars for each phase
 - **Stats cards** — story counts, completion rates, dependency status
-- **Action buttons** — generate PRD, add feature, diagnose
+- **Action buttons** — generate PRD, add feature, align (pre-PRD) / diagnose (post-PRD)
 
 ### Story Graph
 

@@ -54,11 +54,11 @@ Progress is shown in the sidebar task indicator with phase-aware labels.
 
 ### Add Feature
 
-Opens the Add Feature flow to add new stories to an existing PRD. See the [Add Feature guide](/docs/planning/add-feature) for details.
+Opens the Add Feature flow to add new stories to an existing PRD. See the [Add Feature guide](/knowledge?book=user-guide&section=planning&chapter=add-feature&page=add-feature) for details.
 
 ### Diagnose
 
-Runs a health check on your project. See the [Diagnose guide](/docs/planning/diagnose) for details.
+Runs a health check on your project. See the [Diagnose guide](/knowledge?book=user-guide&section=planning&chapter=diagnose&page=diagnose) for details.
 
 ## Working with the Story Graph
 

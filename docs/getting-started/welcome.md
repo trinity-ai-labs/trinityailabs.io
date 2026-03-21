@@ -93,5 +93,5 @@ The sidebar is your main navigation. It shows:
 
 ## What's Next
 
-- **[Creating Your First Project](/docs/getting-started/first-project)** — step-by-step guide to getting started
-- **[Navigating the UI](/docs/getting-started/navigating)** — learn the layout and navigation patterns
+- **[Creating Your First Project](/knowledge?book=user-guide&section=getting-started&chapter=first-project&page=first-project)** — step-by-step guide to getting started
+- **[Navigating the UI](/knowledge?book=user-guide&section=getting-started&chapter=navigating&page=navigating)** — learn the layout and navigation patterns
