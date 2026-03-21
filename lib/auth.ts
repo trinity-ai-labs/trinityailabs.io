@@ -21,6 +21,10 @@ function createAuth() {
       }),
       type: "sqlite",
     },
+    session: {
+      expiresIn: 60 * 60 * 24 * 30, // 30 days
+      updateAge: 60 * 60 * 24, // update session every 24 hours
+    },
     emailAndPassword: {
       enabled: true,
       requireEmailVerification: true,
