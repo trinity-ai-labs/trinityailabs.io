@@ -57,7 +57,7 @@ export async function provisionPersonalDb(userId: string) {
   });
   if (existing.rows[0]?.turso_db_url) return;
 
-  const dbName = `trinity-personal-${userId.slice(0, 8)}`;
+  const dbName = `trinity-personal-${userId.slice(0, 12).toLowerCase()}`;
   const { dbName: name, dbUrl, token } = await provisionTursoDb(dbName);
 
   await db.execute({
