@@ -1,13 +1,12 @@
 "use client";
 
 import { useState, Suspense } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 function LoginContent() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl");
   const [email, setEmail] = useState("");
@@ -31,7 +30,7 @@ function LoginContent() {
       return;
     }
 
-    router.push(callbackUrl ?? "/dashboard");
+    window.location.href = callbackUrl ?? "/dashboard";
   }
 
   return (
