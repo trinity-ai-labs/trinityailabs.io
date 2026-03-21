@@ -163,6 +163,23 @@ export const DOC_SECTIONS: DocSection[] = [
     ],
   },
   {
+    slug: "account",
+    name: "Account & Teams",
+    icon: "users",
+    chapters: [
+      {
+        slug: "signing-in",
+        title: "Signing In",
+        pageTitle: "Signing In",
+      },
+      {
+        slug: "teams",
+        title: "Teams",
+        pageTitle: "Teams & Collaboration",
+      },
+    ],
+  },
+  {
     slug: "configuration",
     name: "Configuration",
     icon: "sliders",
