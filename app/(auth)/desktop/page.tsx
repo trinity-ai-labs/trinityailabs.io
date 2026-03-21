@@ -6,7 +6,7 @@ import { authClient } from "@/lib/auth-client";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-type Status = "loading" | "enter-code" | "confirming" | "success" | "error";
+type Status = "loading" | "need-login" | "enter-code" | "confirming" | "success" | "error";
 
 function DesktopAuthContent() {
   const searchParams = useSearchParams();
@@ -20,12 +20,10 @@ function DesktopAuthContent() {
 
   const { data: session, isPending } = authClient.useSession();
 
-  // Auto-confirm when logged in with a code — no button needed
   useEffect(() => {
     if (isPending) return;
 
     if (!session) {
-      // Redirect to login, preserve the code
       const callback = codeFromUrl
         ? `/desktop?code=${codeFromUrl}`
         : "/desktop";
@@ -34,7 +32,6 @@ function DesktopAuthContent() {
     }
 
     if (codeFromUrl && !confirmedRef.current) {
-      // Logged in + have code → auto-approve
       confirmedRef.current = true;
       confirmCode(codeFromUrl);
     } else if (!codeFromUrl) {
@@ -45,10 +42,14 @@ function DesktopAuthContent() {
   async function confirmCode(deviceCode: string) {
     setStatus("confirming");
     try {
-      const res = await fetch("/api/auth/device/confirm", {
+      // Use the server-side confirm route that doesn't need cookies
+      const res = await fetch(`/api/auth/device/confirm-direct`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code: deviceCode.trim() }),
+        body: JSON.stringify({
+          code: deviceCode.trim(),
+          userId: session?.user?.id,
+        }),
       });
 
       if (!res.ok) {
@@ -100,11 +101,7 @@ function DesktopAuthContent() {
             stroke="currentColor"
             strokeWidth={2}
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M5 13l4 4L19 7"
-            />
+            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
           </svg>
         </div>
         <h1 className="text-2xl font-bold mb-2">Authorized!</h1>
@@ -124,11 +121,8 @@ function DesktopAuthContent() {
           onClick={() => {
             setError("");
             confirmedRef.current = false;
-            if (codeFromUrl) {
-              confirmCode(codeFromUrl);
-            } else {
-              setStatus("enter-code");
-            }
+            if (codeFromUrl) confirmCode(codeFromUrl);
+            else setStatus("enter-code");
           }}
           variant="outline"
         >
@@ -138,15 +132,12 @@ function DesktopAuthContent() {
     );
   }
 
-  // Enter code manually
   return (
     <div className="text-center">
       <h1 className="text-2xl font-bold mb-2">Authorize Trinity Desktop</h1>
       <p className="text-sm text-muted-foreground mb-2">
         Signed in as{" "}
-        <span className="font-medium text-foreground">
-          {session?.user?.email}
-        </span>
+        <span className="font-medium text-foreground">{session?.user?.email}</span>
       </p>
       <p className="text-sm text-muted-foreground mb-6">
         Enter the code shown in the Trinity desktop app.
