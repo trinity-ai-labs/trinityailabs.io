@@ -20,7 +20,7 @@ export function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
-  const { data: session } = authClient.useSession();
+  const { data: session, isPending } = authClient.useSession();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -64,7 +64,9 @@ export function Nav() {
 
         {/* Desktop CTA */}
         <div className="hidden md:flex items-center gap-3">
-          {session ? (
+          {isPending ? (
+            <div className="w-8 h-8" />
+          ) : session ? (
             <div className="relative">
               <button
                 onClick={() => setUserMenuOpen(!userMenuOpen)}
@@ -152,7 +154,7 @@ export function Nav() {
               {link.label}
             </a>
           ))}
-          {session ? (
+          {isPending ? null : session ? (
             <>
               <a
                 href="/dashboard"
