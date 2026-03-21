@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState, Suspense } from "react";
+import { useEffect, useState, useRef, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 type Status = "loading" | "enter-code" | "confirming" | "success" | "error";
 
@@ -16,14 +16,16 @@ function DesktopAuthContent() {
   const [code, setCode] = useState(codeFromUrl ?? "");
   const [status, setStatus] = useState<Status>("loading");
   const [error, setError] = useState("");
+  const confirmedRef = useRef(false);
 
   const { data: session, isPending } = authClient.useSession();
 
+  // Auto-confirm when logged in with a code — no button needed
   useEffect(() => {
     if (isPending) return;
 
-    // Not logged in — redirect to login, then come back
     if (!session) {
+      // Redirect to login, preserve the code
       const callback = codeFromUrl
         ? `/desktop?code=${codeFromUrl}`
         : "/desktop";
@@ -31,29 +33,22 @@ function DesktopAuthContent() {
       return;
     }
 
-    // Logged in with code in URL — go straight to confirm
-    if (codeFromUrl) {
-      setStatus("confirming");
-    } else {
-      // Logged in but no code — ask for it
+    if (codeFromUrl && !confirmedRef.current) {
+      // Logged in + have code → auto-approve
+      confirmedRef.current = true;
+      confirmCode(codeFromUrl);
+    } else if (!codeFromUrl) {
       setStatus("enter-code");
     }
   }, [codeFromUrl, session, isPending, router]);
 
-  function handleSubmitCode(e: React.FormEvent) {
-    e.preventDefault();
-    if (code.trim()) {
-      setStatus("confirming");
-    }
-  }
-
-  async function handleApprove() {
-    setStatus("loading");
+  async function confirmCode(deviceCode: string) {
+    setStatus("confirming");
     try {
       const res = await fetch("/api/auth/device/confirm", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code: code.trim() }),
+        body: JSON.stringify({ code: deviceCode.trim() }),
       });
 
       if (!res.ok) {
@@ -65,44 +60,31 @@ function DesktopAuthContent() {
 
       setStatus("success");
     } catch {
-      setError("Network error");
+      setError("Network error — please try again");
       setStatus("error");
+    }
+  }
+
+  function handleSubmitCode(e: React.FormEvent) {
+    e.preventDefault();
+    if (code.trim()) {
+      confirmCode(code.trim());
     }
   }
 
   if (status === "loading" || isPending) {
     return (
       <div className="text-center">
-        <p className="text-muted-foreground">Loading...</p>
+        <p className="text-muted-foreground">Authorizing...</p>
       </div>
     );
   }
 
-  if (status === "enter-code") {
+  if (status === "confirming") {
     return (
       <div className="text-center">
-        <h1 className="text-2xl font-bold mb-2">Authorize Trinity Desktop</h1>
-        <p className="text-sm text-muted-foreground mb-6">
-          Enter the code shown in the Trinity desktop app.
-        </p>
-        <form onSubmit={handleSubmitCode} className="space-y-4">
-          <Input
-            type="text"
-            value={code}
-            onChange={(e) => setCode(e.target.value.toUpperCase())}
-            placeholder="Enter device code"
-            className="text-center font-mono text-lg tracking-widest"
-            maxLength={8}
-            autoFocus
-          />
-          <Button
-            type="submit"
-            disabled={!code.trim()}
-            className="w-full font-mono bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white"
-          >
-            Continue
-          </Button>
-        </form>
+        <div className="w-8 h-8 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+        <p className="text-muted-foreground">Authorizing device...</p>
       </div>
     );
   }
@@ -127,7 +109,7 @@ function DesktopAuthContent() {
         </div>
         <h1 className="text-2xl font-bold mb-2">Authorized!</h1>
         <p className="text-muted-foreground">
-          You can close this window and return to Trinity.
+          You can close this tab and return to Trinity.
         </p>
       </div>
     );
@@ -138,35 +120,55 @@ function DesktopAuthContent() {
       <div className="text-center">
         <h1 className="text-2xl font-bold mb-2">Authorization Failed</h1>
         <p className="text-sm text-destructive mb-4">{error}</p>
-        <Button onClick={() => setStatus("confirming")} variant="outline">
+        <Button
+          onClick={() => {
+            setError("");
+            confirmedRef.current = false;
+            if (codeFromUrl) {
+              confirmCode(codeFromUrl);
+            } else {
+              setStatus("enter-code");
+            }
+          }}
+          variant="outline"
+        >
           Try Again
         </Button>
       </div>
     );
   }
 
-  // Confirming state
+  // Enter code manually
   return (
     <div className="text-center">
       <h1 className="text-2xl font-bold mb-2">Authorize Trinity Desktop</h1>
-      <p className="text-sm text-muted-foreground mb-6">
-        Sign in as{" "}
+      <p className="text-sm text-muted-foreground mb-2">
+        Signed in as{" "}
         <span className="font-medium text-foreground">
           {session?.user?.email}
-        </span>{" "}
-        on the Trinity desktop app?
+        </span>
       </p>
-      <div className="space-y-3">
+      <p className="text-sm text-muted-foreground mb-6">
+        Enter the code shown in the Trinity desktop app.
+      </p>
+      <form onSubmit={handleSubmitCode} className="space-y-4">
+        <Input
+          type="text"
+          value={code}
+          onChange={(e) => setCode(e.target.value.toUpperCase())}
+          placeholder="Enter device code"
+          className="text-center font-mono text-lg tracking-widest"
+          maxLength={8}
+          autoFocus
+        />
         <Button
-          onClick={handleApprove}
+          type="submit"
+          disabled={!code.trim()}
           className="w-full font-mono bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white"
         >
-          Approve
+          Authorize
         </Button>
-        <p className="text-xs text-muted-foreground">
-          Code: <code className="font-mono">{code}</code>
-        </p>
-      </div>
+      </form>
     </div>
   );
 }
