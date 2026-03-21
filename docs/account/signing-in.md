@@ -32,4 +32,5 @@ Your login persists across app restarts. You won't need to sign in again unless:
 
 - You explicitly sign out
 - Your subscription expires and the refresh token is revoked
-- You've been offline for more than 4 hours
+
+Trinity requires an internet connection — AI providers, git operations (push, PRs, merges), and cloud sync all need it.
