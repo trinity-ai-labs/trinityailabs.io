@@ -52,6 +52,34 @@ export async function sendInviteEmail(to: string, inviteUrl: string) {
   });
 }
 
+export async function sendTeamInviteEmail(
+  to: string,
+  teamName: string,
+  inviterName: string,
+  acceptUrl: string
+) {
+  await getResend().emails.send({
+    from: FROM_ADDRESS,
+    to,
+    subject: `Join ${teamName} on Trinity`,
+    html: `
+      <div style="font-family: system-ui, sans-serif; max-width: 480px; margin: 0 auto; padding: 40px 20px;">
+        <h1 style="font-size: 24px; font-weight: 600; margin-bottom: 16px;">You're invited to ${teamName}</h1>
+        <p style="color: #666; margin-bottom: 24px;">
+          ${inviterName} has invited you to join <strong>${teamName}</strong> on Trinity.
+          Click the button below to accept.
+        </p>
+        <a href="${acceptUrl}" style="display: inline-block; background: linear-gradient(to right, #10b981, #06b6d4); color: white; text-decoration: none; padding: 12px 24px; border-radius: 8px; font-weight: 500;">
+          Join Team
+        </a>
+        <p style="color: #999; font-size: 13px; margin-top: 32px;">
+          If you weren&apos;t expecting this invitation, you can safely ignore this email.
+        </p>
+      </div>
+    `,
+  });
+}
+
 export async function sendWelcomeEmail(to: string, name: string) {
   await getResend().emails.send({
     from: FROM_ADDRESS,
