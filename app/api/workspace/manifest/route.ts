@@ -25,29 +25,46 @@ export async function GET(req: Request) {
 
   const userId = payload.sub!;
 
-  await ensureUserColumns();
-  await ensureTeamsTables();
-  await ensureSubscriptionsTable();
-  await ensureUserPreferencesTable();
+  try {
+    await ensureUserColumns();
+  } catch { /* columns may already exist */ }
+  try {
+    await ensureTeamsTables();
+  } catch { /* tables may already exist */ }
+  try {
+    await ensureSubscriptionsTable();
+  } catch { /* table may already exist */ }
+  try {
+    await ensureUserPreferencesTable();
+  } catch { /* table may already exist */ }
 
-  // Get user info (including personal Turso DB)
-  const userResult = await db.execute({
-    sql: `SELECT id, email, name, handle, turso_db_url, turso_auth_token
-          FROM user WHERE id = ?`,
-    args: [userId],
-  });
-
-  if (!userResult.rows.length) {
-    return NextResponse.json({ error: "User not found" }, { status: 404 });
+  // Get user info — query basic columns first, then try extended columns
+  let user: Record<string, unknown>;
+  try {
+    const userResult = await db.execute({
+      sql: `SELECT id, email, name, handle, turso_db_url, turso_auth_token FROM user WHERE id = ?`,
+      args: [userId],
+    });
+    if (!userResult.rows.length) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+    user = userResult.rows[0] as Record<string, unknown>;
+  } catch {
+    // Extended columns may not exist yet — fall back to basic query
+    const userResult = await db.execute({
+      sql: `SELECT id, email, name FROM user WHERE id = ?`,
+      args: [userId],
+    });
+    if (!userResult.rows.length) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+    user = { ...userResult.rows[0] as Record<string, unknown>, handle: null, turso_db_url: null, turso_auth_token: null };
   }
 
-  const user = userResult.rows[0];
-
-  // Provision personal DB lazily if not yet done
+  // Provision personal DB lazily if not yet done (non-blocking)
   if (!user.turso_db_url) {
     try {
       await provisionPersonalDb(userId);
-      // Re-fetch after provisioning
       const updated = await db.execute({
         sql: "SELECT turso_db_url, turso_auth_token FROM user WHERE id = ?",
         args: [userId],
@@ -57,8 +74,7 @@ export async function GET(req: Request) {
         user.turso_auth_token = updated.rows[0].turso_auth_token;
       }
     } catch (err) {
-      console.error("Personal DB provisioning failed:", err);
-      // Continue without — desktop will use local fallback
+      console.error("Personal DB provisioning failed (non-fatal):", err);
     }
   }
 
