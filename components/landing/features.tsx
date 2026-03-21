@@ -12,6 +12,8 @@ import {
   BookOpen,
   Eye,
   Cpu,
+  Users,
+  MessageSquare,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
@@ -115,20 +117,24 @@ const features = [
     description:
       "Manage multiple repositories in a single project. Stories can span repos. Coordinated branching and release management.",
   },
+  {
+    icon: Users,
+    title: "Team Collaboration",
+    description:
+      "Create teams, invite members, and share projects. Real-time sync via Turso — everyone sees planning, execution, and results.",
+  },
+  {
+    icon: MessageSquare,
+    title: "Comments & Activity",
+    description:
+      "Threaded discussions on stories and PRDs. Activity feed tracks who changed what. Change history for audit trails.",
+  },
 ];
 
 const comingSoon = [
   {
-    title: "Team Collaboration",
-    description: "Shared planning, execution visibility across your team",
-  },
-  {
     title: "Cloud Execution",
     description: "Managed VMs — no local machine needed",
-  },
-  {
-    title: "Comments & Activity",
-    description: "Threaded discussions on stories and PRDs",
   },
 ];
 
