@@ -22,6 +22,8 @@ const footerLinks = [
     title: "Company",
     links: [
       { label: "Contact", href: "mailto:hello@trinityailabs.io" },
+      { label: "Privacy Policy", href: "/privacy" },
+      { label: "Terms of Service", href: "/terms" },
     ],
   },
 ];
@@ -77,6 +79,12 @@ export function Footer() {
         <div className="pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
           <div>&copy; {new Date().getFullYear()} Trinity AI Labs. All rights reserved.</div>
           <div className="flex items-center gap-6">
+            <a href="/privacy" className="hover:text-foreground transition-colors">
+              Privacy
+            </a>
+            <a href="/terms" className="hover:text-foreground transition-colors">
+              Terms
+            </a>
             <a href="mailto:hello@trinityailabs.io" className="hover:text-foreground transition-colors">
               Contact
             </a>
