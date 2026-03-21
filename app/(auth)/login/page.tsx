@@ -78,6 +78,15 @@ function LoginContent() {
 
         {error && <p className="text-sm text-destructive">{error}</p>}
 
+        <div className="flex justify-end">
+          <a
+            href="/forgot-password"
+            className="text-xs text-muted-foreground hover:text-foreground"
+          >
+            Forgot password?
+          </a>
+        </div>
+
         <Button
           type="submit"
           disabled={loading}

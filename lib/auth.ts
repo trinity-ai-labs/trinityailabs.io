@@ -2,7 +2,7 @@ import { betterAuth } from "better-auth";
 import { Kysely } from "kysely";
 import { LibsqlDialect } from "@libsql/kysely-libsql";
 import { db } from "@/lib/db";
-import { sendVerificationEmail } from "@/lib/email";
+import { sendVerificationEmail, sendPasswordResetEmail } from "@/lib/email";
 import { ensureRoleColumn } from "@/lib/ensure-tables";
 
 const adminEmails = (process.env.ADMIN_EMAILS ?? "")
@@ -24,6 +24,9 @@ function createAuth() {
     emailAndPassword: {
       enabled: true,
       requireEmailVerification: true,
+      sendResetPassword: async ({ user, url }) => {
+        await sendPasswordResetEmail(user.email, url);
+      },
     },
     socialProviders: {
       ...(process.env.GOOGLE_CLIENT_ID && {
