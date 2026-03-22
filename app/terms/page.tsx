@@ -107,15 +107,20 @@ export default function TermsPage() {
 
               <h3 className="text-lg font-medium mt-4">4.5 Refunds</h3>
               <p>
-                Refund requests are handled by Lemon Squeezy in accordance with
-                their refund policy. Contact us at{" "}
+                You may cancel your subscription at any time. Cancellation takes
+                effect at the end of your current billing period — you retain
+                full access until then. We do not issue refunds for partial
+                billing periods. Payments are processed by Lemon Squeezy, our
+                Merchant of Record, who may issue refunds at their discretion
+                within 60 days of purchase to resolve disputes. If you believe
+                you were charged in error, contact us at{" "}
                 <a
                   href="mailto:info@trinityailabs.com"
                   className="text-foreground underline underline-offset-4 hover:text-foreground/80"
                 >
                   info@trinityailabs.com
-                </a>{" "}
-                if you have billing concerns.
+                </a>
+                .
               </p>
             </section>
 

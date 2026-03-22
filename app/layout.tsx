@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     title: "Trinity AI Labs | Build While You're AFK",
     description:
       "Autonomous AI development orchestrator. Plan, execute, review, and ship — while you sleep.",
-    url: "https://trinityailabs.io",
+    url: "https://trinityailabs.com",
     siteName: "Trinity AI Labs",
     type: "website",
   },
