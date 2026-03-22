@@ -27,7 +27,7 @@ const faqs = [
   {
     question: "What platforms are supported?",
     answer:
-      "Trinity is available for macOS, Windows, and Linux. It's built with Tauri 2, so it's a native desktop app with a small footprint — not an Electron wrapper.",
+      "Trinity is available for macOS (Apple Silicon and Intel) and Linux. It's built with Tauri 2, so it's a native desktop app with a small footprint — not an Electron wrapper.",
   },
   {
     question: "Is my code sent to Trinity's servers?",
