@@ -1,57 +1,57 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { Ratelimit } from "@upstash/ratelimit";
+import { Redis } from "@upstash/redis";
 
-const hits = new Map<string, { count: number; resetTime: number }>();
+const redis =
+  process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN
+    ? new Redis({
+        url: process.env.UPSTASH_REDIS_REST_URL,
+        token: process.env.UPSTASH_REDIS_REST_TOKEN,
+      })
+    : null;
 
-function checkRate(
-  key: string,
-  limit: number,
-  windowMs: number,
-): { ok: boolean; remaining: number } {
-  const now = Date.now();
-  const entry = hits.get(key);
+const authLimiter = redis
+  ? new Ratelimit({
+      redis,
+      limiter: Ratelimit.slidingWindow(20, "60 s"),
+      prefix: "rl:auth",
+    })
+  : null;
 
-  if (!entry || now > entry.resetTime) {
-    hits.set(key, { count: 1, resetTime: now + windowMs });
-    return { ok: true, remaining: limit - 1 };
-  }
+const billingLimiter = redis
+  ? new Ratelimit({
+      redis,
+      limiter: Ratelimit.slidingWindow(10, "60 s"),
+      prefix: "rl:billing",
+    })
+  : null;
 
-  entry.count++;
-  if (entry.count > limit) return { ok: false, remaining: 0 };
-  return { ok: true, remaining: limit - entry.count };
-}
+export async function middleware(request: NextRequest) {
+  if (!redis) return NextResponse.next();
 
-const RATE_LIMITS: Record<string, { limit: number; windowMs: number }> = {
-  "/api/auth": { limit: 20, windowMs: 60_000 },
-  "/api/billing": { limit: 10, windowMs: 60_000 },
-};
-
-export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const ip = request.headers.get("x-forwarded-for")?.split(",")[0] ?? "unknown";
+  const ip =
+    request.headers.get("x-forwarded-for")?.split(",")[0] ?? "unknown";
 
-  for (const [prefix, config] of Object.entries(RATE_LIMITS)) {
-    if (pathname.startsWith(prefix)) {
-      const key = `${ip}:${prefix}`;
-      const { ok, remaining } = checkRate(key, config.limit, config.windowMs);
+  const limiter = pathname.startsWith("/api/auth")
+    ? authLimiter
+    : billingLimiter;
 
-      if (!ok) {
-        return NextResponse.json(
-          { error: "Too many requests" },
-          {
-            status: 429,
-            headers: { "Retry-After": "60" },
-          },
-        );
-      }
+  if (!limiter) return NextResponse.next();
 
-      const response = NextResponse.next();
-      response.headers.set("X-RateLimit-Remaining", String(remaining));
-      return response;
-    }
+  const { success, remaining } = await limiter.limit(ip);
+
+  if (!success) {
+    return NextResponse.json(
+      { error: "Too many requests" },
+      { status: 429, headers: { "Retry-After": "60" } },
+    );
   }
 
-  return NextResponse.next();
+  const response = NextResponse.next();
+  response.headers.set("X-RateLimit-Remaining", String(remaining));
+  return response;
 }
 
 export const config = {
