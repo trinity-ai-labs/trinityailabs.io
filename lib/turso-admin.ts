@@ -9,8 +9,18 @@ function headers() {
 }
 
 interface TursoDatabase {
-  name: string;
-  hostname: string;
+  name?: string;
+  Name?: string;
+  hostname?: string;
+  Hostname?: string;
+}
+
+function dbName(d: TursoDatabase): string | undefined {
+  return d.name ?? d.Name;
+}
+
+function dbHostname(d: TursoDatabase): string | undefined {
+  return d.hostname ?? d.Hostname;
 }
 
 interface TursoToken {
@@ -39,8 +49,8 @@ export async function createDatabase(
       if (existing.ok) {
         const data = (await existing.json()) as { database: TursoDatabase };
         return {
-          dbName: data.database.name,
-          dbUrl: `libsql://${data.database.hostname}`,
+          dbName: dbName(data.database) ?? name,
+          dbUrl: `libsql://${dbHostname(data.database) ?? `${name}-${ORG}.turso.io`}`,
         };
       }
     }
@@ -50,8 +60,8 @@ export async function createDatabase(
 
   const data = (await res.json()) as { database: TursoDatabase };
   return {
-    dbName: data.database.name,
-    dbUrl: `libsql://${data.database.hostname}`,
+    dbName: dbName(data.database) ?? name,
+    dbUrl: `libsql://${dbHostname(data.database) ?? `${name}-${ORG}.turso.io`}`,
   };
 }
 

@@ -45,6 +45,7 @@ export async function provisionTursoDb(
   name: string
 ): Promise<{ dbName: string; dbUrl: string; token: string }> {
   const { dbName, dbUrl } = await createDatabase(name);
+  if (!dbName) throw new Error(`createDatabase returned empty dbName for "${name}"`);
   const token = await createDatabaseToken(dbName);
   return { dbName, dbUrl, token };
 }
