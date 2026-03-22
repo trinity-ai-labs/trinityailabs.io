@@ -290,10 +290,10 @@ export default function PrivacyPage() {
               <p className="mt-3">
                 To exercise these rights, contact us at{" "}
                 <a
-                  href="mailto:hello@trinityailabs.io"
+                  href="mailto:info@trinityailabs.com"
                   className="text-foreground underline underline-offset-4 hover:text-foreground/80"
                 >
-                  hello@trinityailabs.io
+                  info@trinityailabs.com
                 </a>
                 .
               </p>
@@ -328,10 +328,10 @@ export default function PrivacyPage() {
               <p>
                 If you have questions about this Privacy Policy, contact us at{" "}
                 <a
-                  href="mailto:hello@trinityailabs.io"
+                  href="mailto:info@trinityailabs.com"
                   className="text-foreground underline underline-offset-4 hover:text-foreground/80"
                 >
-                  hello@trinityailabs.io
+                  info@trinityailabs.com
                 </a>
                 .
               </p>

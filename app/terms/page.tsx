@@ -110,10 +110,10 @@ export default function TermsPage() {
                 Refund requests are handled by Lemon Squeezy in accordance with
                 their refund policy. Contact us at{" "}
                 <a
-                  href="mailto:hello@trinityailabs.io"
+                  href="mailto:info@trinityailabs.com"
                   className="text-foreground underline underline-offset-4 hover:text-foreground/80"
                 >
-                  hello@trinityailabs.io
+                  info@trinityailabs.com
                 </a>{" "}
                 if you have billing concerns.
               </p>
@@ -338,10 +338,10 @@ export default function TermsPage() {
               <p>
                 Questions about these Terms? Contact us at{" "}
                 <a
-                  href="mailto:hello@trinityailabs.io"
+                  href="mailto:info@trinityailabs.com"
                   className="text-foreground underline underline-offset-4 hover:text-foreground/80"
                 >
-                  hello@trinityailabs.io
+                  info@trinityailabs.com
                 </a>
                 .
               </p>
