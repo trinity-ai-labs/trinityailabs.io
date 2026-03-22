@@ -14,7 +14,7 @@ export async function POST() {
   }
 
   const result = await db.execute({
-    sql: "SELECT lemonsqueezy_customer_id FROM subscriptions WHERE user_id = ? AND status = 'active' LIMIT 1",
+    sql: "SELECT lemonsqueezy_customer_id FROM subscriptions WHERE user_id = ? AND lemonsqueezy_customer_id IS NOT NULL ORDER BY created_at DESC LIMIT 1",
     args: [session.user.id],
   });
 

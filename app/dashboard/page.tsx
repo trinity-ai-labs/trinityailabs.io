@@ -65,6 +65,7 @@ function DashboardContent({
 
   const isActive =
     subscription?.status === "active" || subscription?.status === "comp";
+  const isCancelled = subscription?.status === "cancelled";
 
   return (
     <div className="max-w-2xl space-y-6">
@@ -83,7 +84,9 @@ function DashboardContent({
           <CardDescription>
             {isActive
               ? "Your subscription is active."
-              : "You don't have an active subscription."}
+              : isCancelled
+                ? "Your subscription has been cancelled."
+                : "You don't have an active subscription."}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -110,6 +113,20 @@ function DashboardContent({
                   Manage Subscription
                 </Button>
               )}
+            </div>
+          ) : isCancelled ? (
+            <div className="space-y-4">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-red-500" />
+                <span className="text-sm">Pro plan - Cancelled</span>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Your subscription has been cancelled. You can resubscribe at any
+                time.
+              </p>
+              <Button variant="outline" onClick={handleManage}>
+                Resubscribe
+              </Button>
             </div>
           ) : (
             <div className="space-y-4">
