@@ -27,7 +27,7 @@ const billingLimiter = redis
     })
   : null;
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   if (!redis) return NextResponse.next();
 
   const { pathname } = request.nextUrl;
