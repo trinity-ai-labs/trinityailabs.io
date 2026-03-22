@@ -202,8 +202,8 @@ export function Features() {
           ))}
         </div>
 
-        {/* Coming soon */}
-        <div className="mt-12">
+        {/* Coming soon — hidden until we decide what goes here */}
+        {/* <div className="mt-12">
           <h3 className="text-center text-sm font-mono text-muted-foreground uppercase tracking-wider mb-6">
             Coming Soon
           </h3>
@@ -221,7 +221,7 @@ export function Features() {
               </div>
             ))}
           </div>
-        </div>
+        </div> */}
       </div>
     </section>
   );
