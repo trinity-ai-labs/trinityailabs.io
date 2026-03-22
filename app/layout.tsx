@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Trinity AI Labs | Autonomous AI Development Orchestrator",
   description:
-    "Describe what you want to build. Trinity plans it, orchestrates AI agents to write and review code in parallel, and ships PRs — autonomously. Available for macOS, Windows & Linux.",
+    "Describe what you want to build. Trinity plans it, orchestrates AI agents to write and review code in parallel, and ships PRs — autonomously. Available for macOS & Linux.",
   keywords: [
     "AI",
     "development",
