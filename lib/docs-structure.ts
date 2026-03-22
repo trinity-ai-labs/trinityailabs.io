@@ -33,6 +33,11 @@ export const DOC_SECTIONS: DocSection[] = [
         pageTitle: "Welcome to Trinity",
       },
       {
+        slug: "prerequisites",
+        title: "Prerequisites",
+        pageTitle: "Prerequisites & Tool Setup",
+      },
+      {
         slug: "first-project",
         title: "First Project",
         pageTitle: "Creating Your First Project",
