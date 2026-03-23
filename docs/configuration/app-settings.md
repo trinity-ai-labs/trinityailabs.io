@@ -26,7 +26,7 @@ The database stores everything in UTC — timezone conversion happens at display
 
 ## Automation Defaults
 
-Default settings that apply to new projects (can be overridden per-project):
+Default settings that apply to all projects. The full settings hierarchy is: **Global → Team → Project → Job**. Team settings (if you're in a team scope) override globals, and project settings override both. See [Teams](/account/teams) for team settings details.
 
 ### Skip Asset Check
 

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-const RELEASES_BASE = "https://releases.trinityailabs.com/releases";
+const RELEASES_BASE = "https://releases.trinityailabs.com";
 const LATEST_URL = `${RELEASES_BASE}/latest.json`;
 
 export async function GET(

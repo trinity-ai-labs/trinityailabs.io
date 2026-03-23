@@ -44,6 +44,12 @@ Assets can be scoped to specific sessions:
 - **align-prd** — assets for PRD alignment
 - **onboarding** — assets uploaded during project onboarding
 
+## Storage Limits
+
+When using **Trinity Cloud** storage, each Pro seat includes 5 GB of managed storage (pooled across the team). If you exceed your quota, uploads will be blocked until you free up space or purchase additional 10 GB packs ($5/month each). See [Project Settings — Storage](/docs/project-setup/project-settings#storage) for details.
+
+**BYO S3** and **Local Only** storage have no Trinity-imposed limits.
+
 ## Manifest View
 
 The manifest provides a lightweight tree view of all assets with just descriptions (no file content or paths). This is what gets included in prompts so agents know what's available without the overhead of full file data.

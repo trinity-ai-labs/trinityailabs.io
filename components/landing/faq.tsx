@@ -37,7 +37,7 @@ const faqs = [
   {
     question: "What does the $10/mo plan include?",
     answer:
-      "Everything — cloud sync across devices, unlimited projects, full metrics and reporting, team collaboration, and priority support. One subscription per person. If a team owner pays for your seat, you don't need your own subscription.",
+      "Everything — cloud sync across devices, unlimited projects, 5 GB managed cloud storage, full metrics and reporting, team collaboration, and priority support. Need more storage? Add 10 GB packs for $5/mo, or bring your own S3-compatible bucket at no extra cost. One subscription per person. If a team owner pays for your seat, you don't need your own subscription.",
   },
   {
     question: "How does team collaboration work?",

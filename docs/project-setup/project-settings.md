@@ -95,6 +95,36 @@ View and manage project target platforms. Targets are set during onboarding but 
 - Each target has a **type** (Web App, Mobile, Desktop, CLI, API, Website) and a **label**
 - Multiple targets can share the same type with different labels (e.g., two Mobile targets: "Client App" and "Driver App")
 
+## Storage
+
+Configure where project assets (images, documents, uploaded files) are stored:
+
+| Option | Description |
+|--------|-------------|
+| **Local Only** | Files stored on disk. Not available for team projects since assets must be accessible to all members. |
+| **Trinity Cloud** | Managed storage via Trinity's R2 infrastructure. No configuration needed. Default for team projects. |
+| **BYO S3-Compatible** | Bring your own S3-compatible storage — AWS S3, Cloudflare R2, Backblaze B2, DigitalOcean Spaces, MinIO, etc. |
+
+### Storage Limits (Trinity Cloud)
+
+Every Pro seat includes **5 GB** of managed cloud storage. For teams, storage is pooled across seats — a 5-seat team gets 25 GB shared.
+
+If you need more space, add-on storage packs are available:
+
+| Pack | Price |
+|------|-------|
+| **10 GB** | $5/month |
+
+Packs stack — buy as many as you need. BYO S3 users are not subject to any Trinity storage limits since files are stored in your own bucket.
+
+### BYO S3 Configuration
+
+For BYO S3, configure:
+- **Endpoint URL** — the S3-compatible API endpoint
+- **Region** — bucket region (use `auto` for Cloudflare R2)
+- **Bucket name** — the storage bucket
+- **Access Key ID** and **Secret Access Key** — credentials (encrypted at rest)
+
 ## Secrets
 
 Manage encrypted API keys and credentials:

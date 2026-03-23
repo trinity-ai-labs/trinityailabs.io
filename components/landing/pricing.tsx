@@ -4,6 +4,7 @@ import { Check } from "lucide-react";
 const features = [
   "Cloud sync via Turso",
   "Unlimited projects",
+  "5 GB managed cloud storage",
   "Team collaboration",
   "Full feature set",
   "Metrics & reports",
@@ -62,6 +63,9 @@ export function Pricing() {
           One subscription per person. Team owners can pay for members&apos; seats.
           <br />
           Bring your own AI API keys — Trinity doesn&apos;t charge for AI usage.
+          <br />
+          Need more storage? Add 10 GB packs for $5/mo. Or bring your own S3
+          bucket.
         </p>
       </div>
     </section>
