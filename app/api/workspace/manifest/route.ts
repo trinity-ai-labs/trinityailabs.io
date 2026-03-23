@@ -8,35 +8,50 @@ import {
 } from "@/lib/ensure-tables";
 import { verifyAccessToken } from "@/lib/device-auth/jwt";
 import { provisionPersonalDb } from "@/lib/teams";
+import { getStorageUsage, getStorageQuota } from "@/lib/storage-quota";
 
 // GET /api/workspace/manifest — returns everything the desktop app needs
 export async function GET(req: Request) {
   const authHeader = req.headers.get("authorization");
   if (!authHeader?.startsWith("Bearer ")) {
-    return NextResponse.json({ error: "Missing access token" }, { status: 401 });
+    return NextResponse.json(
+      { error: "Missing access token" },
+      { status: 401 },
+    );
   }
 
   let payload;
   try {
     payload = await verifyAccessToken(authHeader.slice(7));
   } catch {
-    return NextResponse.json({ error: "Invalid or expired token" }, { status: 401 });
+    return NextResponse.json(
+      { error: "Invalid or expired token" },
+      { status: 401 },
+    );
   }
 
   const userId = payload.sub!;
 
   try {
     await ensureUserColumns();
-  } catch { /* columns may already exist */ }
+  } catch {
+    /* columns may already exist */
+  }
   try {
     await ensureTeamsTables();
-  } catch { /* tables may already exist */ }
+  } catch {
+    /* tables may already exist */
+  }
   try {
     await ensureSubscriptionsTable();
-  } catch { /* table may already exist */ }
+  } catch {
+    /* table may already exist */
+  }
   try {
     await ensureUserPreferencesTable();
-  } catch { /* table may already exist */ }
+  } catch {
+    /* table may already exist */
+  }
 
   // Get user info — query basic columns first, then try extended columns
   let user: Record<string, unknown>;
@@ -58,7 +73,12 @@ export async function GET(req: Request) {
     if (!userResult.rows.length) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
-    user = { ...userResult.rows[0] as Record<string, unknown>, handle: null, turso_db_url: null, turso_auth_token: null };
+    user = {
+      ...(userResult.rows[0] as Record<string, unknown>),
+      handle: null,
+      turso_db_url: null,
+      turso_auth_token: null,
+    };
   }
 
   // Provision personal DB lazily if not yet done (non-blocking)
@@ -86,7 +106,8 @@ export async function GET(req: Request) {
   const subscription = subResult.rows.length
     ? {
         status: subResult.rows[0].status as string,
-        currentPeriodEnd: (subResult.rows[0].current_period_end as string) ?? null,
+        currentPeriodEnd:
+          (subResult.rows[0].current_period_end as string) ?? null,
       }
     : null;
 
@@ -110,15 +131,33 @@ export async function GET(req: Request) {
     args: [userId],
   });
 
-  const teams = teamsResult.rows.map((row) => ({
-    id: row.id as string,
-    slug: row.slug as string,
-    name: row.name as string,
-    role: row.role as string,
-    tursoDbUrl: (row.turso_db_url as string) ?? null,
-    tursoAuthToken: (row.turso_token as string) ?? null,
-    encryptionKey: (row.encryption_key as string) ?? null,
-  }));
+  // Build teams with storage data
+  const teams = await Promise.all(
+    teamsResult.rows.map(async (row) => {
+      const teamId = row.id as string;
+      const [teamUsage, teamQuota] = await Promise.all([
+        getStorageUsage("team", teamId),
+        getStorageQuota("team", teamId),
+      ]);
+      return {
+        id: teamId,
+        slug: row.slug as string,
+        name: row.name as string,
+        role: row.role as string,
+        tursoDbUrl: (row.turso_db_url as string) ?? null,
+        tursoAuthToken: (row.turso_token as string) ?? null,
+        encryptionKey: (row.encryption_key as string) ?? null,
+        storageUsedBytes: teamUsage.usedBytes,
+        storageQuotaBytes: teamQuota.quotaBytes,
+      };
+    }),
+  );
+
+  // Personal storage
+  const [personalUsage, personalQuota] = await Promise.all([
+    getStorageUsage("personal", userId),
+    getStorageQuota("personal", userId),
+  ]);
 
   return NextResponse.json({
     user: {
@@ -132,5 +171,9 @@ export async function GET(req: Request) {
     subscription,
     preferences,
     teams,
+    storage: {
+      usedBytes: personalUsage.usedBytes,
+      quotaBytes: personalQuota.quotaBytes,
+    },
   });
 }

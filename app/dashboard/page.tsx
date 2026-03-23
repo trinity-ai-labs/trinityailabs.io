@@ -2,6 +2,7 @@
 
 import { useState, useEffect, use, Suspense } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,16 +12,50 @@ import {
   CardDescription,
   CardContent,
 } from "@/components/ui/card";
+import { StorageBar, formatBytes } from "@/components/dashboard/storage-bar";
+import { Users, ArrowRight } from "lucide-react";
 
-type Subscription = {
-  status: string;
-  current_period_end: string | null;
-} | null;
+type DashboardUsage = {
+  subscription: {
+    status: string;
+    currentPeriodEnd: string | null;
+    seatsPurchased: number;
+    hasCustomer: boolean;
+  } | null;
+  storage: {
+    usedBytes: number;
+    quotaBytes: number;
+  };
+  teams: Array<{
+    id: string;
+    name: string;
+    slug: string;
+    role: string;
+    memberCount: number;
+    storageUsedBytes: number;
+    storageQuotaBytes: number;
+  }>;
+};
 
-function fetchSubscription(): Promise<Subscription> {
-  return fetch("/api/billing/status")
-    .then((res) => (res.ok ? res.json() : null))
-    .catch(() => null);
+function fetchUsage(): Promise<DashboardUsage> {
+  return fetch("/api/dashboard/usage")
+    .then((res) =>
+      res.ok
+        ? res.json()
+        : {
+            subscription: null,
+            storage: { usedBytes: 0, quotaBytes: 0 },
+            teams: [],
+          },
+    )
+    .catch(
+      () =>
+        ({
+          subscription: null,
+          storage: { usedBytes: 0, quotaBytes: 0 },
+          teams: [],
+        }) as DashboardUsage,
+    );
 }
 
 function DashboardSkeleton() {
@@ -40,18 +75,27 @@ function DashboardSkeleton() {
           <div className="h-10 w-40 bg-muted animate-pulse rounded" />
         </CardContent>
       </Card>
+      <Card>
+        <CardHeader>
+          <div className="h-5 w-20 bg-muted animate-pulse rounded" />
+        </CardHeader>
+        <CardContent>
+          <div className="h-2 w-full bg-muted animate-pulse rounded-full" />
+        </CardContent>
+      </Card>
     </div>
   );
 }
 
 function DashboardContent({
-  subPromise,
+  usagePromise,
 }: {
-  subPromise: Promise<Subscription>;
+  usagePromise: Promise<DashboardUsage>;
 }) {
   const { data: session } = authClient.useSession();
-  const subscription = use(subPromise);
+  const usage = use(usagePromise);
   const router = useRouter();
+  const { subscription, storage, teams } = usage;
 
   // Redirect to handle setup if user has no handle
   useEffect(() => {
@@ -91,6 +135,7 @@ function DashboardContent({
         </p>
       </div>
 
+      {/* Subscription Card */}
       <Card>
         <CardHeader>
           <CardTitle>Subscription</CardTitle>
@@ -107,22 +152,25 @@ function DashboardContent({
             <div className="space-y-4">
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                <span className="text-sm">
+                <span className="text-sm font-medium">
                   {subscription?.status === "comp"
                     ? "Complimentary access"
-                    : "Pro plan - Active"}
+                    : "Pro — $10/month"}
                 </span>
               </div>
-              {subscription?.current_period_end && (
-                <p className="text-xs text-muted-foreground">
-                  Renews{" "}
-                  {new Date(
-                    subscription.current_period_end
-                  ).toLocaleDateString()}
-                </p>
-              )}
+              <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                <span>{subscription?.seatsPurchased ?? 1} seat</span>
+                {subscription?.currentPeriodEnd && (
+                  <span>
+                    Renews{" "}
+                    {new Date(
+                      subscription.currentPeriodEnd,
+                    ).toLocaleDateString()}
+                  </span>
+                )}
+              </div>
               {subscription?.status !== "comp" && (
-                <Button variant="outline" onClick={handleManage}>
+                <Button variant="outline" size="sm" onClick={handleManage}>
                   Manage Subscription
                 </Button>
               )}
@@ -131,13 +179,13 @@ function DashboardContent({
             <div className="space-y-4">
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-red-500" />
-                <span className="text-sm">Pro plan - Cancelled</span>
+                <span className="text-sm">Pro plan — Cancelled</span>
               </div>
               <p className="text-sm text-muted-foreground">
                 Your subscription has been cancelled. You can resubscribe at any
                 time.
               </p>
-              <Button variant="outline" onClick={handleManage}>
+              <Button variant="outline" size="sm" onClick={handleManage}>
                 Resubscribe
               </Button>
             </div>
@@ -151,22 +199,89 @@ function DashboardContent({
                 onClick={handleSubscribe}
                 className="font-mono bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white"
               >
-                Subscribe - $10/mo
+                Subscribe — $10/mo
               </Button>
             </div>
           )}
         </CardContent>
       </Card>
+
+      {/* Storage Card */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Storage</CardTitle>
+          <CardDescription>
+            Managed cloud storage for project assets
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <StorageBar
+            usedBytes={storage.usedBytes}
+            quotaBytes={storage.quotaBytes}
+          />
+          <p className="text-xs text-muted-foreground">
+            5 GB included per seat. Need more?{" "}
+            <Link
+              href="/dashboard/billing"
+              className="text-emerald-500 hover:underline"
+            >
+              View billing
+            </Link>
+          </p>
+        </CardContent>
+      </Card>
+
+      {/* Teams Card */}
+      {teams.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Your Teams</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {teams.map((team) => (
+              <div
+                key={team.id}
+                className="flex items-center justify-between py-2"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center text-sm font-medium text-emerald-500">
+                    {team.name[0]?.toUpperCase()}
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium">{team.name}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {team.memberCount} member
+                      {team.memberCount !== 1 ? "s" : ""} ·{" "}
+                      {formatBytes(team.storageUsedBytes)} /{" "}
+                      {formatBytes(team.storageQuotaBytes)}
+                    </p>
+                  </div>
+                </div>
+                <span className="text-xs text-muted-foreground capitalize">
+                  {team.role}
+                </span>
+              </div>
+            ))}
+            <Link
+              href="/dashboard/teams"
+              className="flex items-center gap-1 text-sm text-emerald-500 hover:underline pt-1"
+            >
+              Manage Teams
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }
 
 export default function DashboardPage() {
-  const [subPromise] = useState(() => fetchSubscription());
+  const [usagePromise] = useState(() => fetchUsage());
 
   return (
     <Suspense fallback={<DashboardSkeleton />}>
-      <DashboardContent subPromise={subPromise} />
+      <DashboardContent usagePromise={usagePromise} />
     </Suspense>
   );
 }

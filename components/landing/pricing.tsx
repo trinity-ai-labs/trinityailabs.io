@@ -60,7 +60,8 @@ export function Pricing() {
         </div>
 
         <p className="text-center text-sm text-muted-foreground mt-8">
-          One subscription per person. Team owners can pay for members&apos; seats.
+          One subscription per person. Team owners can pay for members&apos;
+          seats.
           <br />
           Bring your own AI API keys — Trinity doesn&apos;t charge for AI usage.
           <br />

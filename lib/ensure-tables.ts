@@ -6,7 +6,7 @@ export async function ensureRoleColumn() {
   if (roleColumnEnsured) return;
   try {
     await db.execute(
-      `ALTER TABLE user ADD COLUMN role TEXT NOT NULL DEFAULT 'user'`
+      `ALTER TABLE user ADD COLUMN role TEXT NOT NULL DEFAULT 'user'`,
     );
   } catch {
     // Column already exists
@@ -162,6 +162,18 @@ export async function ensureRefreshTokensTable() {
       expires_at TEXT NOT NULL,
       revoked INTEGER NOT NULL DEFAULT 0,
       created_at TEXT DEFAULT (datetime('now'))
+    )
+  `);
+}
+
+export async function ensureStorageUsageTable() {
+  await db.execute(`
+    CREATE TABLE IF NOT EXISTS storage_usage (
+      scope TEXT NOT NULL,
+      scope_id TEXT NOT NULL,
+      used_bytes INTEGER NOT NULL DEFAULT 0,
+      updated_at TEXT DEFAULT (datetime('now')),
+      PRIMARY KEY (scope, scope_id)
     )
   `);
 }

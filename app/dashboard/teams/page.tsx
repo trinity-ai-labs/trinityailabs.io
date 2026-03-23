@@ -11,6 +11,7 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { Users, Plus, Mail, Trash2, Crown, Copy, Check } from "lucide-react";
+import { StorageBar, formatBytes } from "@/components/dashboard/storage-bar";
 
 type Team = {
   id: string;
@@ -45,6 +46,12 @@ type TeamDetail = {
   currentUserRole: string;
 };
 
+type TeamStorage = {
+  id: string;
+  storageUsedBytes: number;
+  storageQuotaBytes: number;
+};
+
 export default function TeamsPage() {
   const [teams, setTeams] = useState<Team[]>([]);
   const [selectedTeam, setSelectedTeam] = useState<TeamDetail | null>(null);
@@ -55,6 +62,7 @@ export default function TeamsPage() {
   const [inviting, setInviting] = useState(false);
   const [error, setError] = useState("");
   const [copied, setCopied] = useState(false);
+  const [teamStorage, setTeamStorage] = useState<TeamStorage[]>([]);
 
   const fetchTeams = useCallback(async () => {
     const res = await fetch("/api/teams");
@@ -67,6 +75,27 @@ export default function TeamsPage() {
 
   useEffect(() => {
     fetchTeams();
+    // Fetch storage data for all teams
+    fetch("/api/dashboard/usage")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (data?.teams) {
+          setTeamStorage(
+            data.teams.map(
+              (t: {
+                id: string;
+                storageUsedBytes: number;
+                storageQuotaBytes: number;
+              }) => ({
+                id: t.id,
+                storageUsedBytes: t.storageUsedBytes,
+                storageQuotaBytes: t.storageQuotaBytes,
+              }),
+            ),
+          );
+        }
+      })
+      .catch(() => {});
   }, [fetchTeams]);
 
   async function handleCreateTeam(e: React.FormEvent) {
@@ -128,7 +157,7 @@ export default function TeamsPage() {
     if (!selectedTeam) return;
     const res = await fetch(
       `/api/teams/${selectedTeam.team.id}/members/${userId}`,
-      { method: "DELETE" }
+      { method: "DELETE" },
     );
     if (res.ok) {
       await selectTeam(selectedTeam.team.id);
@@ -138,7 +167,8 @@ export default function TeamsPage() {
 
   async function handleDeleteTeam() {
     if (!selectedTeam) return;
-    if (!confirm("Are you sure? This will delete the team and all its data.")) return;
+    if (!confirm("Are you sure? This will delete the team and all its data."))
+      return;
 
     const res = await fetch(`/api/teams/${selectedTeam.team.id}`, {
       method: "DELETE",
@@ -230,6 +260,12 @@ export default function TeamsPage() {
                     <p className="text-xs text-muted-foreground">
                       {team.member_count} member
                       {team.member_count !== 1 ? "s" : ""}
+                      {(() => {
+                        const ts = teamStorage.find((s) => s.id === team.id);
+                        return ts
+                          ? ` · ${formatBytes(ts.storageUsedBytes)} / ${formatBytes(ts.storageQuotaBytes)}`
+                          : "";
+                      })()}
                     </p>
                   </div>
                 </div>
@@ -312,9 +348,7 @@ export default function TeamsPage() {
                               variant="ghost"
                               size="sm"
                               className="h-7 w-7 p-0 text-muted-foreground hover:text-destructive"
-                              onClick={() =>
-                                handleRemoveMember(member.user_id)
-                              }
+                              onClick={() => handleRemoveMember(member.user_id)}
                             >
                               <Trash2 className="w-3.5 h-3.5" />
                             </Button>
@@ -348,12 +382,29 @@ export default function TeamsPage() {
                 </div>
               )}
 
+              {/* Team storage */}
+              {(() => {
+                const ts = teamStorage.find(
+                  (s) => s.id === selectedTeam.team.id,
+                );
+                return ts ? (
+                  <div className="mt-4 pt-4 border-t">
+                    <h3 className="text-sm font-medium mb-3">Storage</h3>
+                    <StorageBar
+                      usedBytes={ts.storageUsedBytes}
+                      quotaBytes={ts.storageQuotaBytes}
+                    />
+                    <p className="text-xs text-muted-foreground mt-2">
+                      {selectedTeam.members.length} seat
+                      {selectedTeam.members.length !== 1 ? "s" : ""} × 5 GB
+                    </p>
+                  </div>
+                ) : null;
+              })()}
+
               {/* Invite form */}
               {selectedTeam.currentUserRole === "owner" && (
-                <form
-                  onSubmit={handleInvite}
-                  className="mt-4 flex gap-3"
-                >
+                <form onSubmit={handleInvite} className="mt-4 flex gap-3">
                   <Input
                     type="email"
                     placeholder="Invite by email"
