@@ -84,7 +84,7 @@ A floating help button appears in the bottom-right corner of every page. Click i
 ### Adding a Feature
 
 1. Navigate to **Plan**
-2. Click **Add Feature**
+2. Click **Architect**
 3. Describe what you want in the chat interface
 4. Review the generated stories
 5. Confirm to add them to your PRD

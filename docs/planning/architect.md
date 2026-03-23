@@ -1,11 +1,11 @@
-# Adding Features
+# Architect
 
-The Add Feature flow lets you add new stories to an existing PRD, modify existing stories, or create entirely new PRDs — all through a conversational interface.
+The Architect flow lets you add new stories to an existing PRD, modify existing stories, or create entirely new PRDs — all through a conversational interface.
 
-## Accessing Add Feature
+## Accessing Architect
 
 1. Navigate to **Plan**
-2. Click the **Add Feature** button
+2. Click the **Architect** button
 
 ## The Conversation
 
@@ -69,21 +69,21 @@ Protected stories are flagged in the preview but can't be modified. If you need 
 
 ## From Audit Pages
 
-You can also reach Add Feature from the Knowledge Base:
+You can also reach Architect from the Knowledge Base:
 
 1. Navigate to an audit page in the vault
-2. Click **Address in Add Feature**
+2. Click **Address in Architect**
 3. The audit findings are pre-loaded as context for story generation
 
 This creates stories with an `audit_source` reference, linking them back to the originating audit. After the stories execute and merge, Trinity automatically re-checks the audit items.
 
 ## From Diagnose
 
-After running a diagnosis, findings can be sent to Add Feature:
+After running a diagnosis, findings can be sent to Architect:
 
 1. Run **Diagnose** from the planning dashboard
 2. Review the findings
-3. Click **Send to Add Feature** on findings you want to address
+3. Click **Send to Architect** on findings you want to address
 
 The findings provide context for generating targeted fix stories.
 
@@ -91,5 +91,5 @@ The findings provide context for generating targeted fix stories.
 
 - **Be specific about scope** — "Add user authentication" is broad; "Add email/password login with forgot-password flow using NextAuth" is better
 - **Reference existing features** — "Add filtering to the existing product list page" helps Trinity understand the context
-- **One feature at a time** — for complex additions, it's better to do multiple Add Feature passes than one huge request
+- **One feature at a time** — for complex additions, it's better to do multiple Architect passes than one huge request
 - **Attach references** — wireframes, API specs, or design mockups help agents implement exactly what you want

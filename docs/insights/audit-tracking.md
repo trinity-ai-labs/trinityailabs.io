@@ -16,7 +16,7 @@ During the "Import Existing Project" flow, Trinity scans your codebase and ident
 
 ### 2. Create Stories from Audit Items
 
-From an audit page, click **"Address in Add Feature"** to create a new story pre-filled with the audit recommendations. The story gets an `audit_source` reference linking it back to the originating audit page.
+From an audit page, click **"Address in Architect"** to create a new story pre-filled with the audit recommendations. The story gets an `audit_source` reference linking it back to the originating audit page.
 
 ### 3. Auto-Check After Merge
 

@@ -92,9 +92,9 @@ export const DOC_SECTIONS: DocSection[] = [
         pageTitle: "PRD Planning Pipeline",
       },
       {
-        slug: "add-feature",
-        title: "Add Feature",
-        pageTitle: "Adding Features",
+        slug: "architect",
+        title: "Architect",
+        pageTitle: "Architect",
       },
       {
         slug: "diagnose",

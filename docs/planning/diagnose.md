@@ -69,7 +69,7 @@ A high-level narrative summarizing the project's state and the most important ac
 
 ## Acting on Diagnose Findings
 
-Select findings and click **Send to Add Feature** to generate stories that address the issues. The finding context is passed to the Add Feature flow, so generated stories are specifically targeted at the problem.
+Select findings and click **Implement** to generate stories that address the issues. The finding context is passed to the Architect flow, so generated stories are specifically targeted at the problem.
 
 You can also use findings for manual review — they're especially useful for prioritizing technical debt, identifying security issues, and understanding areas that need attention.
 
