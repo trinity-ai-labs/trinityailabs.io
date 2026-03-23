@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,10 +18,68 @@ export default function SettingsPage() {
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
 
+  const [handle, setHandle] = useState("");
+  const [handleError, setHandleError] = useState("");
+  const [handleAvailable, setHandleAvailable] = useState<boolean | null>(null);
+  const [checkingHandle, setCheckingHandle] = useState(false);
+  const [handleSaving, setHandleSaving] = useState(false);
+  const [handleMessage, setHandleMessage] = useState("");
+  const [originalHandle, setOriginalHandle] = useState("");
+  const handleTimerRef = useRef<ReturnType<typeof setTimeout>>(null);
+
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [pwSaving, setPwSaving] = useState(false);
   const [pwMessage, setPwMessage] = useState("");
+
+  // Load current handle
+  useEffect(() => {
+    fetch("/api/handle/me")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.handle) {
+          setHandle(data.handle);
+          setOriginalHandle(data.handle);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  // Check handle availability with debounce
+  useEffect(() => {
+    if (handleTimerRef.current) clearTimeout(handleTimerRef.current);
+    const value = handle.toLowerCase().trim();
+    if (value === originalHandle) {
+      setHandleAvailable(null);
+      setHandleError("");
+      return;
+    }
+    if (value.length < 3) {
+      setHandleAvailable(null);
+      setHandleError(value.length > 0 ? "At least 3 characters" : "");
+      return;
+    }
+    setCheckingHandle(true);
+    handleTimerRef.current = setTimeout(async () => {
+      try {
+        const res = await fetch(
+          `/api/handle?handle=${encodeURIComponent(value)}`
+        );
+        const data = await res.json();
+        if (!res.ok) {
+          setHandleError(data.error);
+          setHandleAvailable(false);
+        } else {
+          setHandleAvailable(data.available);
+          setHandleError(data.available ? "" : "Handle already taken");
+        }
+      } catch {
+        setHandleError("Failed to check availability");
+        setHandleAvailable(null);
+      }
+      setCheckingHandle(false);
+    }, 400);
+  }, [handle, originalHandle]);
 
   async function handleUpdateProfile(e: React.FormEvent) {
     e.preventDefault();
@@ -32,6 +90,31 @@ export default function SettingsPage() {
 
     setMessage(error ? error.message ?? "Update failed" : "Profile updated");
     setSaving(false);
+  }
+
+  async function handleUpdateHandle(e: React.FormEvent) {
+    e.preventDefault();
+    setHandleSaving(true);
+    setHandleMessage("");
+
+    try {
+      const res = await fetch("/api/handle", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ handle: handle.toLowerCase().trim() }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setHandleMessage(data.error ?? "Failed to update handle");
+      } else {
+        setHandleMessage("Handle updated");
+        setOriginalHandle(data.handle);
+        setHandleAvailable(null);
+      }
+    } catch {
+      setHandleMessage("Failed to update handle");
+    }
+    setHandleSaving(false);
   }
 
   async function handleChangePassword(e: React.FormEvent) {
@@ -97,6 +180,66 @@ export default function SettingsPage() {
             )}
             <Button type="submit" disabled={saving} variant="outline">
               {saving ? "Saving..." : "Save"}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Handle</CardTitle>
+          <CardDescription>
+            Your unique handle for invites and identification.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleUpdateHandle} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium mb-1.5">Handle</label>
+              <div className="relative">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">
+                  @
+                </span>
+                <Input
+                  value={handle}
+                  onChange={(e) =>
+                    setHandle(
+                      e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, "")
+                    )
+                  }
+                  className="pl-7"
+                  minLength={3}
+                  maxLength={30}
+                  required
+                />
+                {handle.length >= 3 && handle !== originalHandle && (
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm">
+                    {checkingHandle
+                      ? "..."
+                      : handleAvailable
+                        ? "\u2713"
+                        : "\u2717"}
+                  </span>
+                )}
+              </div>
+              {handleError && (
+                <p className="text-xs text-destructive mt-1">{handleError}</p>
+              )}
+            </div>
+            {handleMessage && (
+              <p className="text-sm text-muted-foreground">{handleMessage}</p>
+            )}
+            <Button
+              type="submit"
+              disabled={
+                handleSaving ||
+                handle === originalHandle ||
+                checkingHandle ||
+                handleAvailable === false
+              }
+              variant="outline"
+            >
+              {handleSaving ? "Saving..." : "Update Handle"}
             </Button>
           </form>
         </CardContent>

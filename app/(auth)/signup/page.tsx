@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
@@ -11,12 +11,18 @@ function SignUpForm() {
   const inviteToken = searchParams.get("invite");
 
   const [name, setName] = useState("");
+  const [handle, setHandle] = useState("");
+  const [handleError, setHandleError] = useState("");
+  const [handleAvailable, setHandleAvailable] = useState<boolean | null>(null);
+  const [checkingHandle, setCheckingHandle] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [inviteEmail, setInviteEmail] = useState<string | null>(null);
+
+  const handleTimerRef = useRef<ReturnType<typeof setTimeout>>(null);
 
   useEffect(() => {
     if (!inviteToken) return;
@@ -27,6 +33,36 @@ function SignUpForm() {
       })
       .catch(() => null);
   }, [inviteToken]);
+
+  useEffect(() => {
+    if (handleTimerRef.current) clearTimeout(handleTimerRef.current);
+    const value = handle.toLowerCase().trim();
+    if (value.length < 3) {
+      setHandleAvailable(null);
+      setHandleError(value.length > 0 ? "At least 3 characters" : "");
+      return;
+    }
+    setCheckingHandle(true);
+    handleTimerRef.current = setTimeout(async () => {
+      try {
+        const res = await fetch(
+          `/api/handle?handle=${encodeURIComponent(value)}`
+        );
+        const data = await res.json();
+        if (!res.ok) {
+          setHandleError(data.error);
+          setHandleAvailable(false);
+        } else {
+          setHandleAvailable(data.available);
+          setHandleError(data.available ? "" : "Handle already taken");
+        }
+      } catch {
+        setHandleError("Failed to check availability");
+        setHandleAvailable(null);
+      }
+      setCheckingHandle(false);
+    }, 400);
+  }, [handle]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -43,6 +79,15 @@ function SignUpForm() {
       setError(error.message ?? "Sign up failed");
       setLoading(false);
       return;
+    }
+
+    // Set handle after account creation
+    if (data?.user?.id) {
+      await fetch("/api/handle", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ handle: handle.toLowerCase().trim() }),
+      }).catch(() => {});
     }
 
     if (inviteToken && data?.user?.id) {
@@ -118,6 +163,42 @@ function SignUpForm() {
         </div>
 
         <div>
+          <label htmlFor="handle" className="block text-sm font-medium mb-1.5">
+            Handle
+          </label>
+          <div className="relative">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">
+              @
+            </span>
+            <Input
+              id="handle"
+              type="text"
+              value={handle}
+              onChange={(e) =>
+                setHandle(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""))
+              }
+              placeholder="your-handle"
+              className="pl-7"
+              minLength={3}
+              maxLength={30}
+              required
+            />
+            {handle.length >= 3 && (
+              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm">
+                {checkingHandle
+                  ? "..."
+                  : handleAvailable
+                    ? "\u2713"
+                    : "\u2717"}
+              </span>
+            )}
+          </div>
+          {handleError && (
+            <p className="text-xs text-destructive mt-1">{handleError}</p>
+          )}
+        </div>
+
+        <div>
           <label htmlFor="email" className="block text-sm font-medium mb-1.5">
             Email
           </label>
@@ -156,7 +237,7 @@ function SignUpForm() {
 
         <Button
           type="submit"
-          disabled={loading}
+          disabled={loading || !handleAvailable || checkingHandle}
           className="w-full font-mono bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white"
         >
           {loading ? "Creating account..." : "Create Account"}
@@ -180,7 +261,7 @@ function SignUpForm() {
           onClick={() =>
             authClient.signIn.social({
               provider: "google",
-              callbackURL: "/dashboard",
+              callbackURL: "/setup-handle",
             })
           }
         >
@@ -211,7 +292,7 @@ function SignUpForm() {
           onClick={() =>
             authClient.signIn.social({
               provider: "github",
-              callbackURL: "/dashboard",
+              callbackURL: "/setup-handle",
             })
           }
         >

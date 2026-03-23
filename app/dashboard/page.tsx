@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, use, Suspense } from "react";
+import { useState, useEffect, use, Suspense } from "react";
+import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import {
@@ -50,6 +51,18 @@ function DashboardContent({
 }) {
   const { data: session } = authClient.useSession();
   const subscription = use(subPromise);
+  const router = useRouter();
+
+  // Redirect to handle setup if user has no handle
+  useEffect(() => {
+    if (!session?.user) return;
+    fetch("/api/handle/me")
+      .then((r) => r.json())
+      .then((data) => {
+        if (!data.handle) router.replace("/setup-handle");
+      })
+      .catch(() => {});
+  }, [session?.user, router]);
 
   async function handleSubscribe() {
     const res = await fetch("/api/billing/checkout", { method: "POST" });

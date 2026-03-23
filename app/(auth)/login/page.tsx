@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 function LoginContent() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl");
-  const [email, setEmail] = useState("");
+  const [identity, setIdentity] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -18,6 +18,30 @@ function LoginContent() {
     e.preventDefault();
     setError("");
     setLoading(true);
+
+    let email = identity.trim();
+
+    // If it doesn't look like an email, resolve handle → email
+    if (!email.includes("@")) {
+      try {
+        const res = await fetch("/api/handle/resolve", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ handle: email }),
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          setError(data.error ?? "Handle not found");
+          setLoading(false);
+          return;
+        }
+        email = data.email;
+      } catch {
+        setError("Failed to resolve handle");
+        setLoading(false);
+        return;
+      }
+    }
 
     const { error } = await authClient.signIn.email({
       email,
@@ -43,17 +67,17 @@ function LoginContent() {
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label
-            htmlFor="email"
+            htmlFor="identity"
             className="block text-sm font-medium mb-1.5"
           >
-            Email
+            Email or Handle
           </label>
           <Input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="you@example.com"
+            id="identity"
+            type="text"
+            value={identity}
+            onChange={(e) => setIdentity(e.target.value)}
+            placeholder="you@example.com or your-handle"
             required
           />
         </div>
