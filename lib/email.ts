@@ -52,6 +52,56 @@ export async function sendInviteEmail(to: string, inviteUrl: string) {
   });
 }
 
+export async function sendPasswordResetEmail(to: string, url: string) {
+  await getResend().emails.send({
+    from: FROM_ADDRESS,
+    to,
+    subject: "Reset your password - Trinity AI Labs",
+    html: `
+      <div style="font-family: system-ui, sans-serif; max-width: 480px; margin: 0 auto; padding: 40px 20px;">
+        <h1 style="font-size: 24px; font-weight: 600; margin-bottom: 16px;">Reset your password</h1>
+        <p style="color: #666; margin-bottom: 24px;">
+          Click the button below to set a new password for your Trinity account. This link expires in 1 hour.
+        </p>
+        <a href="${url}" style="display: inline-block; background: linear-gradient(to right, #10b981, #06b6d4); color: white; text-decoration: none; padding: 12px 24px; border-radius: 8px; font-weight: 500;">
+          Reset Password
+        </a>
+        <p style="color: #999; font-size: 13px; margin-top: 32px;">
+          If you didn&apos;t request a password reset, you can safely ignore this email.
+        </p>
+      </div>
+    `,
+  });
+}
+
+export async function sendTeamInviteEmail(
+  to: string,
+  teamName: string,
+  inviterName: string,
+  acceptUrl: string
+) {
+  await getResend().emails.send({
+    from: FROM_ADDRESS,
+    to,
+    subject: `Join ${teamName} on Trinity`,
+    html: `
+      <div style="font-family: system-ui, sans-serif; max-width: 480px; margin: 0 auto; padding: 40px 20px;">
+        <h1 style="font-size: 24px; font-weight: 600; margin-bottom: 16px;">You're invited to ${teamName}</h1>
+        <p style="color: #666; margin-bottom: 24px;">
+          ${inviterName} has invited you to join <strong>${teamName}</strong> on Trinity.
+          Click the button below to accept.
+        </p>
+        <a href="${acceptUrl}" style="display: inline-block; background: linear-gradient(to right, #10b981, #06b6d4); color: white; text-decoration: none; padding: 12px 24px; border-radius: 8px; font-weight: 500;">
+          Join Team
+        </a>
+        <p style="color: #999; font-size: 13px; margin-top: 32px;">
+          If you weren&apos;t expecting this invitation, you can safely ignore this email.
+        </p>
+      </div>
+    `,
+  });
+}
+
 export async function sendWelcomeEmail(to: string, name: string) {
   await getResend().emails.send({
     from: FROM_ADDRESS,

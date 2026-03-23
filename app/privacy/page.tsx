@@ -16,7 +16,7 @@ export default function PrivacyPage() {
         <div className="max-w-3xl mx-auto px-6">
           <h1 className="text-4xl font-bold mb-2">Privacy Policy</h1>
           <p className="text-muted-foreground mb-12">
-            Last updated: March 21, 2026
+            Last updated: March 22, 2026
           </p>
 
           <div className="prose prose-invert prose-sm max-w-none space-y-8 text-muted-foreground [&_h2]:text-foreground [&_h3]:text-foreground [&_strong]:text-foreground">
@@ -147,7 +147,8 @@ export default function PrivacyPage() {
               </ul>
               <p className="mt-3">
                 We do not sell your personal information. We do not use your project
-                data or code to train AI models. We do not serve advertisements.
+                data or code to train AI models. We do not serve third-party
+                display advertisements.
               </p>
             </section>
 
@@ -200,7 +201,27 @@ export default function PrivacyPage() {
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold">6. Data Storage &amp; Security</h2>
+              <h2 className="text-xl font-semibold">
+                6. Referral &amp; Affiliate Links
+              </h2>
+              <p>
+                The Service may include referral or affiliate links to
+                third-party products and services (for example, AI providers,
+                hosting platforms, or developer tools). When you click a
+                referral link, the destination service may set cookies or
+                tracking parameters that associate your visit with Trinity AI
+                Labs. If you purchase or sign up through such a link, we may
+                receive a referral commission. These links are always marked
+                with a referral indicator within the Service. Clicking a
+                referral link does not change the price you pay. We only
+                recommend products that are relevant to the Trinity workflow —
+                we do not accept payment for placement or prioritize
+                recommendations based on commission rates.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-xl font-semibold">7. Data Storage &amp; Security</h2>
               <ul className="list-disc pl-5 space-y-1.5">
                 <li>
                   Synced databases are hosted on Turso with TLS encryption in
@@ -225,7 +246,7 @@ export default function PrivacyPage() {
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold">7. Data Retention</h2>
+              <h2 className="text-xl font-semibold">8. Data Retention</h2>
               <p>
                 Your data is retained for as long as your account is active. If
                 your subscription lapses, your data is preserved (read-only access)
@@ -239,7 +260,7 @@ export default function PrivacyPage() {
 
             <section>
               <h2 className="text-xl font-semibold">
-                8. Team Collaboration &amp; Shared Data
+                9. Team Collaboration &amp; Shared Data
               </h2>
               <p>
                 When you join a team, your name, email, handle, and avatar are
@@ -252,7 +273,7 @@ export default function PrivacyPage() {
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold">9. Your Rights</h2>
+              <h2 className="text-xl font-semibold">10. Your Rights</h2>
               <p>You may:</p>
               <ul className="list-disc pl-5 space-y-1.5">
                 <li>Access your personal data via the dashboard and desktop app.</li>
@@ -269,10 +290,10 @@ export default function PrivacyPage() {
               <p className="mt-3">
                 To exercise these rights, contact us at{" "}
                 <a
-                  href="mailto:hello@trinityailabs.io"
+                  href="mailto:info@trinityailabs.com"
                   className="text-foreground underline underline-offset-4 hover:text-foreground/80"
                 >
-                  hello@trinityailabs.io
+                  info@trinityailabs.com
                 </a>
                 .
               </p>
@@ -280,7 +301,7 @@ export default function PrivacyPage() {
 
             <section>
               <h2 className="text-xl font-semibold">
-                10. Children&apos;s Privacy
+                11. Children&apos;s Privacy
               </h2>
               <p>
                 Our Service is not directed at children under 16. We do not
@@ -292,7 +313,7 @@ export default function PrivacyPage() {
 
             <section>
               <h2 className="text-xl font-semibold">
-                11. Changes to This Policy
+                12. Changes to This Policy
               </h2>
               <p>
                 We may update this Privacy Policy from time to time. We will notify
@@ -303,14 +324,14 @@ export default function PrivacyPage() {
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold">12. Contact</h2>
+              <h2 className="text-xl font-semibold">13. Contact</h2>
               <p>
                 If you have questions about this Privacy Policy, contact us at{" "}
                 <a
-                  href="mailto:hello@trinityailabs.io"
+                  href="mailto:info@trinityailabs.com"
                   className="text-foreground underline underline-offset-4 hover:text-foreground/80"
                 >
-                  hello@trinityailabs.io
+                  info@trinityailabs.com
                 </a>
                 .
               </p>

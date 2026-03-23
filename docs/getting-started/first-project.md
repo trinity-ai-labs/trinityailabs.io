@@ -2,14 +2,28 @@
 
 This guide walks you through creating a new project in Trinity, from initial setup to your first running story.
 
+## Before You Start
+
+Make sure you have the required tools installed:
+
+- **Git** — with your name and email configured
+- **GitHub CLI** — installed and authenticated (`gh auth login`)
+- **Claude Code CLI** — installed for when you're ready to run stories
+- **Node.js 18+**
+
+See the **[Prerequisites & Tool Setup](/knowledge?book=user-guide&section=getting-started&chapter=prerequisites&page=prerequisites)** page for detailed install instructions for macOS and Linux. Trinity will also check for these tools at each step and tell you exactly what to run if something is missing.
+
 ## Step 1: Create a Project
 
 From the main screen, click **New Project**. You'll need to provide:
 
-- **Name** — a human-readable name for your project (e.g., "My Todo App")
-- **Git repository path** — the local path to your project's git repository
+- **Name** — this becomes the folder name and GitHub repo name (e.g., "my-todo-app")
+- **Location** — the parent directory where the project folder will be created
+- **Visibility** — whether the GitHub repo is public or private
 
-If you're starting from scratch (no existing code), Trinity will guide you through the full onboarding wizard. If you have an existing codebase, you can use the **Import Existing** flow instead.
+Trinity will check that Git and GitHub CLI are ready before showing the form. If something is missing, you'll see instructions to fix it with a **Check Again** button.
+
+If you have an existing codebase, use the **Import Existing** flow instead — it validates that your folder is a git repo with a GitHub remote.
 
 ## Step 2: Onboarding Wizard
 
@@ -59,13 +73,15 @@ Make sure the plan makes sense before starting execution. You can:
 
 ## Step 5: Start Execution
 
-Navigate to the **Run** page and click **Start**. This launches the coordinator, which:
+Navigate to the **Run** page and click **Start**. Trinity will check that **Claude Code CLI** is installed — if it's missing, you'll see install instructions right in the modal. See the [Prerequisites](/knowledge?book=user-guide&section=getting-started&chapter=prerequisites&page=prerequisites) page for the full Claude Code setup walkthrough.
+
+Once started, the coordinator:
 
 1. Identifies stories that are ready to run (all dependencies met)
 2. Assigns them to available workers
-3. Each worker executes the story through the agent pipeline
+3. Each worker executes the story through the agent pipeline (Analyst → Implementer → Auditor → Documenter)
 
-You can configure the number of parallel workers in project settings.
+You can configure the number of parallel workers and automation settings in the run modal.
 
 ## Step 6: Monitor Progress
 

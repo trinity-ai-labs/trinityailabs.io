@@ -19,7 +19,7 @@ export function FinalCTA() {
           <PlatformDownload size="lg" />
         </div>
         <p className="text-xs text-muted-foreground mt-6">
-          Available for macOS, Windows, and Linux
+          Available for macOS and Linux
         </p>
       </div>
     </section>

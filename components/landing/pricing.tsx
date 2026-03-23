@@ -4,12 +4,13 @@ import { Check } from "lucide-react";
 const features = [
   "Cloud sync via Turso",
   "Unlimited projects",
+  "Team collaboration",
   "Full feature set",
-  "Priority support",
   "Metrics & reports",
   "PDF reports",
   "All AI providers",
   "Parallel execution",
+  "Priority support",
 ];
 
 export function Pricing() {
@@ -58,8 +59,9 @@ export function Pricing() {
         </div>
 
         <p className="text-center text-sm text-muted-foreground mt-8">
-          Bring your own AI API keys (Anthropic, DeepSeek, or Ollama). Trinity
-          doesn&apos;t charge for AI usage — you pay your provider directly.
+          One subscription per person. Team owners can pay for members&apos; seats.
+          <br />
+          Bring your own AI API keys — Trinity doesn&apos;t charge for AI usage.
         </p>
       </div>
     </section>

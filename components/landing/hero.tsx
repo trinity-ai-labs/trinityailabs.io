@@ -20,7 +20,7 @@ export function Hero() {
           <div className="inline-flex items-center gap-2 px-4 py-1.5 mb-8 rounded-full border border-border bg-card/50 backdrop-blur">
             <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
             <span className="text-sm font-mono text-muted-foreground">
-              Now available for macOS, Windows &amp; Linux
+              Now available for macOS &amp; Linux
             </span>
           </div>
 

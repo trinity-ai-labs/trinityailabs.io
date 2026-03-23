@@ -21,7 +21,7 @@ const footerLinks = [
   {
     title: "Company",
     links: [
-      { label: "Contact", href: "mailto:hello@trinityailabs.io" },
+      { label: "Contact", href: "mailto:info@trinityailabs.com" },
       { label: "Privacy Policy", href: "/privacy" },
       { label: "Terms of Service", href: "/terms" },
     ],
@@ -85,7 +85,7 @@ export function Footer() {
             <a href="/terms" className="hover:text-foreground transition-colors">
               Terms
             </a>
-            <a href="mailto:hello@trinityailabs.io" className="hover:text-foreground transition-colors">
+            <a href="mailto:info@trinityailabs.com" className="hover:text-foreground transition-colors">
               Contact
             </a>
           </div>
