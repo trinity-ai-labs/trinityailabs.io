@@ -22,12 +22,12 @@ const faqs = [
   {
     question: "Do I need to be online for Trinity to work?",
     answer:
-      "Trinity runs locally on your machine. You need internet access for cloud AI providers (Anthropic, DeepSeek), but if you're using Ollama with local models, you can work fully offline. The Free plan is entirely local with no cloud dependency.",
+      "Yes. Trinity runs locally but needs internet to reach AI providers (Claude, DeepSeek) and for cloud sync. Your code stays on your machine — only prompts and responses go to the AI provider.",
   },
   {
     question: "What platforms are supported?",
     answer:
-      "Trinity is available for macOS, Windows, and Linux. It's built with Tauri 2, so it's a native desktop app with a small footprint — not an Electron wrapper.",
+      "Trinity is available for macOS (Apple Silicon and Intel) and Linux. It's built with Tauri 2, so it's a native desktop app with a small footprint — not an Electron wrapper.",
   },
   {
     question: "Is my code sent to Trinity's servers?",
@@ -35,14 +35,14 @@ const faqs = [
       "No. Your code stays on your machine. Trinity orchestrates AI agents locally. Code is sent only to the AI provider you choose (Anthropic, DeepSeek, or stays local with Ollama). The Pro plan syncs project metadata (stories, plans, status) via Turso — never your source code.",
   },
   {
-    question: "What does the $10/mo Pro plan include?",
+    question: "What does the $10/mo plan include?",
     answer:
-      "Pro adds cloud sync (so your project state persists across devices), unlimited projects, full metrics and reporting, and priority support. The Free plan is limited to 1 project with local-only storage. Both plans include the full feature set — no feature gates on the AI pipeline.",
+      "Everything — cloud sync across devices, unlimited projects, 5 GB managed cloud storage, full metrics and reporting, team collaboration, and priority support. Need more storage? Add 10 GB packs for $5/mo, or bring your own S3-compatible bucket at no extra cost. One subscription per person. If a team owner pays for your seat, you don't need your own subscription.",
   },
   {
-    question: "When will team features be available?",
+    question: "How does team collaboration work?",
     answer:
-      "Team collaboration — shared planning, execution visibility, comments, and activity feeds — is on the roadmap. We'll announce availability to Pro users first. The Team plan will be $10/seat/month.",
+      "Create a team, invite members by email, and share projects. All planning data syncs in real-time via Turso. Each team member runs execution on their own machine — Trinity coordinates job claiming so no two people work on the same story. Comments, activity feeds, and change history keep everyone aligned. $10/seat/month — the team owner can pay for members or members can bring their own subscription.",
   },
 ];
 

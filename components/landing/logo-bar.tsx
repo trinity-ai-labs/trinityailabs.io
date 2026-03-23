@@ -16,7 +16,7 @@ export function LogoBar() {
             </div>
             <span className="hidden sm:inline text-border">|</span>
             <div className="flex items-center gap-2">
-              <span className="font-mono">macOS · Windows · Linux</span>
+              <span className="font-mono">macOS · Linux</span>
             </div>
           </div>
         </div>

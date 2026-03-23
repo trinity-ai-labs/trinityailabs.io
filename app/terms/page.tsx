@@ -16,7 +16,7 @@ export default function TermsPage() {
         <div className="max-w-3xl mx-auto px-6">
           <h1 className="text-4xl font-bold mb-2">Terms of Service</h1>
           <p className="text-muted-foreground mb-12">
-            Last updated: March 21, 2026
+            Last updated: March 22, 2026
           </p>
 
           <div className="prose prose-invert prose-sm max-w-none space-y-8 text-muted-foreground [&_h2]:text-foreground [&_h3]:text-foreground [&_strong]:text-foreground">
@@ -107,21 +107,43 @@ export default function TermsPage() {
 
               <h3 className="text-lg font-medium mt-4">4.5 Refunds</h3>
               <p>
-                Refund requests are handled by Lemon Squeezy in accordance with
-                their refund policy. Contact us at{" "}
+                You may cancel your subscription at any time. Cancellation takes
+                effect at the end of your current billing period — you retain
+                full access until then. We do not issue refunds for partial
+                billing periods. Payments are processed by Lemon Squeezy, our
+                Merchant of Record, who may issue refunds at their discretion
+                within 60 days of purchase to resolve disputes. If you believe
+                you were charged in error, contact us at{" "}
                 <a
-                  href="mailto:hello@trinityailabs.io"
+                  href="mailto:info@trinityailabs.com"
                   className="text-foreground underline underline-offset-4 hover:text-foreground/80"
                 >
-                  hello@trinityailabs.io
-                </a>{" "}
-                if you have billing concerns.
+                  info@trinityailabs.com
+                </a>
+                .
               </p>
             </section>
 
             <section>
               <h2 className="text-xl font-semibold">
-                5. Claude Code Requirement
+                5. Referral &amp; Affiliate Links
+              </h2>
+              <p>
+                The Service may contain referral or affiliate links to
+                third-party products and services. These links are clearly
+                identified within the Service. If you click a referral link and
+                make a purchase or create an account, Trinity AI Labs may
+                receive a referral commission at no additional cost to you. The
+                presence of a referral link does not constitute an endorsement
+                or guarantee of the third-party product. We do not prioritize
+                recommendations based on commission rates — referral links are
+                only included for products relevant to the Trinity workflow.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-xl font-semibold">
+                6. Claude Code Requirement
               </h2>
               <p>
                 Trinity requires Claude Code (by Anthropic) to be installed on your
@@ -135,16 +157,16 @@ export default function TermsPage() {
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold">6. Your Data</h2>
+              <h2 className="text-xl font-semibold">7. Your Data</h2>
 
-              <h3 className="text-lg font-medium mt-4">6.1 Ownership</h3>
+              <h3 className="text-lg font-medium mt-4">7.1 Ownership</h3>
               <p>
                 You retain all rights to your code, project data, and content. We
                 do not claim ownership of any code generated through the Service.
                 We do not use your code or project data to train AI models.
               </p>
 
-              <h3 className="text-lg font-medium mt-4">6.2 Cloud Sync</h3>
+              <h3 className="text-lg font-medium mt-4">7.2 Cloud Sync</h3>
               <p>
                 Project data is synced via cloud databases (Turso) to enable
                 multi-device and team access. You grant us a limited license to
@@ -152,7 +174,7 @@ export default function TermsPage() {
                 purpose of providing the Service.
               </p>
 
-              <h3 className="text-lg font-medium mt-4">6.3 Secrets</h3>
+              <h3 className="text-lg font-medium mt-4">7.3 Secrets</h3>
               <p>
                 API keys and secrets you store in Trinity are encrypted at rest.
                 You are responsible for the security and rotation of your own
@@ -161,7 +183,7 @@ export default function TermsPage() {
                 externally if you no longer trust that person.
               </p>
 
-              <h3 className="text-lg font-medium mt-4">6.4 Asset Storage</h3>
+              <h3 className="text-lg font-medium mt-4">7.4 Asset Storage</h3>
               <p>
                 If you use Trinity-managed storage, uploaded assets are stored on
                 Cloudflare R2. Per-file limit: 50MB. Per-project limit: 1GB.
@@ -172,15 +194,15 @@ export default function TermsPage() {
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold">7. Teams</h2>
+              <h2 className="text-xl font-semibold">8. Teams</h2>
 
-              <h3 className="text-lg font-medium mt-4">7.1 Team Creation</h3>
+              <h3 className="text-lg font-medium mt-4">8.1 Team Creation</h3>
               <p>
                 Any subscriber can create teams. The creator is the team owner.
                 Teams are free to create — you pay only for seats.
               </p>
 
-              <h3 className="text-lg font-medium mt-4">7.2 Roles</h3>
+              <h3 className="text-lg font-medium mt-4">8.2 Roles</h3>
               <p>
                 Teams have two roles: <strong>Owner</strong> and{" "}
                 <strong>Member</strong>. Owners have full control over team
@@ -189,14 +211,14 @@ export default function TermsPage() {
                 gates. See our documentation for the full permissions matrix.
               </p>
 
-              <h3 className="text-lg font-medium mt-4">7.3 Data Isolation</h3>
+              <h3 className="text-lg font-medium mt-4">8.3 Data Isolation</h3>
               <p>
                 Each team has a physically isolated database. Your team&apos;s
                 project data is not accessible to other teams or users outside your
                 team.
               </p>
 
-              <h3 className="text-lg font-medium mt-4">7.4 Member Removal</h3>
+              <h3 className="text-lg font-medium mt-4">8.4 Member Removal</h3>
               <p>
                 When a member is removed from a team, their database access token
                 is immediately revoked. Any in-progress execution jobs by the
@@ -206,7 +228,7 @@ export default function TermsPage() {
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold">8. Acceptable Use</h2>
+              <h2 className="text-xl font-semibold">9. Acceptable Use</h2>
               <p>You agree not to:</p>
               <ul className="list-disc pl-5 space-y-1.5">
                 <li>
@@ -240,11 +262,11 @@ export default function TermsPage() {
 
             <section>
               <h2 className="text-xl font-semibold">
-                9. Disclaimers &amp; Limitations
+                10. Disclaimers &amp; Limitations
               </h2>
 
               <h3 className="text-lg font-medium mt-4">
-                9.1 AI-Generated Code
+                10.1 AI-Generated Code
               </h3>
               <p>
                 Code generated through the Service is produced by AI (Claude Code).
@@ -255,7 +277,7 @@ export default function TermsPage() {
               </p>
 
               <h3 className="text-lg font-medium mt-4">
-                9.2 Service Availability
+                10.2 Service Availability
               </h3>
               <p>
                 We aim to provide reliable service but do not guarantee 100%
@@ -266,7 +288,7 @@ export default function TermsPage() {
               </p>
 
               <h3 className="text-lg font-medium mt-4">
-                9.3 Limitation of Liability
+                10.3 Limitation of Liability
               </h3>
               <p>
                 To the maximum extent permitted by law, Trinity AI Labs shall not
@@ -276,7 +298,7 @@ export default function TermsPage() {
                 preceding the claim.
               </p>
 
-              <h3 className="text-lg font-medium mt-4">9.4 No Warranty</h3>
+              <h3 className="text-lg font-medium mt-4">10.4 No Warranty</h3>
               <p>
                 The Service is provided &quot;as is&quot; and &quot;as
                 available&quot; without warranties of any kind, whether express or
@@ -286,7 +308,7 @@ export default function TermsPage() {
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold">10. Termination</h2>
+              <h2 className="text-xl font-semibold">11. Termination</h2>
               <p>
                 You may cancel your subscription at any time through Lemon
                 Squeezy&apos;s customer portal. We may terminate or suspend your
@@ -297,7 +319,7 @@ export default function TermsPage() {
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold">11. Changes to Terms</h2>
+              <h2 className="text-xl font-semibold">12. Changes to Terms</h2>
               <p>
                 We may update these Terms from time to time. We will notify you of
                 material changes by email or via a notice in the Service. Continued
@@ -307,7 +329,7 @@ export default function TermsPage() {
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold">12. Governing Law</h2>
+              <h2 className="text-xl font-semibold">13. Governing Law</h2>
               <p>
                 These Terms are governed by applicable law. Any disputes arising
                 from these Terms or the Service will be resolved through good-faith
@@ -317,14 +339,14 @@ export default function TermsPage() {
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold">13. Contact</h2>
+              <h2 className="text-xl font-semibold">14. Contact</h2>
               <p>
                 Questions about these Terms? Contact us at{" "}
                 <a
-                  href="mailto:hello@trinityailabs.io"
+                  href="mailto:info@trinityailabs.com"
                   className="text-foreground underline underline-offset-4 hover:text-foreground/80"
                 >
-                  hello@trinityailabs.io
+                  info@trinityailabs.com
                 </a>
                 .
               </p>

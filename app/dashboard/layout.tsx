@@ -6,10 +6,19 @@ import Image from "next/image";
 import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
-import { LogOut, Settings, LayoutDashboard, Shield } from "lucide-react";
+import {
+  LogOut,
+  Settings,
+  LayoutDashboard,
+  Shield,
+  Users,
+  CreditCard,
+} from "lucide-react";
 
 const sidebarLinks = [
   { label: "Overview", href: "/dashboard", icon: LayoutDashboard },
+  { label: "Teams", href: "/dashboard/teams", icon: Users },
+  { label: "Billing", href: "/dashboard/billing", icon: CreditCard },
   { label: "Settings", href: "/dashboard/settings", icon: Settings },
 ];
 

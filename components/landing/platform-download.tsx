@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Download, Apple, Monitor } from "lucide-react";
+import { Download, Apple } from "lucide-react";
 import { detectPlatform, getPlatformLabel, getDownloadUrl, type Platform } from "@/lib/platform";
 
 export function PlatformDownload({ size = "lg" }: { size?: "default" | "lg" }) {
@@ -37,9 +37,9 @@ export function DownloadButtons() {
         size="lg"
         className="font-mono bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white w-full sm:w-auto"
       >
-        <a href="#download-macos">
+        <a href={getDownloadUrl("macos-arm")}>
           <Apple className="mr-2 w-4 h-4" />
-          macOS
+          macOS (Apple Silicon)
         </a>
       </Button>
       <Button
@@ -48,9 +48,9 @@ export function DownloadButtons() {
         variant="outline"
         className="font-mono w-full sm:w-auto"
       >
-        <a href="#download-windows">
-          <Monitor className="mr-2 w-4 h-4" />
-          Windows
+        <a href={getDownloadUrl("macos-intel")}>
+          <Apple className="mr-2 w-4 h-4" />
+          macOS (Intel)
         </a>
       </Button>
       <Button
@@ -59,7 +59,7 @@ export function DownloadButtons() {
         variant="outline"
         className="font-mono w-full sm:w-auto"
       >
-        <a href="#download-linux">
+        <a href={getDownloadUrl("linux")}>
           <Download className="mr-2 w-4 h-4" />
           Linux
         </a>

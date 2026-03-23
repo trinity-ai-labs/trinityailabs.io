@@ -52,9 +52,9 @@ Click **Generate PRD** to create a new plan. This launches the 4-phase planning 
 
 Progress is shown in the sidebar task indicator with phase-aware labels.
 
-### Add Feature
+### Architect
 
-Opens the Add Feature flow to add new stories to an existing PRD. See the [Add Feature guide](/knowledge?book=user-guide&section=planning&chapter=add-feature&page=add-feature) for details.
+Opens the Architect flow to add new stories to an existing PRD. See the [Architect guide](/knowledge?book=user-guide&section=planning&chapter=architect&page=architect) for details.
 
 ### Diagnose
 

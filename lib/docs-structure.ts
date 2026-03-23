@@ -33,6 +33,11 @@ export const DOC_SECTIONS: DocSection[] = [
         pageTitle: "Welcome to Trinity",
       },
       {
+        slug: "prerequisites",
+        title: "Prerequisites",
+        pageTitle: "Prerequisites & Tool Setup",
+      },
+      {
         slug: "first-project",
         title: "First Project",
         pageTitle: "Creating Your First Project",
@@ -87,9 +92,9 @@ export const DOC_SECTIONS: DocSection[] = [
         pageTitle: "PRD Planning Pipeline",
       },
       {
-        slug: "add-feature",
-        title: "Add Feature",
-        pageTitle: "Adding Features",
+        slug: "architect",
+        title: "Architect",
+        pageTitle: "Architect",
       },
       {
         slug: "diagnose",
@@ -159,6 +164,23 @@ export const DOC_SECTIONS: DocSection[] = [
         slug: "audit-tracking",
         title: "Audit Tracking",
         pageTitle: "Codebase Audit Tracking",
+      },
+    ],
+  },
+  {
+    slug: "account",
+    name: "Account & Teams",
+    icon: "users",
+    chapters: [
+      {
+        slug: "signing-in",
+        title: "Signing In",
+        pageTitle: "Signing In",
+      },
+      {
+        slug: "teams",
+        title: "Teams",
+        pageTitle: "Teams & Collaboration",
       },
     ],
   },

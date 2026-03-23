@@ -2,7 +2,7 @@ import { betterAuth } from "better-auth";
 import { Kysely } from "kysely";
 import { LibsqlDialect } from "@libsql/kysely-libsql";
 import { db } from "@/lib/db";
-import { sendVerificationEmail } from "@/lib/email";
+import { sendVerificationEmail, sendPasswordResetEmail } from "@/lib/email";
 import { ensureRoleColumn } from "@/lib/ensure-tables";
 
 const adminEmails = (process.env.ADMIN_EMAILS ?? "")
@@ -21,9 +21,30 @@ function createAuth() {
       }),
       type: "sqlite",
     },
+    session: {
+      expiresIn: 60 * 60 * 24 * 30, // 30 days
+      updateAge: 60 * 60 * 24, // update session every 24 hours
+    },
     emailAndPassword: {
       enabled: true,
       requireEmailVerification: true,
+      sendResetPassword: async ({ user, url }) => {
+        await sendPasswordResetEmail(user.email, url);
+      },
+    },
+    socialProviders: {
+      ...(process.env.GOOGLE_CLIENT_ID && {
+        google: {
+          clientId: process.env.GOOGLE_CLIENT_ID,
+          clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+        },
+      }),
+      ...(process.env.GITHUB_CLIENT_ID && {
+        github: {
+          clientId: process.env.GITHUB_CLIENT_ID,
+          clientSecret: process.env.GITHUB_CLIENT_SECRET!,
+        },
+      }),
     },
     emailVerification: {
       sendOnSignUp: true,
