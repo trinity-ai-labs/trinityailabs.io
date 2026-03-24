@@ -33,7 +33,7 @@ export async function GET(
   }
 
   const membersResult = await db.execute({
-    sql: `SELECT tm.user_id, tm.role, tm.paid_by, tm.joined_at,
+    sql: `SELECT tm.user_id, tm.role, tm.joined_at,
             u.name, u.email
           FROM team_members tm
           JOIN user u ON u.id = tm.user_id
@@ -43,7 +43,7 @@ export async function GET(
   });
 
   const invitesResult = await db.execute({
-    sql: `SELECT id, email, paid_by, status, created_at, expires_at
+    sql: `SELECT id, email, status, created_at, expires_at
           FROM team_invites
           WHERE team_id = ? AND status = 'pending'
           ORDER BY created_at DESC`,

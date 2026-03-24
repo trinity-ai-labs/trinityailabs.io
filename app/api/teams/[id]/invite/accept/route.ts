@@ -27,7 +27,7 @@ export async function POST(
 
   // Find and validate invite
   const inviteResult = await db.execute({
-    sql: `SELECT id, email, paid_by, expires_at
+    sql: `SELECT id, email, expires_at
           FROM team_invites
           WHERE team_id = ? AND token = ? AND status = 'pending'`,
     args: [teamId, token],
@@ -82,9 +82,9 @@ export async function POST(
 
   // Add member
   await db.execute({
-    sql: `INSERT INTO team_members (team_id, user_id, role, paid_by, turso_token)
-          VALUES (?, ?, 'member', ?, ?)`,
-    args: [teamId, session.user.id, invite.paid_by, tursoToken],
+    sql: `INSERT INTO team_members (team_id, user_id, role, turso_token)
+          VALUES (?, ?, 'member', ?)`,
+    args: [teamId, session.user.id, tursoToken],
   });
 
   // Mark invite as accepted

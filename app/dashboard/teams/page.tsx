@@ -27,14 +27,12 @@ type Member = {
   name: string;
   email: string;
   role: string;
-  paid_by: string;
   joined_at: string;
 };
 
 type Invite = {
   id: string;
   email: string;
-  paid_by: string;
   status: string;
   created_at: string;
 };

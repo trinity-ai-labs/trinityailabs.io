@@ -57,7 +57,6 @@ export async function ensureTeamMembersTable() {
       team_id TEXT NOT NULL,
       user_id TEXT NOT NULL,
       role TEXT NOT NULL DEFAULT 'member' CHECK (role IN ('owner', 'member')),
-      paid_by TEXT NOT NULL DEFAULT 'self' CHECK (paid_by IN ('self', 'team')),
       turso_token TEXT,
       joined_at TEXT DEFAULT (datetime('now')),
       PRIMARY KEY (team_id, user_id)
@@ -71,7 +70,6 @@ export async function ensureTeamInvitesTable() {
       id TEXT PRIMARY KEY,
       team_id TEXT NOT NULL,
       email TEXT NOT NULL,
-      paid_by TEXT NOT NULL DEFAULT 'self' CHECK (paid_by IN ('self', 'team')),
       invited_by TEXT NOT NULL,
       token TEXT NOT NULL UNIQUE,
       status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'accepted', 'expired', 'revoked')),

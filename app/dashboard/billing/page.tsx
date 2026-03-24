@@ -11,7 +11,8 @@ import {
 } from "@/components/ui/card";
 import { StorageBar } from "@/components/dashboard/storage-bar";
 import { Badge } from "@/components/ui/badge";
-import { Package } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Gift, Loader2, Package, UserPlus, X } from "lucide-react";
 
 type DashboardUsage = {
   subscription: {
@@ -34,6 +35,23 @@ type DashboardUsage = {
     storageQuotaBytes: number;
   }>;
 };
+
+type SponsoredSeat = {
+  id: string;
+  userId: string;
+  userName: string | null;
+  userEmail: string;
+  userHandle: string | null;
+  status: string;
+  createdAt: string;
+};
+
+function fetchSeats(): Promise<SponsoredSeat[]> {
+  return fetch("/api/sponsorship")
+    .then((res) => (res.ok ? res.json() : { seats: [] }))
+    .then((data) => data.seats ?? [])
+    .catch(() => []);
+}
 
 function fetchUsage(): Promise<DashboardUsage> {
   return fetch("/api/dashboard/usage")
@@ -103,12 +121,20 @@ const statusConfig: Record<
 
 function BillingContent({
   usagePromise,
+  seatsPromise,
 }: {
   usagePromise: Promise<DashboardUsage>;
+  seatsPromise: Promise<SponsoredSeat[]>;
 }) {
   const usage = use(usagePromise);
+  const initialSeats = use(seatsPromise);
   const { subscription, storage, teams } = usage;
   const [loading, setLoading] = useState(false);
+  const [seats, setSeats] = useState(initialSeats);
+  const [sponsorInput, setSponsorInput] = useState("");
+  const [sponsoring, setSponsoring] = useState(false);
+  const [removingId, setRemovingId] = useState<string | null>(null);
+  const [sponsorError, setSponsorError] = useState("");
 
   const isActive =
     subscription?.status === "active" || subscription?.status === "comp";
@@ -127,6 +153,52 @@ function BillingContent({
     const { url } = await res.json();
     if (url) window.location.href = url;
     else setLoading(false);
+  }
+
+  async function handleSponsor(e: React.FormEvent) {
+    e.preventDefault();
+    if (!sponsorInput.trim()) return;
+    setSponsorError("");
+    setSponsoring(true);
+
+    const res = await fetch("/api/sponsorship", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ handleOrEmail: sponsorInput.trim() }),
+    });
+
+    if (!res.ok) {
+      const data = await res.json();
+      setSponsorError(data.error ?? "Failed to sponsor");
+      setSponsoring(false);
+      return;
+    }
+
+    const seat: SponsoredSeat = await res.json();
+    setSeats((prev) => [seat, ...prev]);
+    setSponsorInput("");
+    setSponsoring(false);
+  }
+
+  async function handleUnsponsor(seat: SponsoredSeat) {
+    const displayName = seat.userHandle
+      ? `@${seat.userHandle}`
+      : (seat.userName ?? seat.userEmail);
+    if (
+      !confirm(
+        `Stop sponsoring ${displayName}? They will lose their membership unless they pay for it themselves.`,
+      )
+    )
+      return;
+
+    setRemovingId(seat.id);
+    const res = await fetch(`/api/sponsorship/${seat.id}`, {
+      method: "DELETE",
+    });
+    if (res.ok) {
+      setSeats((prev) => prev.filter((s) => s.id !== seat.id));
+    }
+    setRemovingId(null);
   }
 
   const config =
@@ -266,16 +338,109 @@ function BillingContent({
           </div>
         </CardContent>
       </Card>
+
+      {/* Sponsored Seats */}
+      {isActive && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Gift className="w-5 h-5" />
+              Sponsored Seats
+            </CardTitle>
+            <CardDescription>
+              Gift someone a Trinity membership by their handle or email.
+              $10/mo per seat.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSponsor} className="flex gap-2 mb-4">
+              <Input
+                placeholder="handle or email@example.com"
+                value={sponsorInput}
+                onChange={(e) => {
+                  setSponsorInput(e.target.value);
+                  setSponsorError("");
+                }}
+                className="max-w-xs"
+              />
+              <Button
+                type="submit"
+                size="sm"
+                disabled={sponsoring || !sponsorInput.trim()}
+              >
+                {sponsoring ? (
+                  <Loader2 className="w-4 h-4 mr-1.5 animate-spin" />
+                ) : (
+                  <UserPlus className="w-4 h-4 mr-1.5" />
+                )}
+                Sponsor
+              </Button>
+            </form>
+
+            {sponsorError && (
+              <p className="text-sm text-destructive mb-3">{sponsorError}</p>
+            )}
+
+            {seats.length === 0 ? (
+              <p className="text-sm text-muted-foreground py-2">
+                You&apos;re not sponsoring anyone yet.
+              </p>
+            ) : (
+              <div className="space-y-2">
+                {seats.map((seat) => {
+                  const displayName = seat.userHandle
+                    ? `@${seat.userHandle}`
+                    : (seat.userName ?? seat.userEmail);
+
+                  return (
+                    <div
+                      key={seat.id}
+                      className="flex items-center justify-between px-3 py-2 rounded-md border"
+                    >
+                      <div className="min-w-0">
+                        <p className="text-sm font-medium truncate">
+                          {displayName}
+                        </p>
+                        <p className="text-xs text-muted-foreground truncate">
+                          {seat.userEmail}
+                        </p>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive"
+                        onClick={() => handleUnsponsor(seat)}
+                        disabled={removingId === seat.id}
+                      >
+                        {removingId === seat.id ? (
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                        ) : (
+                          <X className="w-4 h-4" />
+                        )}
+                      </Button>
+                    </div>
+                  );
+                })}
+                <p className="text-xs text-muted-foreground pt-1">
+                  {seats.length} sponsored seat{seats.length === 1 ? "" : "s"}{" "}
+                  &middot; ${seats.length * 10}/mo
+                </p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }
 
 export default function BillingPage() {
   const [usagePromise] = useState(() => fetchUsage());
+  const [seatsPromise] = useState(() => fetchSeats());
 
   return (
     <Suspense fallback={<BillingSkeleton />}>
-      <BillingContent usagePromise={usagePromise} />
+      <BillingContent usagePromise={usagePromise} seatsPromise={seatsPromise} />
     </Suspense>
   );
 }

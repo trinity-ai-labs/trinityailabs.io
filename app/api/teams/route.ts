@@ -77,8 +77,8 @@ export async function POST(req: Request) {
   }
 
   await db.execute({
-    sql: `INSERT INTO team_members (team_id, user_id, role, paid_by, turso_token)
-          VALUES (?, ?, 'owner', 'self', ?)`,
+    sql: `INSERT INTO team_members (team_id, user_id, role, turso_token)
+          VALUES (?, ?, 'owner', ?)`,
     args: [id, session.user.id, ownerToken],
   });
 

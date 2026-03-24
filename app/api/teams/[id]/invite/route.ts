@@ -23,7 +23,7 @@ export async function POST(
   }
 
   const body = await req.json();
-  const { email, paid_by } = body;
+  const { email } = body;
 
   if (!email || typeof email !== "string") {
     return NextResponse.json({ error: "Email is required" }, { status: 400 });
@@ -60,9 +60,9 @@ export async function POST(
   const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
 
   await db.execute({
-    sql: `INSERT INTO team_invites (id, team_id, email, paid_by, invited_by, token, status, expires_at)
-          VALUES (?, ?, ?, ?, ?, ?, 'pending', ?)`,
-    args: [inviteId, teamId, normalizedEmail, paid_by ?? "self", session.user.id, token, expiresAt],
+    sql: `INSERT INTO team_invites (id, team_id, email, invited_by, token, status, expires_at)
+          VALUES (?, ?, ?, ?, ?, 'pending', ?)`,
+    args: [inviteId, teamId, normalizedEmail, session.user.id, token, expiresAt],
   });
 
   // Get team name for the email
