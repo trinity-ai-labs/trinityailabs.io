@@ -22,17 +22,41 @@ Switching scopes changes which projects are shown. Execution continues in the ba
 
 | Role | Can do |
 |------|--------|
-| **Owner** | Everything — manage members, billing, secrets, delete projects, approve checkpoints |
-| **Member** | Edit PRDs, run stories, respond to story gates, create projects |
+| **Owner** | Everything — manage members, billing, secrets, delete projects, approve checkpoints, configure permissions |
+| **Member** | Edit PRDs, run stories, respond to story gates, create projects (plus any actions granted by permission overrides) |
+
+### Configurable Permissions
+
+Some actions can be opened up to all team members via permission overrides. Team owners configure these at the team level, and can further override per-project:
+
+| Permission | Default | Description |
+|-----------|---------|-------------|
+| **Approve Checkpoints** | Owner only | Who can approve release and quality checkpoint gates |
+| **Manage Secrets** | Owner only | Who can create, edit, delete, or reveal secret values |
+| **Delete Projects** | Owner only | Who can archive (soft-delete) projects |
+| **Reclaim Jobs** | Owner only | Who can reclaim stuck execution jobs |
+
+Set these in **Team Settings** → **Permissions**, or override per-project in **Project Settings** → **Permission Overrides**.
+
+The cascade is: **Project → Team → Default (owner only)**. In personal scope, all permissions are open.
 
 ## Inviting Members
 
 Only the team owner can invite:
 
-1. Go to **Teams** page or the website dashboard
-2. Enter the person's email
-3. They receive an invite email with a link
-4. They click the link, sign in (or create an account), and join
+1. Go to **Teams** page
+2. Enter the person's email or handle
+3. They receive an invite and can join the team
+
+## Seat Sponsorship
+
+Team owners can sponsor seats for users who don't have their own subscription:
+
+1. Go to the **Teams** page
+2. Under **Sponsored Seats**, enter the email or handle of the person to sponsor
+3. The sponsored user gets access to Trinity on your subscription
+
+Sponsored seats count toward your team's seat limit and storage quota.
 
 ## Team Settings
 
@@ -47,6 +71,7 @@ Team owners can configure team-wide defaults that sit between global (personal) 
 |----------|----------|
 | **Automation** | Auto PR, Auto Merge, Squash Merge, Delete After Merge, Skip Asset Check, Skip Business Details Check, Auto Release to Base, Delete Release Branch, Auto-Approve Quality Checkpoints |
 | **AI Models** | Default models for each tier (Reasoning, Standard, Fast, Micro) |
+| **Permissions** | Approve Checkpoints, Manage Secrets, Delete Projects, Reclaim Jobs (owner-only or open to all) |
 
 ### Settings Hierarchy
 

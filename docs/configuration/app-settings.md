@@ -60,7 +60,7 @@ Default worker configuration for new projects:
 
 ### Database Location
 
-In development mode, the database (`trinity.db`) lives in the project root. In the packaged (Tauri) app, it lives at `~/.trinity/trinity.db`.
+The database (`trinity.db`) lives at `~/.trinity/trinity.db` in both development and packaged (Tauri) mode.
 
 ### Backups
 

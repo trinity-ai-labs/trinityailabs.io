@@ -113,6 +113,28 @@ export async function pauseSubscription(
   return res.json();
 }
 
+export async function updateSubscriptionQuantity(
+  subscriptionId: string,
+  quantity: number
+) {
+  const res = await fetch(`${API_URL}/subscriptions/${subscriptionId}`, {
+    method: "PATCH",
+    headers: headers(),
+    body: JSON.stringify({
+      data: {
+        type: "subscriptions",
+        id: subscriptionId,
+        attributes: { quantity },
+      },
+    }),
+  });
+  if (!res.ok) {
+    const error = await res.text();
+    throw new Error(`Failed to update subscription quantity: ${error}`);
+  }
+  return res.json();
+}
+
 export async function resumeSubscription(subscriptionId: string) {
   const res = await fetch(`${API_URL}/subscriptions/${subscriptionId}`, {
     method: "PATCH",

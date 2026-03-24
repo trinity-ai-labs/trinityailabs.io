@@ -102,7 +102,7 @@ A powerful cycle connects audits to execution:
 
 1. **Analyze** — run a codebase analysis (via Import or manually)
 2. **Audit pages created** — checklists of improvements land in the vault
-3. **Address items** — click "Address in Add Feature" from an audit page
+3. **Address items** — click "Implement" from an audit page
 4. **Stories generated** — with `audit_source` linking back to the audit
 5. **Execute** — agents implement the fixes
 6. **Auto-check** — after merge, Trinity re-scans and checks off addressed items

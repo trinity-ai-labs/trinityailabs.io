@@ -5,6 +5,7 @@ import {
   ensureUserColumns,
   ensureSubscriptionsTable,
   ensureUserPreferencesTable,
+  ensureSponsoredSeatsTable,
 } from "@/lib/ensure-tables";
 import { verifyAccessToken } from "@/lib/device-auth/jwt";
 import { provisionPersonalDb } from "@/lib/teams";
@@ -49,6 +50,11 @@ export async function GET(req: Request) {
   }
   try {
     await ensureUserPreferencesTable();
+  } catch {
+    /* table may already exist */
+  }
+  try {
+    await ensureSponsoredSeatsTable();
   } catch {
     /* table may already exist */
   }
@@ -98,18 +104,55 @@ export async function GET(req: Request) {
     }
   }
 
-  // Get subscription
+  // Get subscription — check own subscription first, then sponsorship
   const subResult = await db.execute({
     sql: "SELECT status, current_period_end FROM subscriptions WHERE user_id = ? ORDER BY updated_at DESC LIMIT 1",
     args: [userId],
   });
-  const subscription = subResult.rows.length
-    ? {
-        status: subResult.rows[0].status as string,
-        currentPeriodEnd:
-          (subResult.rows[0].current_period_end as string) ?? null,
-      }
-    : null;
+
+  let subscription: {
+    status: string;
+    currentPeriodEnd: string | null;
+    sponsoredBy?: { sponsorId: string; sponsorName: string } | null;
+  } | null = null;
+
+  if (subResult.rows.length) {
+    subscription = {
+      status: subResult.rows[0].status as string,
+      currentPeriodEnd: (subResult.rows[0].current_period_end as string) ?? null,
+      sponsoredBy: null,
+    };
+  }
+
+  // If no own active subscription, check if sponsored
+  const ownActive =
+    subscription?.status === "active" || subscription?.status === "comp";
+  if (!ownActive) {
+    const sponsorResult = await db.execute({
+      sql: `SELECT ss.sponsor_id, u.name AS sponsor_name,
+              s.status AS sponsor_sub_status, s.current_period_end
+            FROM sponsored_seats ss
+            JOIN user u ON u.id = ss.sponsor_id
+            JOIN subscriptions s ON s.user_id = ss.sponsor_id
+              AND s.status IN ('active', 'comp')
+            WHERE ss.user_id = ? AND ss.status = 'active'
+            ORDER BY s.updated_at DESC
+            LIMIT 1`,
+      args: [userId],
+    });
+
+    if (sponsorResult.rows.length) {
+      const sponsor = sponsorResult.rows[0];
+      subscription = {
+        status: "active",
+        currentPeriodEnd: (sponsor.current_period_end as string) ?? null,
+        sponsoredBy: {
+          sponsorId: sponsor.sponsor_id as string,
+          sponsorName: sponsor.sponsor_name as string,
+        },
+      };
+    }
+  }
 
   // Get user preferences
   const prefsResult = await db.execute({

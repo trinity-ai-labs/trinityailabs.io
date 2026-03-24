@@ -54,7 +54,7 @@ Progress is shown in the sidebar task indicator with phase-aware labels.
 
 ### Architect
 
-Opens the Architect flow to add new stories to an existing PRD. See the [Architect guide](/knowledge?book=user-guide&section=planning&chapter=architect&page=architect) for details.
+Opens the Architect flow to add new stories to an existing PRD. See the [Architect guide](/knowledge?book=user-guide&section=planning&chapter=add-feature&page=add-feature) for details.
 
 ### Diagnose
 

@@ -12,3 +12,4 @@ export {
   revokeUserRefreshTokens,
 } from "./refresh";
 export { getSubscriptionStatus, isActiveSubscription } from "./subscription";
+export { getAuthUserId } from "./get-auth-user";

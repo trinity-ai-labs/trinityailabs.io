@@ -166,6 +166,24 @@ export async function ensureRefreshTokensTable() {
   `);
 }
 
+let sponsoredSeatsEnsured = false;
+
+export async function ensureSponsoredSeatsTable() {
+  if (sponsoredSeatsEnsured) return;
+  await db.execute(`
+    CREATE TABLE IF NOT EXISTS sponsored_seats (
+      id TEXT PRIMARY KEY,
+      sponsor_id TEXT NOT NULL,
+      user_id TEXT NOT NULL,
+      status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'cancelled')),
+      created_at TEXT DEFAULT (datetime('now')),
+      cancelled_at TEXT,
+      UNIQUE(sponsor_id, user_id)
+    )
+  `);
+  sponsoredSeatsEnsured = true;
+}
+
 export async function ensureStorageUsageTable() {
   await db.execute(`
     CREATE TABLE IF NOT EXISTS storage_usage (
