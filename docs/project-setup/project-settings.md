@@ -135,3 +135,20 @@ Manage encrypted API keys and credentials:
 - Import from `.env` files
 
 Secrets are injected as environment variables when agents execute stories. They're encrypted at rest using AES-256-GCM.
+
+## Danger Zone
+
+High-impact project operations are grouped at the bottom of project settings:
+
+### Move Project
+
+Transfer a project between personal and team scopes. Available when you have teams:
+
+- **Move to Team** — transfers a personal project to a team scope. All data syncs to the team's Turso database. If using Trinity Cloud storage, assets are migrated to the team's R2 bucket.
+- **Move to Personal** — transfers a team project back to your personal scope. Assets migrate accordingly.
+
+Moving requires typing the project name to confirm. Storage migration runs automatically — no manual file moves needed.
+
+### Delete Project
+
+Permanently archives the project. Requires typing the project name to confirm. Team owners control who can delete projects via the **Delete Projects** permission.

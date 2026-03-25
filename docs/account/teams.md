@@ -94,6 +94,35 @@ When using **Trinity Cloud** storage, each seat contributes 5 GB to a shared tea
 
 If the team needs more space, the team owner can purchase 10 GB add-on packs for $5/month each. Teams using **BYO S3** storage are not subject to any Trinity storage limits.
 
+## Collaboration Features
+
+Teams get real-time collaboration tools:
+
+### Comments
+
+Leave comments on stories, epics, and other entities. Comments sync across all team members and show in the entity's detail view. Edit or delete your own comments.
+
+### Activity Feed
+
+The **Activity** page in the sidebar shows a chronological feed of actions across the project — story status changes, PRD updates, checkpoint approvals, and more. Each entry shows who did what and when.
+
+### Presence
+
+When viewing stories or other entities, you'll see avatar indicators showing which team members are currently viewing the same item. Presence updates in real time.
+
+### Entity Timeline
+
+Each entity (story, epic, phase) has a timeline tab showing its full history — status changes, field updates, and comments in chronological order.
+
+## Moving Projects Between Scopes
+
+Transfer projects between personal and team scopes from **Project Settings** → **Danger Zone**:
+
+- **Personal → Team** — share a project with your team. Data syncs to the team database, cloud assets migrate automatically.
+- **Team → Personal** — take a project back to your personal scope.
+
+Requires typing the project name to confirm.
+
 ## How Sync Works
 
 - All planning data (PRDs, stories, knowledge base) syncs via Turso in 1-5 seconds
