@@ -27,16 +27,25 @@ const billingLimiter = redis
     })
   : null;
 
+const syncLimiter = redis
+  ? new Ratelimit({
+      redis,
+      limiter: Ratelimit.slidingWindow(200, "60 s"),
+      prefix: "rl:turso-sync",
+    })
+  : null;
+
 export async function proxy(request: NextRequest) {
   if (!redis) return NextResponse.next();
 
   const { pathname } = request.nextUrl;
-  const ip =
-    request.headers.get("x-forwarded-for")?.split(",")[0] ?? "unknown";
+  const ip = request.headers.get("x-forwarded-for")?.split(",")[0] ?? "unknown";
 
-  const limiter = pathname.startsWith("/api/auth")
-    ? authLimiter
-    : billingLimiter;
+  const limiter = pathname.startsWith("/api/turso-sync")
+    ? syncLimiter
+    : pathname.startsWith("/api/auth")
+      ? authLimiter
+      : billingLimiter;
 
   if (!limiter) return NextResponse.next();
 
@@ -55,5 +64,9 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/api/auth/:path*", "/api/billing/:path*"],
+  matcher: [
+    "/api/auth/:path*",
+    "/api/billing/:path*",
+    "/api/turso-sync/:path*",
+  ],
 };

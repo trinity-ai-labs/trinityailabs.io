@@ -73,7 +73,10 @@ export async function createDatabaseToken(
     {
       method: "POST",
       headers: headers(),
-      body: JSON.stringify({ permissions: { read_attach: { databases: ["*"] } } }),
+      body: JSON.stringify({
+        permissions: { read_attach: { databases: ["*"] } },
+        expiration: "7d",
+      }),
     }
   );
 

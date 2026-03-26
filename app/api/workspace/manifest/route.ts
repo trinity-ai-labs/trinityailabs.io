@@ -11,6 +11,21 @@ import { verifyAccessToken } from "@/lib/device-auth/jwt";
 import { provisionPersonalDb } from "@/lib/teams";
 import { getStorageUsage, getStorageQuota } from "@/lib/storage-quota";
 
+let tablesEnsured: Promise<void> | null = null;
+
+function ensureAllTables(): Promise<void> {
+  if (!tablesEnsured) {
+    tablesEnsured = Promise.all([
+      ensureUserColumns().catch(() => {}),
+      ensureTeamsTables().catch(() => {}),
+      ensureSubscriptionsTable().catch(() => {}),
+      ensureUserPreferencesTable().catch(() => {}),
+      ensureSponsoredSeatsTable().catch(() => {}),
+    ]).then(() => {});
+  }
+  return tablesEnsured;
+}
+
 // GET /api/workspace/manifest — returns everything the desktop app needs
 export async function GET(req: Request) {
   const authHeader = req.headers.get("authorization");
@@ -33,31 +48,7 @@ export async function GET(req: Request) {
 
   const userId = payload.sub!;
 
-  try {
-    await ensureUserColumns();
-  } catch {
-    /* columns may already exist */
-  }
-  try {
-    await ensureTeamsTables();
-  } catch {
-    /* tables may already exist */
-  }
-  try {
-    await ensureSubscriptionsTable();
-  } catch {
-    /* table may already exist */
-  }
-  try {
-    await ensureUserPreferencesTable();
-  } catch {
-    /* table may already exist */
-  }
-  try {
-    await ensureSponsoredSeatsTable();
-  } catch {
-    /* table may already exist */
-  }
+  await ensureAllTables();
 
   // Get user info — query basic columns first, then try extended columns
   let user: Record<string, unknown>;
@@ -119,7 +110,8 @@ export async function GET(req: Request) {
   if (subResult.rows.length) {
     subscription = {
       status: subResult.rows[0].status as string,
-      currentPeriodEnd: (subResult.rows[0].current_period_end as string) ?? null,
+      currentPeriodEnd:
+        (subResult.rows[0].current_period_end as string) ?? null,
       sponsoredBy: null,
     };
   }
@@ -164,9 +156,11 @@ export async function GET(req: Request) {
     preferences[row.key as string] = row.value as string;
   }
 
-  // Get teams with Turso tokens and encryption keys
+  const siteBase = process.env.BETTER_AUTH_URL ?? "https://trinityailabs.com";
+
+  // Get teams with encryption keys
   const teamsResult = await db.execute({
-    sql: `SELECT t.id, t.slug, t.name, t.encryption_key, tm.role, tm.turso_token,
+    sql: `SELECT t.id, t.slug, t.name, t.encryption_key, tm.role,
             t.turso_db_url
           FROM teams t
           JOIN team_members tm ON tm.team_id = t.id AND tm.user_id = ?
@@ -187,8 +181,9 @@ export async function GET(req: Request) {
         slug: row.slug as string,
         name: row.name as string,
         role: row.role as string,
-        tursoDbUrl: (row.turso_db_url as string) ?? null,
-        tursoAuthToken: (row.turso_token as string) ?? null,
+        syncProxyUrl: (row.turso_db_url as string)
+          ? `${siteBase}/api/turso-sync/team/${teamId}`
+          : null,
         encryptionKey: (row.encryption_key as string) ?? null,
         storageUsedBytes: teamUsage.usedBytes,
         storageQuotaBytes: teamQuota.quotaBytes,
@@ -209,8 +204,9 @@ export async function GET(req: Request) {
       name: user.name as string,
       handle: (user.handle as string) ?? null,
       role: (user.role as string) ?? null,
-      tursoDbUrl: (user.turso_db_url as string) ?? null,
-      tursoAuthToken: (user.turso_auth_token as string) ?? null,
+      syncProxyUrl: (user.turso_db_url as string)
+        ? `${siteBase}/api/turso-sync/personal`
+        : null,
     },
     subscription,
     preferences,
