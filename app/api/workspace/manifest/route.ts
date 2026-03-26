@@ -7,7 +7,7 @@ import {
   ensureUserPreferencesTable,
   ensureSponsoredSeatsTable,
 } from "@/lib/ensure-tables";
-import { verifyAccessToken } from "@/lib/device-auth/jwt";
+import { requireAccessToken } from "@/lib/device-auth";
 import { provisionPersonalDb } from "@/lib/teams";
 import { getStorageUsage, getStorageQuota } from "@/lib/storage-quota";
 
@@ -28,20 +28,12 @@ function ensureAllTables(): Promise<void> {
 
 // GET /api/workspace/manifest — returns everything the desktop app needs
 export async function GET(req: Request) {
-  const authHeader = req.headers.get("authorization");
-  if (!authHeader?.startsWith("Bearer ")) {
-    return NextResponse.json(
-      { error: "Missing access token" },
-      { status: 401 },
-    );
-  }
-
   let payload;
   try {
-    payload = await verifyAccessToken(authHeader.slice(7));
+    payload = await requireAccessToken(req);
   } catch {
     return NextResponse.json(
-      { error: "Invalid or expired token" },
+      { error: "Missing or invalid access token" },
       { status: 401 },
     );
   }
@@ -95,12 +87,27 @@ export async function GET(req: Request) {
     }
   }
 
-  // Get subscription — check own subscription first, then sponsorship
-  const subResult = await db.execute({
-    sql: "SELECT status, current_period_end FROM subscriptions WHERE user_id = ? ORDER BY updated_at DESC LIMIT 1",
-    args: [userId],
-  });
+  // Parallel: subscription + preferences + teams (all need only userId)
+  const [subResult, prefsResult, teamsResult] = await Promise.all([
+    db.execute({
+      sql: "SELECT status, current_period_end FROM subscriptions WHERE user_id = ? ORDER BY updated_at DESC LIMIT 1",
+      args: [userId],
+    }),
+    db.execute({
+      sql: "SELECT key, value FROM user_preferences WHERE user_id = ?",
+      args: [userId],
+    }),
+    db.execute({
+      sql: `SELECT t.id, t.slug, t.name, t.encryption_key, tm.role,
+              t.turso_db_url
+            FROM teams t
+            JOIN team_members tm ON tm.team_id = t.id AND tm.user_id = ?
+            ORDER BY t.name`,
+      args: [userId],
+    }),
+  ]);
 
+  // Process subscription
   let subscription: {
     status: string;
     currentPeriodEnd: string | null;
@@ -146,27 +153,13 @@ export async function GET(req: Request) {
     }
   }
 
-  // Get user preferences
-  const prefsResult = await db.execute({
-    sql: "SELECT key, value FROM user_preferences WHERE user_id = ?",
-    args: [userId],
-  });
+  // Process preferences
   const preferences: Record<string, string> = {};
   for (const row of prefsResult.rows) {
     preferences[row.key as string] = row.value as string;
   }
 
   const siteBase = process.env.BETTER_AUTH_URL ?? "https://trinityailabs.com";
-
-  // Get teams with encryption keys
-  const teamsResult = await db.execute({
-    sql: `SELECT t.id, t.slug, t.name, t.encryption_key, tm.role,
-            t.turso_db_url
-          FROM teams t
-          JOIN team_members tm ON tm.team_id = t.id AND tm.user_id = ?
-          ORDER BY t.name`,
-    args: [userId],
-  });
 
   // Build teams with storage data
   const teams = await Promise.all(

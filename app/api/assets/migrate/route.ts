@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { verifyAccessToken } from "@/lib/device-auth/jwt";
-import { isActiveSubscription } from "@/lib/device-auth/subscription";
+import { requireAccessToken, isActiveSubscription } from "@/lib/device-auth";
 import { ensureSubscriptionsTable } from "@/lib/ensure-tables";
 import { copyObject, deleteObject, buildStorageKey } from "@/lib/r2";
 import { incrementUsage, decrementUsage } from "@/lib/storage-quota";
@@ -15,20 +14,12 @@ interface AssetEntry {
 
 // POST /api/assets/migrate — move R2 objects between scope prefixes
 export async function POST(req: Request) {
-  const authHeader = req.headers.get("authorization");
-  if (!authHeader?.startsWith("Bearer ")) {
-    return NextResponse.json(
-      { error: "Missing access token" },
-      { status: 401 },
-    );
-  }
-
   let payload;
   try {
-    payload = await verifyAccessToken(authHeader.slice(7));
+    payload = await requireAccessToken(req);
   } catch {
     return NextResponse.json(
-      { error: "Invalid or expired token" },
+      { error: "Missing or invalid access token" },
       { status: 401 },
     );
   }
@@ -53,12 +44,18 @@ export async function POST(req: Request) {
 
   if (!projectId || !fromScope || !fromScopeId || !toScope || !toScopeId) {
     return NextResponse.json(
-      { error: "projectId, fromScope, fromScopeId, toScope, toScopeId are required" },
+      {
+        error:
+          "projectId, fromScope, fromScopeId, toScope, toScopeId are required",
+      },
       { status: 400 },
     );
   }
 
-  if (!["personal", "team"].includes(fromScope) || !["personal", "team"].includes(toScope)) {
+  if (
+    !["personal", "team"].includes(fromScope) ||
+    !["personal", "team"].includes(toScope)
+  ) {
     return NextResponse.json(
       { error: "scope must be 'personal' or 'team'" },
       { status: 400 },

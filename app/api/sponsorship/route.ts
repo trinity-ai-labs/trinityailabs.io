@@ -15,8 +15,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  await ensureSponsoredSeatsTable();
-  await ensureUserColumns();
+  await Promise.all([ensureSponsoredSeatsTable(), ensureUserColumns()]);
 
   const result = await db.execute({
     sql: `SELECT ss.id, ss.user_id, ss.status, ss.created_at,
@@ -52,12 +51,17 @@ export async function POST(req: NextRequest) {
   const { handleOrEmail } = body;
 
   if (!handleOrEmail || typeof handleOrEmail !== "string") {
-    return NextResponse.json({ error: "handleOrEmail is required" }, { status: 400 });
+    return NextResponse.json(
+      { error: "handleOrEmail is required" },
+      { status: 400 },
+    );
   }
 
-  await ensureSponsoredSeatsTable();
-  await ensureSubscriptionsTable();
-  await ensureUserColumns();
+  await Promise.all([
+    ensureSponsoredSeatsTable(),
+    ensureSubscriptionsTable(),
+    ensureUserColumns(),
+  ]);
 
   const value = handleOrEmail.trim();
   const isEmail = value.includes("@");
@@ -78,7 +82,10 @@ export async function POST(req: NextRequest) {
   const targetUserId = targetUser.id as string;
 
   if (targetUserId === userId) {
-    return NextResponse.json({ error: "You cannot sponsor yourself" }, { status: 400 });
+    return NextResponse.json(
+      { error: "You cannot sponsor yourself" },
+      { status: 400 },
+    );
   }
 
   // Check if already sponsored by this user
@@ -88,7 +95,10 @@ export async function POST(req: NextRequest) {
   });
 
   if (existing.rows.length > 0) {
-    return NextResponse.json({ error: "You are already sponsoring this user" }, { status: 409 });
+    return NextResponse.json(
+      { error: "You are already sponsoring this user" },
+      { status: 409 },
+    );
   }
 
   // Get sponsor's subscription to update quantity
@@ -103,7 +113,7 @@ export async function POST(req: NextRequest) {
   if (!subResult.rows.length) {
     return NextResponse.json(
       { error: "You need an active subscription to sponsor seats" },
-      { status: 402 }
+      { status: 402 },
     );
   }
 
@@ -121,7 +131,7 @@ export async function POST(req: NextRequest) {
       console.error("Failed to update Lemon Squeezy quantity:", err);
       return NextResponse.json(
         { error: "Failed to update billing. Please try again." },
-        { status: 500 }
+        { status: 500 },
       );
     }
   }
@@ -148,6 +158,6 @@ export async function POST(req: NextRequest) {
       userHandle: targetUser.handle,
       status: "active",
     },
-    { status: 201 }
+    { status: 201 },
   );
 }

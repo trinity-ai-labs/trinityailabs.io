@@ -25,12 +25,25 @@ export async function GET() {
     /* tables may already exist */
   }
 
-  // Subscription
-  const subResult = await db.execute({
-    sql: `SELECT status, current_period_end, seats_purchased, lemonsqueezy_customer_id
-          FROM subscriptions WHERE user_id = ? ORDER BY updated_at DESC LIMIT 1`,
-    args: [userId],
-  });
+  // Parallel: subscription + personal storage + teams
+  const [subResult, personalUsage, personalQuota, teamsResult] =
+    await Promise.all([
+      db.execute({
+        sql: `SELECT status, current_period_end, seats_purchased, lemonsqueezy_customer_id
+              FROM subscriptions WHERE user_id = ? ORDER BY updated_at DESC LIMIT 1`,
+        args: [userId],
+      }),
+      getStorageUsage("personal", userId),
+      getStorageQuota("personal", userId),
+      db.execute({
+        sql: `SELECT t.id, t.name, t.slug, tm.role,
+                (SELECT COUNT(*) FROM team_members WHERE team_id = t.id) as member_count
+              FROM teams t
+              JOIN team_members tm ON tm.team_id = t.id AND tm.user_id = ?
+              ORDER BY t.name`,
+        args: [userId],
+      }),
+    ]);
 
   const subscription = subResult.rows.length
     ? {
@@ -41,22 +54,6 @@ export async function GET() {
         hasCustomer: !!subResult.rows[0].lemonsqueezy_customer_id,
       }
     : null;
-
-  // Personal storage
-  const [personalUsage, personalQuota] = await Promise.all([
-    getStorageUsage("personal", userId),
-    getStorageQuota("personal", userId),
-  ]);
-
-  // Teams with storage
-  const teamsResult = await db.execute({
-    sql: `SELECT t.id, t.name, t.slug, tm.role,
-            (SELECT COUNT(*) FROM team_members WHERE team_id = t.id) as member_count
-          FROM teams t
-          JOIN team_members tm ON tm.team_id = t.id AND tm.user_id = ?
-          ORDER BY t.name`,
-    args: [userId],
-  });
 
   const teams = await Promise.all(
     teamsResult.rows.map(async (row) => {

@@ -36,21 +36,26 @@ export async function GET(request: NextRequest) {
   // Status is "approved" — consume and mint tokens
   const userId = await consumeDeviceCode(code);
   if (!userId) {
-    return NextResponse.json({ error: "Failed to consume code" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to consume code" },
+      { status: 500 },
+    );
   }
 
-  // Fetch user info
-  const userResult = await db.execute({
-    sql: "SELECT id, email, name FROM user WHERE id = ?",
-    args: [userId],
-  });
+  // Fetch user info + subscription in parallel
+  const [userResult, sub] = await Promise.all([
+    db.execute({
+      sql: "SELECT id, email, name FROM user WHERE id = ?",
+      args: [userId],
+    }),
+    getSubscriptionStatus(userId),
+  ]);
 
   if (!userResult.rows.length) {
     return NextResponse.json({ error: "User not found" }, { status: 500 });
   }
 
   const user = userResult.rows[0];
-  const sub = await getSubscriptionStatus(userId);
 
   const accessToken = await signAccessToken({
     sub: user.id as string,

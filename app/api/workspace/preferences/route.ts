@@ -1,27 +1,28 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { ensureUserPreferencesTable } from "@/lib/ensure-tables";
-import { verifyAccessToken } from "@/lib/device-auth/jwt";
+import { requireAccessToken } from "@/lib/device-auth";
 
 // PUT /api/workspace/preferences — update user preferences
 export async function PUT(req: Request) {
-  const authHeader = req.headers.get("authorization");
-  if (!authHeader?.startsWith("Bearer ")) {
-    return NextResponse.json({ error: "Missing access token" }, { status: 401 });
-  }
-
   let payload;
   try {
-    payload = await verifyAccessToken(authHeader.slice(7));
+    payload = await requireAccessToken(req);
   } catch {
-    return NextResponse.json({ error: "Invalid or expired token" }, { status: 401 });
+    return NextResponse.json(
+      { error: "Missing or invalid access token" },
+      { status: 401 },
+    );
   }
 
   const userId = payload.sub!;
   const body = await req.json();
 
   if (!body || typeof body !== "object") {
-    return NextResponse.json({ error: "Body must be an object of key-value pairs" }, { status: 400 });
+    return NextResponse.json(
+      { error: "Body must be an object of key-value pairs" },
+      { status: 400 },
+    );
   }
 
   await ensureUserPreferencesTable();

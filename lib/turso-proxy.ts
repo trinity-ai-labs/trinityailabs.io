@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
 import { ensureTeamsTables, ensureUserColumns } from "@/lib/ensure-tables";
 import { createDatabaseToken } from "@/lib/turso-admin";
+import { TTLCache } from "@/lib/ttl-cache";
 
 // ── Credential Cache ────────────────────────────────────────────────
 
@@ -8,24 +9,14 @@ interface CachedCredentials {
   tursoUrl: string;
   tursoToken: string;
   tursoDbName: string;
-  expiresAt: number;
 }
 
 const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
-const credentialCache = new Map<string, CachedCredentials>();
-
-function getCached(key: string): CachedCredentials | null {
-  const entry = credentialCache.get(key);
-  if (!entry || Date.now() > entry.expiresAt) {
-    credentialCache.delete(key);
-    return null;
-  }
-  return entry;
-}
-
-function setCache(key: string, creds: CachedCredentials): void {
-  credentialCache.set(key, creds);
-}
+const credentialCache = new TTLCache<string, CachedCredentials>({
+  maxSize: 200,
+  ttlMs: CACHE_TTL_MS,
+  sweepIntervalMs: 60_000,
+});
 
 export function invalidateCache(key: string): void {
   credentialCache.delete(key);
@@ -43,7 +34,7 @@ export async function resolvePersonalCredentials(
   userId: string,
 ): Promise<TursoCredentials | null> {
   const cacheKey = `personal:${userId}`;
-  const cached = getCached(cacheKey);
+  const cached = credentialCache.get(cacheKey);
   if (cached) return cached;
 
   await ensureUserColumns();
@@ -62,13 +53,8 @@ export async function resolvePersonalCredentials(
 
   if (!tursoUrl || !tursoToken || !tursoDbName) return null;
 
-  const creds: CachedCredentials = {
-    tursoUrl,
-    tursoToken,
-    tursoDbName,
-    expiresAt: Date.now() + CACHE_TTL_MS,
-  };
-  setCache(cacheKey, creds);
+  const creds: CachedCredentials = { tursoUrl, tursoToken, tursoDbName };
+  credentialCache.set(cacheKey, creds);
   return creds;
 }
 
@@ -77,7 +63,7 @@ export async function resolveTeamCredentials(
   teamId: string,
 ): Promise<TursoCredentials | null> {
   const cacheKey = `team:${userId}:${teamId}`;
-  const cached = getCached(cacheKey);
+  const cached = credentialCache.get(cacheKey);
   if (cached) return cached;
 
   await ensureTeamsTables();
@@ -99,13 +85,8 @@ export async function resolveTeamCredentials(
 
   if (!tursoUrl || !tursoToken || !tursoDbName) return null;
 
-  const creds: CachedCredentials = {
-    tursoUrl,
-    tursoToken,
-    tursoDbName,
-    expiresAt: Date.now() + CACHE_TTL_MS,
-  };
-  setCache(cacheKey, creds);
+  const creds: CachedCredentials = { tursoUrl, tursoToken, tursoDbName };
+  credentialCache.set(cacheKey, creds);
   return creds;
 }
 

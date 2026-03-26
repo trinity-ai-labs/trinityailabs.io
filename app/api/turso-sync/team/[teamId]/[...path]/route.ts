@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { verifyAccessToken } from "@/lib/device-auth/jwt";
+import { requireAccessToken } from "@/lib/device-auth";
 import { db } from "@/lib/db";
 import { ensureTeamsTables } from "@/lib/ensure-tables";
 import { resolveTeamCredentials, proxyWithRotation } from "@/lib/turso-proxy";
@@ -20,21 +20,12 @@ interface RouteParams {
 const PIPELINE_PATHS = new Set(["v2/pipeline", "v3/pipeline"]);
 
 async function handleProxy(req: Request, { params }: RouteParams) {
-  // Verify JWT
-  const authHeader = req.headers.get("authorization");
-  if (!authHeader?.startsWith("Bearer ")) {
-    return NextResponse.json(
-      { error: "Missing access token" },
-      { status: 401 },
-    );
-  }
-
   let payload;
   try {
-    payload = await verifyAccessToken(authHeader.slice(7));
+    payload = await requireAccessToken(req);
   } catch {
     return NextResponse.json(
-      { error: "Invalid or expired token" },
+      { error: "Missing or invalid access token" },
       { status: 401 },
     );
   }

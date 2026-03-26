@@ -13,3 +13,4 @@ export {
 } from "./refresh";
 export { getSubscriptionStatus, isActiveSubscription } from "./subscription";
 export { getAuthUserId } from "./get-auth-user";
+export { requireAccessToken, AccessTokenError } from "./require-access-token";

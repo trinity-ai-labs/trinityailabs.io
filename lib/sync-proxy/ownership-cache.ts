@@ -4,6 +4,7 @@
  */
 
 import { createClient, type Client } from "@libsql/client";
+import { TTLCache } from "@/lib/ttl-cache";
 
 // ── Types ───────────────────────────────────────────────────────────
 
@@ -11,11 +12,6 @@ export interface ProjectOwner {
   createdBy: string | null;
   ownerType: string;
   ownerId: string;
-}
-
-interface CacheEntry<T> {
-  value: T;
-  expiresAt: number;
 }
 
 // ── Cache ───────────────────────────────────────────────────────────
@@ -41,42 +37,37 @@ const DIRECT_PROJECT_TABLES = new Set([
 /** Tables linked to projects via prd_id. */
 const PRD_LINKED_TABLES = new Set(["stories", "phases", "epics"]);
 
-const projectOwnerCache = new Map<string, CacheEntry<ProjectOwner>>();
-const prdToProjectCache = new Map<string, CacheEntry<string>>();
-const entityToProjectCache = new Map<string, CacheEntry<string>>();
-
-function getFromCache<T>(
-  cache: Map<string, CacheEntry<T>>,
-  key: string,
-): T | null {
-  const entry = cache.get(key);
-  if (!entry || Date.now() > entry.expiresAt) {
-    cache.delete(key);
-    return null;
-  }
-  return entry.value;
-}
-
-function setInCache<T>(
-  cache: Map<string, CacheEntry<T>>,
-  key: string,
-  value: T,
-): void {
-  cache.set(key, { value, expiresAt: Date.now() + CACHE_TTL_MS });
-}
+const projectOwnerCache = new TTLCache<string, ProjectOwner>({
+  maxSize: 500,
+  ttlMs: CACHE_TTL_MS,
+  sweepIntervalMs: 60_000,
+});
+const prdToProjectCache = new TTLCache<string, string>({
+  maxSize: 500,
+  ttlMs: CACHE_TTL_MS,
+  sweepIntervalMs: 60_000,
+});
+const entityToProjectCache = new TTLCache<string, string>({
+  maxSize: 500,
+  ttlMs: CACHE_TTL_MS,
+  sweepIntervalMs: 60_000,
+});
 
 // ── Client pool — one HTTP client per team DB ───────────────────────
 
-const clientPool = new Map<string, Client>();
+const clientPool = new TTLCache<string, Client>({
+  maxSize: 50,
+  ttlMs: 10 * 60 * 1000,
+  sweepIntervalMs: 60_000,
+});
 
 function getTeamClient(tursoUrl: string, tursoToken: string): Client {
-  const key = tursoUrl;
-  let client = clientPool.get(key);
-  if (!client) {
-    const httpUrl = tursoUrl.replace("libsql://", "https://");
-    client = createClient({ url: httpUrl, authToken: tursoToken });
-    clientPool.set(key, client);
-  }
+  const existing = clientPool.get(tursoUrl);
+  if (existing) return existing;
+
+  const httpUrl = tursoUrl.replace("libsql://", "https://");
+  const client = createClient({ url: httpUrl, authToken: tursoToken });
+  clientPool.set(tursoUrl, client);
   return client;
 }
 
@@ -87,7 +78,7 @@ export async function getProjectOwner(
   tursoUrl: string,
   tursoToken: string,
 ): Promise<ProjectOwner | null> {
-  const cached = getFromCache(projectOwnerCache, projectId);
+  const cached = projectOwnerCache.get(projectId);
   if (cached) return cached;
 
   const client = getTeamClient(tursoUrl, tursoToken);
@@ -104,7 +95,7 @@ export async function getProjectOwner(
     ownerType: row.owner_type as string,
     ownerId: row.owner_id as string,
   };
-  setInCache(projectOwnerCache, projectId, owner);
+  projectOwnerCache.set(projectId, owner);
   return owner;
 }
 
@@ -113,7 +104,7 @@ export async function getProjectForPrd(
   tursoUrl: string,
   tursoToken: string,
 ): Promise<string | null> {
-  const cached = getFromCache(prdToProjectCache, prdId);
+  const cached = prdToProjectCache.get(prdId);
   if (cached) return cached;
 
   const client = getTeamClient(tursoUrl, tursoToken);
@@ -125,7 +116,7 @@ export async function getProjectForPrd(
   if (!result.rows.length) return null;
 
   const projectId = result.rows[0].project_id as string;
-  setInCache(prdToProjectCache, prdId, projectId);
+  prdToProjectCache.set(prdId, projectId);
   return projectId;
 }
 
@@ -136,7 +127,7 @@ export async function getProjectForEntity(
   tursoToken: string,
 ): Promise<string | null> {
   const cacheKey = `${table}:${entityId}`;
-  const cached = getFromCache(entityToProjectCache, cacheKey);
+  const cached = entityToProjectCache.get(cacheKey);
   if (cached) return cached;
 
   const client = getTeamClient(tursoUrl, tursoToken);
@@ -148,7 +139,7 @@ export async function getProjectForEntity(
     });
     if (!result.rows.length) return null;
     const projectId = result.rows[0].project_id as string;
-    setInCache(entityToProjectCache, cacheKey, projectId);
+    entityToProjectCache.set(cacheKey, projectId);
     return projectId;
   }
 
@@ -160,14 +151,17 @@ export async function getProjectForEntity(
     if (!result.rows.length) return null;
     const prdId = result.rows[0].prd_id as string;
     const projectId = await getProjectForPrd(prdId, tursoUrl, tursoToken);
-    if (projectId) setInCache(entityToProjectCache, cacheKey, projectId);
+    if (projectId) entityToProjectCache.set(cacheKey, projectId);
     return projectId;
   }
 
   return null;
 }
 
-const lastWarmed = new Map<string, number>();
+const lastWarmed = new TTLCache<string, boolean>({
+  maxSize: 100,
+  ttlMs: CACHE_TTL_MS,
+});
 
 /**
  * Preload project ownership for a team. Skips if warmed within the TTL.
@@ -177,9 +171,7 @@ export async function warmProjectCache(
   tursoUrl: string,
   tursoToken: string,
 ): Promise<void> {
-  const now = Date.now();
-  const last = lastWarmed.get(teamId);
-  if (last && now - last < CACHE_TTL_MS) return;
+  if (lastWarmed.get(teamId)) return;
 
   const client = getTeamClient(tursoUrl, tursoToken);
   const result = await client.execute({
@@ -193,9 +185,9 @@ export async function warmProjectCache(
       ownerType: row.owner_type as string,
       ownerId: row.owner_id as string,
     };
-    setInCache(projectOwnerCache, row.id as string, owner);
+    projectOwnerCache.set(row.id as string, owner);
   }
-  lastWarmed.set(teamId, Date.now());
+  lastWarmed.set(teamId, true);
 }
 
 /**

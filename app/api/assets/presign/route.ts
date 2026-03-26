@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { verifyAccessToken } from "@/lib/device-auth/jwt";
-import { isActiveSubscription } from "@/lib/device-auth/subscription";
+import { requireAccessToken, isActiveSubscription } from "@/lib/device-auth";
 import { ensureSubscriptionsTable } from "@/lib/ensure-tables";
 import {
   presignUpload,
@@ -17,20 +16,12 @@ import {
 
 // POST /api/assets/presign — get presigned URL for upload or download
 export async function POST(req: Request) {
-  const authHeader = req.headers.get("authorization");
-  if (!authHeader?.startsWith("Bearer ")) {
-    return NextResponse.json(
-      { error: "Missing access token" },
-      { status: 401 },
-    );
-  }
-
   let payload;
   try {
-    payload = await verifyAccessToken(authHeader.slice(7));
+    payload = await requireAccessToken(req);
   } catch {
     return NextResponse.json(
-      { error: "Invalid or expired token" },
+      { error: "Missing or invalid access token" },
       { status: 401 },
     );
   }
