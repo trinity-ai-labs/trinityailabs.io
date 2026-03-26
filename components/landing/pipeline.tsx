@@ -57,7 +57,7 @@ export function Pipeline() {
         </div>
 
         {/* Flow arrow */}
-        <div className="mt-8 flex items-center justify-center gap-2 text-sm text-muted-foreground font-mono">
+        <div className="mt-8 flex items-center justify-center gap-2 text-xs sm:text-sm text-muted-foreground font-mono flex-wrap">
           <span>Story in</span>
           <span className="text-blue-400">→</span>
           <span className="text-blue-400">Analyst</span>
