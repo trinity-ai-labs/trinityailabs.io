@@ -63,7 +63,7 @@ export async function GET(req: Request) {
   let user: Record<string, unknown>;
   try {
     const userResult = await db.execute({
-      sql: `SELECT id, email, name, handle, turso_db_url, turso_auth_token FROM user WHERE id = ?`,
+      sql: `SELECT id, email, name, handle, role, turso_db_url, turso_auth_token FROM user WHERE id = ?`,
       args: [userId],
     });
     if (!userResult.rows.length) {
@@ -208,6 +208,7 @@ export async function GET(req: Request) {
       email: user.email as string,
       name: user.name as string,
       handle: (user.handle as string) ?? null,
+      role: (user.role as string) ?? null,
       tursoDbUrl: (user.turso_db_url as string) ?? null,
       tursoAuthToken: (user.turso_auth_token as string) ?? null,
     },
