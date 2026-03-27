@@ -69,14 +69,10 @@ export async function createDatabaseToken(
   dbName: string
 ): Promise<string> {
   const res = await fetch(
-    `${API_BASE}/organizations/${ORG}/databases/${dbName}/auth/tokens`,
+    `${API_BASE}/organizations/${ORG}/databases/${dbName}/auth/tokens?expiration=7d`,
     {
       method: "POST",
       headers: headers(),
-      body: JSON.stringify({
-        permissions: { read_attach: { databases: ["*"] } },
-        expiration: "7d",
-      }),
     }
   );
 

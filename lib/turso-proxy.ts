@@ -150,6 +150,10 @@ export async function proxyWithRotation(
     subPath,
   );
 
+  if (firstAttempt.status >= 400 && firstAttempt.status !== 401) {
+    const body = await firstAttempt.clone().text();
+    console.error(`[turso-proxy] ${req.method} /${subPath} → ${firstAttempt.status}: ${body}`);
+  }
   if (firstAttempt.status !== 401) return firstAttempt;
 
   // Token expired — rotate and retry
@@ -166,12 +170,12 @@ export async function proxyWithRotation(
 
 // ── Proxy Forwarding ────────────────────────────────────────────────
 
-/** Headers safe to forward from Turso back to the client. */
-const PASSTHROUGH_RESPONSE_HEADERS = new Set([
-  "content-type",
-  "content-length",
-  "content-encoding",
-  "transfer-encoding",
+/** Headers to strip from Turso responses (security-sensitive). */
+const BLOCKED_RESPONSE_HEADERS = new Set([
+  "authorization",
+  "set-cookie",
+  "server",
+  "x-powered-by",
 ]);
 
 export async function proxyToTurso(
@@ -202,10 +206,10 @@ export async function proxyToTurso(
 
   const upstreamRes = await fetch(upstreamUrl, fetchInit);
 
-  // Build filtered response headers
+  // Forward all headers except security-sensitive ones
   const responseHeaders = new Headers();
   for (const [key, value] of upstreamRes.headers) {
-    if (PASSTHROUGH_RESPONSE_HEADERS.has(key.toLowerCase())) {
+    if (!BLOCKED_RESPONSE_HEADERS.has(key.toLowerCase())) {
       responseHeaders.set(key, value);
     }
   }
