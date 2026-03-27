@@ -204,9 +204,8 @@ export async function GET(req: Request) {
       name: user.name as string,
       handle: (user.handle as string) ?? null,
       role: (user.role as string) ?? null,
-      syncProxyUrl: (user.turso_db_url as string)
-        ? `${siteBase}/api/turso-sync/personal`
-        : null,
+      tursoDbUrl: (user.turso_db_url as string) ?? null,
+      tursoAuthToken: (user.turso_auth_token as string) ?? null,
     },
     subscription,
     preferences,

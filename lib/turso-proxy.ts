@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { ensureTeamsTables, ensureUserColumns } from "@/lib/ensure-tables";
+import { ensureTeamsTables } from "@/lib/ensure-tables";
 import { createDatabaseToken } from "@/lib/turso-admin";
 import { TTLCache } from "@/lib/ttl-cache";
 
@@ -28,34 +28,6 @@ export interface TursoCredentials {
   tursoUrl: string;
   tursoToken: string;
   tursoDbName: string;
-}
-
-export async function resolvePersonalCredentials(
-  userId: string,
-): Promise<TursoCredentials | null> {
-  const cacheKey = `personal:${userId}`;
-  const cached = credentialCache.get(cacheKey);
-  if (cached) return cached;
-
-  await ensureUserColumns();
-
-  const result = await db.execute({
-    sql: "SELECT turso_db_url, turso_auth_token, turso_db_name FROM user WHERE id = ?",
-    args: [userId],
-  });
-
-  if (!result.rows.length) return null;
-
-  const row = result.rows[0];
-  const tursoUrl = row.turso_db_url as string | null;
-  const tursoToken = row.turso_auth_token as string | null;
-  const tursoDbName = row.turso_db_name as string | null;
-
-  if (!tursoUrl || !tursoToken || !tursoDbName) return null;
-
-  const creds: CachedCredentials = { tursoUrl, tursoToken, tursoDbName };
-  credentialCache.set(cacheKey, creds);
-  return creds;
 }
 
 export async function resolveTeamCredentials(
@@ -92,24 +64,6 @@ export async function resolveTeamCredentials(
 
 // ── Token Rotation ──────────────────────────────────────────────────
 
-async function rotatePersonalToken(
-  userId: string,
-  dbName: string,
-): Promise<string | null> {
-  try {
-    const newToken = await createDatabaseToken(dbName);
-    await db.execute({
-      sql: "UPDATE user SET turso_auth_token = ? WHERE id = ?",
-      args: [newToken, userId],
-    });
-    invalidateCache(`personal:${userId}`);
-    return newToken;
-  } catch (err) {
-    console.error("[turso-proxy] Personal token rotation failed:", err);
-    return null;
-  }
-}
-
 async function rotateTeamToken(
   userId: string,
   teamId: string,
@@ -129,9 +83,10 @@ async function rotateTeamToken(
   }
 }
 
-export type ProxyScope =
-  | { type: "personal"; userId: string }
-  | { type: "team"; userId: string; teamId: string };
+export interface TeamProxyScope {
+  userId: string;
+  teamId: string;
+}
 
 /**
  * Proxy a request to Turso with automatic token rotation on 401.
@@ -141,7 +96,7 @@ export async function proxyWithRotation(
   req: Request,
   creds: TursoCredentials,
   subPath: string,
-  scope: ProxyScope,
+  scope: TeamProxyScope,
 ): Promise<Response> {
   const firstAttempt = await proxyToTurso(
     req,
@@ -150,17 +105,14 @@ export async function proxyWithRotation(
     subPath,
   );
 
-  if (firstAttempt.status >= 400 && firstAttempt.status !== 401) {
-    const body = await firstAttempt.clone().text();
-    console.error(`[turso-proxy] ${req.method} /${subPath} → ${firstAttempt.status}: ${body}`);
-  }
   if (firstAttempt.status !== 401) return firstAttempt;
 
   // Token expired — rotate and retry
-  const newToken =
-    scope.type === "personal"
-      ? await rotatePersonalToken(scope.userId, creds.tursoDbName)
-      : await rotateTeamToken(scope.userId, scope.teamId, creds.tursoDbName);
+  const newToken = await rotateTeamToken(
+    scope.userId,
+    scope.teamId,
+    creds.tursoDbName,
+  );
 
   if (!newToken) return firstAttempt;
 
@@ -170,12 +122,12 @@ export async function proxyWithRotation(
 
 // ── Proxy Forwarding ────────────────────────────────────────────────
 
-/** Headers to strip from Turso responses (security-sensitive). */
-const BLOCKED_RESPONSE_HEADERS = new Set([
-  "authorization",
-  "set-cookie",
-  "server",
-  "x-powered-by",
+/** Headers safe to forward from Turso back to the client. */
+const PASSTHROUGH_RESPONSE_HEADERS = new Set([
+  "content-type",
+  "content-length",
+  "content-encoding",
+  "transfer-encoding",
 ]);
 
 export async function proxyToTurso(
@@ -206,10 +158,10 @@ export async function proxyToTurso(
 
   const upstreamRes = await fetch(upstreamUrl, fetchInit);
 
-  // Forward all headers except security-sensitive ones
+  // Build filtered response headers
   const responseHeaders = new Headers();
   for (const [key, value] of upstreamRes.headers) {
-    if (!BLOCKED_RESPONSE_HEADERS.has(key.toLowerCase())) {
+    if (PASSTHROUGH_RESPONSE_HEADERS.has(key.toLowerCase())) {
       responseHeaders.set(key, value);
     }
   }

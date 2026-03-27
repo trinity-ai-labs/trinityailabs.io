@@ -105,7 +105,6 @@ async function handleProxy(req: Request, { params }: RouteParams) {
         body: JSON.stringify(body),
       });
       return proxyWithRotation(forwardReq, creds, subPath, {
-        type: "team",
         userId,
         teamId,
       });
