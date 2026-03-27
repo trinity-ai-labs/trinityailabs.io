@@ -1,6 +1,6 @@
 # Welcome to Trinity
 
-Trinity is a next-generation Integrated Development Environment. It coordinates multiple AI agents to build your software projects — from planning through execution — while you maintain oversight and control.
+Trinity is a next-generation Integrated Development Environment. It coordinates multiple AI agents to build your software projects — planning, coding, review, and shipping — all in one environment, while you maintain oversight and control.
 
 ## What Trinity Does
 
