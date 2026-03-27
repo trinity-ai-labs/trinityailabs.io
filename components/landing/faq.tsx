@@ -7,12 +7,12 @@ const faqs = [
   {
     question: "What is Trinity exactly?",
     answer:
-      "Trinity is an autonomous development orchestrator — a desktop app (built with Tauri) that plans your entire project, breaks it into stories, and executes them through a 4-agent AI pipeline in parallel. It's not a code editor or autocomplete tool. It's a system that ships PRs while you sleep.",
+      "Trinity is a next-generation IDE — a desktop app that brings the full meaning back to Integrated Development Environment. It plans your entire project, breaks it into stories, and executes them through a 4-agent AI pipeline in parallel. Planning, coding, review, knowledge, release management, team collaboration, threaded comments, activity feeds, metrics, recaps, and PDF reports — all integrated into one environment that ships PRs while you sleep.",
   },
   {
     question: "How is this different from Cursor or GitHub Copilot?",
     answer:
-      "Cursor and Copilot help you write code faster inside an editor. Trinity operates at the project level — it plans features, manages dependencies between stories, runs multiple agents in parallel across isolated git worktrees, reviews its own code through an auditor agent, and creates PRs automatically. It's a layer above code generation.",
+      "Cursor and Copilot added AI to the text editor. Trinity is a different kind of IDE — it operates at the project level. It plans features, manages dependencies, runs multiple agents in parallel across isolated git worktrees, reviews its own code, and creates PRs automatically. On top of that, you get team collaboration, threaded comments, activity feeds, metrics, recaps, and PDF reports. They made the editor smarter. Trinity replaced the entire workflow.",
   },
   {
     question: "What AI models does Trinity use?",

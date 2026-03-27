@@ -5,7 +5,7 @@ import { Footer } from "@/components/landing/footer";
 export const metadata: Metadata = {
   title: "Terms of Service | Trinity AI Labs",
   description:
-    "Terms and conditions for using the Trinity AI development orchestrator.",
+    "Terms and conditions for using Trinity, the next-generation IDE.",
 };
 
 export default function TermsPage() {
@@ -35,9 +35,9 @@ export default function TermsPage() {
             <section>
               <h2 className="text-xl font-semibold">2. The Service</h2>
               <p>
-                Trinity is an autonomous AI development orchestrator. It plans
-                software projects, orchestrates AI agents to write and review code,
-                and manages execution pipelines. The Service includes:
+                Trinity is a next-generation Integrated Development Environment. It
+                plans software projects, coordinates AI agents to write and review
+                code, and manages the full development lifecycle. The Service includes:
               </p>
               <ul className="list-disc pl-5 space-y-1.5">
                 <li>

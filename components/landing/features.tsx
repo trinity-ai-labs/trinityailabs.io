@@ -144,11 +144,15 @@ export function Features() {
       <div className="max-w-6xl mx-auto px-6">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Everything you need to ship autonomously
+            A truly{" "}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-500">
+              integrated
+            </span>{" "}
+            development environment
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Not just another AI coding tool. A full development orchestrator that plans,
-            executes, reviews, and learns.
+            Planning. Execution. Review. Knowledge. Releases. Team collaboration.
+            Comments. Activity feeds. Metrics. Reports. One environment.
           </p>
         </div>
 

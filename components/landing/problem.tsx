@@ -3,14 +3,18 @@ export function Problem() {
     <section className="py-24 border-t border-border">
       <div className="max-w-4xl mx-auto px-6 text-center">
         <h2 className="text-3xl md:text-4xl font-bold mb-6 leading-tight">
-          AI coding tools write code.{" "}
+          Your &ldquo;IDE&rdquo; is just a{" "}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-500">
-            Trinity builds products.
+            text editor.
           </span>
         </h2>
+        <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed">
+          Cursor for code. Linear for tasks. GitHub for PRs. Notion for docs.
+          Spreadsheets for metrics. Five tools. You&apos;re the glue.
+        </p>
         <p className="text-lg text-muted-foreground mb-12 max-w-2xl mx-auto leading-relaxed">
-          Copilot and Cursor help you write code faster. Trinity plans your entire project,
-          executes stories through a 4-agent pipeline, learns from every run, and ships PRs — while you sleep.
+          IDE stands for <span className="text-foreground font-semibold">Integrated Development Environment</span>.
+          It&apos;s time it lived up to its name.
         </p>
 
         {/* Pipeline visual */}

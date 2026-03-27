@@ -102,7 +102,7 @@ export default function AdminLayout({
         <div className="h-16 flex items-center px-6 border-b border-border">
           <Link href="/" className="flex items-center gap-2.5">
             <Image
-              src="/app-icon.png"
+              src="/logo.png"
               alt="Trinity"
               width={28}
               height={28}

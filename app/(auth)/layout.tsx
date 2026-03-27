@@ -11,7 +11,7 @@ export default function AuthLayout({
       <nav className="h-16 flex items-center px-6 border-b border-border">
         <Link href="/" className="flex items-center gap-2.5">
           <Image
-            src="/app-icon.png"
+            src="/logo.png"
             alt="Trinity"
             width={32}
             height={32}

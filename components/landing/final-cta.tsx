@@ -9,11 +9,10 @@ export function FinalCTA() {
 
       <div className="relative max-w-2xl mx-auto px-6 text-center">
         <h2 className="text-3xl md:text-4xl font-bold mb-4">
-          Ready to build while you&apos;re AFK?
+          Ready to see what an IDE can really do?
         </h2>
         <p className="text-lg text-muted-foreground mb-8 max-w-lg mx-auto">
           Download Trinity and ship your first feature tonight.
-          Free plan, no credit card required.
         </p>
         <div className="flex justify-center">
           <PlatformDownload size="lg" />

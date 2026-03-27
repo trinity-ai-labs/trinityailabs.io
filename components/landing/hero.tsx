@@ -26,16 +26,15 @@ export function Hero() {
 
           {/* Headline */}
           <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-[1.1] tracking-tight">
-            Build while you&apos;re{" "}
+            Describe it.{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-500">
-              AFK
+              Ship it.
             </span>
           </h1>
 
           {/* Sub-headline */}
           <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed">
-            Describe what you want to build. Trinity plans it, orchestrates AI agents
-            to write and review code in parallel, and ships PRs — autonomously.
+            Trinity builds your software while you sleep.
           </p>
 
           {/* Dual CTA */}

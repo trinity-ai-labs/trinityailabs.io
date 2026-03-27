@@ -13,34 +13,34 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Trinity AI Labs | Autonomous AI Development Orchestrator",
+  title: "Trinity AI Labs | Describe It. Ship It.",
   description:
-    "Describe what you want to build. Trinity plans it, orchestrates AI agents to write and review code in parallel, and ships PRs — autonomously. Available for macOS & Linux.",
+    "Trinity builds your software while you sleep. AI agents that plan, code, review, and ship — with team collaboration, metrics, and reports. The IDE that actually integrates everything. Available for macOS & Linux.",
   keywords: [
     "AI",
-    "development",
-    "autonomous",
-    "coding",
-    "orchestrator",
+    "IDE",
+    "next-generation IDE",
+    "development environment",
     "AI agents",
+    "autonomous coding",
     "code generation",
     "parallel execution",
     "Tauri",
     "desktop app",
   ],
   openGraph: {
-    title: "Trinity AI Labs | Build While You're AFK",
+    title: "Trinity AI Labs | Describe It. Ship It.",
     description:
-      "Autonomous AI development orchestrator. Plan, execute, review, and ship — while you sleep.",
+      "Trinity builds your software while you sleep. The IDE that actually integrates everything.",
     url: "https://trinityailabs.com",
     siteName: "Trinity AI Labs",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Trinity AI Labs | Build While You're AFK",
+    title: "Trinity AI Labs | Describe It. Ship It.",
     description:
-      "Autonomous AI development orchestrator. Plan, execute, review, and ship — while you sleep.",
+      "Trinity builds your software while you sleep. The IDE that actually integrates everything.",
   },
   robots: {
     index: true,

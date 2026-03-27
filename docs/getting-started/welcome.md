@@ -1,6 +1,6 @@
 # Welcome to Trinity
 
-Trinity is an autonomous AI development orchestration dashboard. It coordinates multiple AI agents to build your software projects — from planning through execution — while you maintain oversight and control.
+Trinity is a next-generation Integrated Development Environment. It coordinates multiple AI agents to build your software projects — from planning through execution — while you maintain oversight and control.
 
 ## What Trinity Does
 

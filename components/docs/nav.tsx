@@ -43,7 +43,7 @@ export function DocsNav() {
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2.5">
               <Image
-                src="/app-icon.png"
+                src="/logo.png"
                 alt="Trinity"
                 width={26}
                 height={26}

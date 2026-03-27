@@ -1,5 +1,13 @@
 import Image from "next/image";
-import { Twitter } from "lucide-react";
+import { Instagram } from "lucide-react";
+
+function XIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+    </svg>
+  );
+}
 
 const footerLinks = [
   {
@@ -36,21 +44,30 @@ export function Footer() {
           {/* Brand column */}
           <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-2.5 mb-4">
-              <Image src="/app-icon.png" alt="Trinity" width={28} height={28} className="rounded-lg" />
+              <Image src="/logo.png" alt="Trinity" width={28} height={28} className="rounded-lg" />
               <span className="font-mono font-bold">trinity</span>
             </div>
             <p className="text-sm text-muted-foreground mb-4 max-w-xs">
-              Autonomous AI development orchestrator. Plan, execute, review, ship.
+              The next-generation IDE. Plan, execute, review, ship — autonomously.
             </p>
             <div className="flex items-center gap-3">
               <a
-                href="https://x.com/trinityailabs"
+                href="https://x.com/trinity_ai_labs"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-muted-foreground hover:text-foreground transition-colors"
-                aria-label="X (Twitter)"
+                aria-label="X"
               >
-                <Twitter className="w-5 h-5" />
+                <XIcon className="w-4 h-4" />
+              </a>
+              <a
+                href="https://instagram.com/trinity.ai.labs"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+                aria-label="Instagram"
+              >
+                <Instagram className="w-5 h-5" />
               </a>
             </div>
           </div>
