@@ -8,6 +8,18 @@ function getResend() {
 
 const FROM_ADDRESS = "Trinity AI Labs <info@trinityailabs.com>";
 
+const HTML_ESCAPE: Record<string, string> = {
+  "&": "&amp;",
+  "<": "&lt;",
+  ">": "&gt;",
+  '"': "&quot;",
+  "'": "&#39;",
+};
+
+function escapeHtml(str: string): string {
+  return str.replace(/[&<>"']/g, (ch) => HTML_ESCAPE[ch]!);
+}
+
 export async function sendVerificationEmail(to: string, url: string) {
   await getResend().emails.send({
     from: FROM_ADDRESS,
@@ -78,7 +90,7 @@ export async function sendTeamInviteEmail(
   to: string,
   teamName: string,
   inviterName: string,
-  acceptUrl: string
+  acceptUrl: string,
 ) {
   await getResend().emails.send({
     from: FROM_ADDRESS,
@@ -97,6 +109,39 @@ export async function sendTeamInviteEmail(
         <p style="color: #999; font-size: 13px; margin-top: 32px;">
           If you weren&apos;t expecting this invitation, you can safely ignore this email.
         </p>
+      </div>
+    `,
+  });
+}
+
+export async function sendBugReportEmail(report: {
+  id: string;
+  title: string;
+  description: string;
+  userEmail: string;
+  userName: string | null;
+  appVersion: string | null;
+  os: string | null;
+}) {
+  const adminEmail =
+    process.env.BUG_REPORT_NOTIFY_EMAIL ?? "info@trinityailabs.com";
+  const siteUrl = process.env.BETTER_AUTH_URL ?? "https://trinityailabs.com";
+
+  await getResend().emails.send({
+    from: FROM_ADDRESS,
+    to: adminEmail,
+    subject: `[Bug Report] ${report.title}`,
+    html: `
+      <div style="font-family: system-ui, sans-serif; max-width: 480px; margin: 0 auto; padding: 40px 20px;">
+        <h1 style="font-size: 24px; font-weight: 600; margin-bottom: 16px;">New Bug Report</h1>
+        <p style="color: #666; margin-bottom: 8px;"><strong>Title:</strong> ${escapeHtml(report.title)}</p>
+        <p style="color: #666; margin-bottom: 8px;"><strong>Reporter:</strong> ${escapeHtml(report.userName ?? "Unknown")} (${escapeHtml(report.userEmail)})</p>
+        ${report.appVersion ? `<p style="color: #666; margin-bottom: 8px;"><strong>App Version:</strong> ${escapeHtml(report.appVersion)}</p>` : ""}
+        ${report.os ? `<p style="color: #666; margin-bottom: 8px;"><strong>OS:</strong> ${escapeHtml(report.os)}</p>` : ""}
+        <p style="color: #666; margin-bottom: 24px;"><strong>Description:</strong><br/>${escapeHtml(report.description).replace(/\n/g, "<br/>")}</p>
+        <a href="${siteUrl}/admin/bug-reports/${report.id}" style="display: inline-block; background: linear-gradient(to right, #10b981, #06b6d4); color: white; text-decoration: none; padding: 12px 24px; border-radius: 8px; font-weight: 500;">
+          View Bug Report
+        </a>
       </div>
     `,
   });

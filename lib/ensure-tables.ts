@@ -182,6 +182,45 @@ export async function ensureSponsoredSeatsTable() {
   sponsoredSeatsEnsured = true;
 }
 
+let bugReportsEnsured = false;
+
+export async function ensureBugReportsTables() {
+  if (bugReportsEnsured) return;
+
+  await Promise.all([
+    db.execute(`
+      CREATE TABLE IF NOT EXISTS bug_reports (
+        id TEXT PRIMARY KEY,
+        user_id TEXT NOT NULL,
+        user_email TEXT NOT NULL,
+        user_name TEXT,
+        title TEXT NOT NULL,
+        description TEXT NOT NULL,
+        app_version TEXT,
+        os TEXT,
+        route TEXT,
+        status TEXT NOT NULL DEFAULT 'open' CHECK (status IN ('open', 'in_progress', 'resolved', 'closed')),
+        admin_notes TEXT,
+        created_at TEXT DEFAULT (datetime('now')),
+        updated_at TEXT DEFAULT (datetime('now'))
+      )
+    `),
+    db.execute(`
+      CREATE TABLE IF NOT EXISTS bug_report_attachments (
+        id TEXT PRIMARY KEY,
+        bug_report_id TEXT NOT NULL,
+        file_name TEXT NOT NULL,
+        storage_key TEXT NOT NULL,
+        content_type TEXT NOT NULL,
+        file_size INTEGER,
+        created_at TEXT DEFAULT (datetime('now'))
+      )
+    `),
+  ]);
+
+  bugReportsEnsured = true;
+}
+
 export async function ensureStorageUsageTable() {
   await db.execute(`
     CREATE TABLE IF NOT EXISTS storage_usage (

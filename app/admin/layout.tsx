@@ -7,12 +7,20 @@ import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { LogOut, LayoutDashboard, Users, Mail, Shield } from "lucide-react";
+import {
+  LogOut,
+  LayoutDashboard,
+  Users,
+  Mail,
+  Shield,
+  Bug,
+} from "lucide-react";
 
 const sidebarLinks = [
   { label: "Overview", href: "/admin", icon: LayoutDashboard },
   { label: "Users", href: "/admin/users", icon: Users },
   { label: "Invites", href: "/admin/invites", icon: Mail },
+  { label: "Bug Reports", href: "/admin/bug-reports", icon: Bug },
 ];
 
 export default function AdminLayout({
@@ -71,7 +79,10 @@ export default function AdminLayout({
               <div className="h-8 w-44 bg-muted animate-pulse rounded" />
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {Array.from({ length: 4 }).map((_, i) => (
-                  <div key={i} className="h-24 bg-muted/50 animate-pulse rounded-lg border" />
+                  <div
+                    key={i}
+                    className="h-24 bg-muted/50 animate-pulse rounded-lg border"
+                  />
                 ))}
               </div>
             </div>
