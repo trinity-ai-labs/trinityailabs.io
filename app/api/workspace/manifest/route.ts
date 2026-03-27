@@ -134,7 +134,9 @@ export async function GET(req: Request) {
             JOIN user u ON u.id = ss.sponsor_id
             JOIN subscriptions s ON s.user_id = ss.sponsor_id
               AND s.status IN ('active', 'comp')
-            WHERE ss.user_id = ? AND ss.status = 'active'
+            WHERE ss.user_id = ?
+              AND (ss.status = 'active'
+                OR (ss.status = 'cancelled' AND ss.effective_until > datetime('now')))
             ORDER BY s.updated_at DESC
             LIMIT 1`,
       args: [userId],
@@ -207,6 +209,7 @@ export async function GET(req: Request) {
     storage: {
       usedBytes: personalUsage.usedBytes,
       quotaBytes: personalQuota.quotaBytes,
+      addonBytes: personalQuota.addonBytes,
     },
   });
 }

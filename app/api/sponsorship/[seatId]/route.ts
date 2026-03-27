@@ -72,9 +72,9 @@ export async function DELETE(
     });
   }
 
-  // Cancel the seat
+  // Cancel the seat (immediate — no grace period for sponsor-initiated cancellation)
   await db.execute({
-    sql: "UPDATE sponsored_seats SET status = 'cancelled', cancelled_at = datetime('now') WHERE id = ?",
+    sql: "UPDATE sponsored_seats SET status = 'cancelled', cancelled_at = datetime('now'), cancelled_by = 'sponsor' WHERE id = ?",
     args: [seatId],
   });
 

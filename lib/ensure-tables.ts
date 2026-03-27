@@ -179,7 +179,34 @@ export async function ensureSponsoredSeatsTable() {
       UNIQUE(sponsor_id, user_id)
     )
   `);
+  for (const col of ["cancelled_by TEXT", "effective_until TEXT"]) {
+    try {
+      await db.execute(`ALTER TABLE sponsored_seats ADD COLUMN ${col}`);
+    } catch {
+      // Column already exists
+    }
+  }
   sponsoredSeatsEnsured = true;
+}
+
+let storageAddonsEnsured = false;
+
+export async function ensureStorageAddonsTable() {
+  if (storageAddonsEnsured) return;
+  await db.execute(`
+    CREATE TABLE IF NOT EXISTS storage_addons (
+      id TEXT PRIMARY KEY,
+      purchaser_id TEXT NOT NULL,
+      beneficiary_id TEXT NOT NULL,
+      lemonsqueezy_subscription_id TEXT,
+      lemonsqueezy_customer_id TEXT,
+      status TEXT NOT NULL DEFAULT 'active',
+      current_period_end TEXT,
+      created_at TEXT DEFAULT (datetime('now')),
+      updated_at TEXT DEFAULT (datetime('now'))
+    )
+  `);
+  storageAddonsEnsured = true;
 }
 
 let bugReportsEnsured = false;
@@ -221,7 +248,10 @@ export async function ensureBugReportsTables() {
   bugReportsEnsured = true;
 }
 
+let storageUsageEnsured = false;
+
 export async function ensureStorageUsageTable() {
+  if (storageUsageEnsured) return;
   await db.execute(`
     CREATE TABLE IF NOT EXISTS storage_usage (
       scope TEXT NOT NULL,
@@ -231,4 +261,12 @@ export async function ensureStorageUsageTable() {
       PRIMARY KEY (scope, scope_id)
     )
   `);
+  try {
+    await db.execute(
+      `ALTER TABLE storage_usage ADD COLUMN over_quota_since TEXT`,
+    );
+  } catch {
+    // Column already exists
+  }
+  storageUsageEnsured = true;
 }

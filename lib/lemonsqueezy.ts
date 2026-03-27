@@ -10,8 +10,16 @@ function headers() {
 
 export async function createCheckoutUrl(
   email: string,
-  userId: string
+  userId: string,
+  options?: {
+    variantId?: string;
+    trialEndsAt?: string;
+    customData?: Record<string, string>;
+  },
 ): Promise<string> {
+  const variantId =
+    options?.variantId ?? process.env.LEMONSQUEEZY_VARIANT_ID;
+
   const res = await fetch(`${API_URL}/checkouts`, {
     method: "POST",
     headers: headers(),
@@ -24,11 +32,14 @@ export async function createCheckoutUrl(
           },
           checkout_data: {
             email,
-            custom: { user_id: userId },
+            custom: { user_id: userId, ...options?.customData },
           },
           product_options: {
             redirect_url: `${process.env.BETTER_AUTH_URL}/dashboard`,
           },
+          ...(options?.trialEndsAt
+            ? { trial_ends_at: options.trialEndsAt }
+            : {}),
         },
         relationships: {
           store: {
@@ -40,7 +51,7 @@ export async function createCheckoutUrl(
           variant: {
             data: {
               type: "variants",
-              id: process.env.LEMONSQUEEZY_VARIANT_ID,
+              id: variantId,
             },
           },
         },

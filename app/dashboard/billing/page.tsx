@@ -12,7 +12,16 @@ import {
 import { StorageBar } from "@/components/dashboard/storage-bar";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Gift, Loader2, Package, UserPlus, X } from "lucide-react";
+import {
+  AlertTriangle,
+  Gift,
+  HardDrive,
+  Loader2,
+  Package,
+  Plus,
+  UserPlus,
+  X,
+} from "lucide-react";
 
 type DashboardUsage = {
   subscription: {
@@ -21,9 +30,16 @@ type DashboardUsage = {
     seatsPurchased: number;
     hasCustomer: boolean;
   } | null;
+  sponsoredBy: {
+    seatId: string;
+    sponsorName: string;
+    currentPeriodEnd: string | null;
+    effectiveUntil: string | null;
+  } | null;
   storage: {
     usedBytes: number;
     quotaBytes: number;
+    addonBytes: number;
   };
   teams: Array<{
     id: string;
@@ -46,6 +62,18 @@ type SponsoredSeat = {
   createdAt: string;
 };
 
+type StorageAddon = {
+  id: string;
+  type: "self" | "gifted" | "received";
+  status: string;
+  currentPeriodEnd: string | null;
+  createdAt: string;
+  purchaserName: string | null;
+  purchaserEmail: string | null;
+  beneficiaryName: string | null;
+  beneficiaryEmail: string | null;
+};
+
 function fetchSeats(): Promise<SponsoredSeat[]> {
   return fetch("/api/sponsorship")
     .then((res) => (res.ok ? res.json() : { seats: [] }))
@@ -60,7 +88,8 @@ function fetchUsage(): Promise<DashboardUsage> {
         ? res.json()
         : {
             subscription: null,
-            storage: { usedBytes: 0, quotaBytes: 0 },
+            sponsoredBy: null,
+            storage: { usedBytes: 0, quotaBytes: 0, addonBytes: 0 },
             teams: [],
           },
     )
@@ -68,10 +97,18 @@ function fetchUsage(): Promise<DashboardUsage> {
       () =>
         ({
           subscription: null,
-          storage: { usedBytes: 0, quotaBytes: 0 },
+          sponsoredBy: null,
+          storage: { usedBytes: 0, quotaBytes: 0, addonBytes: 0 },
           teams: [],
         }) as DashboardUsage,
     );
+}
+
+function fetchAddons(): Promise<StorageAddon[]> {
+  return fetch("/api/billing/storage-addon")
+    .then((res) => (res.ok ? res.json() : { addons: [] }))
+    .then((data) => data.addons ?? [])
+    .catch(() => []);
 }
 
 function BillingSkeleton() {
@@ -119,25 +156,49 @@ const statusConfig: Record<
   inactive: { label: "Inactive", variant: "outline", dot: "bg-gray-500" },
 };
 
+function formatBytes(bytes: number): string {
+  if (bytes === 0) return "0 GB";
+  const gb = bytes / (1024 * 1024 * 1024);
+  return gb >= 1 ? `${gb.toFixed(1)} GB` : `${(gb * 1024).toFixed(0)} MB`;
+}
+
+function formatDate(iso: string): string {
+  return new Date(iso).toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
 function BillingContent({
   usagePromise,
   seatsPromise,
+  addonsPromise,
 }: {
   usagePromise: Promise<DashboardUsage>;
   seatsPromise: Promise<SponsoredSeat[]>;
+  addonsPromise: Promise<StorageAddon[]>;
 }) {
   const usage = use(usagePromise);
   const initialSeats = use(seatsPromise);
-  const { subscription, storage, teams } = usage;
+  const initialAddons = use(addonsPromise);
+  const { subscription, sponsoredBy, storage, teams } = usage;
   const [loading, setLoading] = useState(false);
   const [seats, setSeats] = useState(initialSeats);
+  const [addons, setAddons] = useState(initialAddons);
   const [sponsorInput, setSponsorInput] = useState("");
   const [sponsoring, setSponsoring] = useState(false);
   const [removingId, setRemovingId] = useState<string | null>(null);
+  const [cancellingAddonId, setCancellingAddonId] = useState<string | null>(
+    null,
+  );
   const [sponsorError, setSponsorError] = useState("");
+  const [leavingSponsorship, setLeavingSponsorship] = useState(false);
+  const [sponsorshipLeft, setSponsorshipLeft] = useState(false);
 
   const isActive =
     subscription?.status === "active" || subscription?.status === "comp";
+  const hasAccess = isActive || (!!sponsoredBy && !sponsorshipLeft);
 
   async function handleSubscribe() {
     setLoading(true);
@@ -201,8 +262,65 @@ function BillingContent({
     setRemovingId(null);
   }
 
+  async function handleLeaveSponsorship() {
+    if (
+      !confirm(
+        `Leave sponsorship from ${sponsoredBy?.sponsorName}? You'll keep access until ${sponsoredBy?.currentPeriodEnd ? formatDate(sponsoredBy.currentPeriodEnd) : "the end of the billing period"}, then you'll need your own subscription.`,
+      )
+    )
+      return;
+
+    setLeavingSponsorship(true);
+    const res = await fetch("/api/sponsorship/leave", { method: "POST" });
+    if (res.ok) {
+      setSponsorshipLeft(true);
+    }
+    setLeavingSponsorship(false);
+  }
+
+  async function handleBuyStoragePack(beneficiaryId?: string) {
+    setLoading(true);
+    const res = await fetch("/api/billing/storage-addon/checkout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(beneficiaryId ? { beneficiaryId } : {}),
+    });
+    const { url } = await res.json();
+    if (url) window.location.href = url;
+    else setLoading(false);
+  }
+
+  async function handleCancelAddon(addonId: string) {
+    if (!confirm("Cancel this storage pack? It will remain active until the end of the current billing period."))
+      return;
+
+    setCancellingAddonId(addonId);
+    const res = await fetch(`/api/billing/storage-addon/${addonId}`, {
+      method: "DELETE",
+    });
+    if (res.ok) {
+      setAddons((prev) =>
+        prev.map((a) =>
+          a.id === addonId ? { ...a, status: "cancelled" } : a,
+        ),
+      );
+    }
+    setCancellingAddonId(null);
+  }
+
   const config =
     statusConfig[subscription?.status ?? "inactive"] ?? statusConfig.inactive;
+
+  // Calculate over-quota warning for expiring packs
+  const expiringPacks = addons.filter(
+    (a) => a.status === "cancelled" && a.currentPeriodEnd,
+  );
+  const activePackCount = addons.filter((a) => a.status === "active").length;
+  const futureQuota =
+    storage.quotaBytes -
+    expiringPacks.length * 10 * 1024 * 1024 * 1024;
+  const willBeOverQuota =
+    expiringPacks.length > 0 && storage.usedBytes > futureQuota;
 
   return (
     <div className="max-w-2xl space-y-6">
@@ -212,6 +330,50 @@ function BillingContent({
           Manage your subscription and storage usage.
         </p>
       </div>
+
+      {/* Sponsored Membership Card */}
+      {sponsoredBy && !sponsorshipLeft && !isActive && (
+        <Card className="border-cyan-500/30 bg-cyan-500/5">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Gift className="w-5 h-5 text-cyan-500" />
+              Sponsored Membership
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-sm">
+              Your membership is sponsored by{" "}
+              <strong>{sponsoredBy.sponsorName}</strong>.
+            </p>
+            {sponsoredBy.currentPeriodEnd && (
+              <p className="text-sm text-muted-foreground">
+                Current period ends {formatDate(sponsoredBy.currentPeriodEnd)}
+              </p>
+            )}
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleLeaveSponsorship}
+                disabled={leavingSponsorship}
+              >
+                {leavingSponsorship ? (
+                  <Loader2 className="w-4 h-4 mr-1.5 animate-spin" />
+                ) : null}
+                Leave Sponsorship
+              </Button>
+              <Button
+                size="sm"
+                onClick={handleSubscribe}
+                disabled={loading}
+                className="font-mono bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white"
+              >
+                {loading ? "Loading..." : "Subscribe Myself — $10/mo"}
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Subscription Details */}
       <Card>
@@ -248,13 +410,7 @@ function BillingContent({
                         : "Renews"}
                     </p>
                     <p className="font-medium">
-                      {new Date(
-                        subscription.currentPeriodEnd,
-                      ).toLocaleDateString("en-US", {
-                        month: "long",
-                        day: "numeric",
-                        year: "numeric",
-                      })}
+                      {formatDate(subscription.currentPeriodEnd)}
                     </p>
                   </div>
                 )}
@@ -298,6 +454,28 @@ function BillingContent({
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-5">
+          {willBeOverQuota && (
+            <div className="flex gap-3 rounded-md border border-amber-500/30 bg-amber-500/5 p-3">
+              <AlertTriangle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
+              <div className="text-sm space-y-1">
+                <p className="font-medium text-amber-600 dark:text-amber-400">
+                  Storage pack expiring soon
+                </p>
+                <p className="text-muted-foreground">
+                  You&apos;re using {formatBytes(storage.usedBytes)} but will
+                  only have {formatBytes(Math.max(0, futureQuota))} after{" "}
+                  {expiringPacks.length} pack
+                  {expiringPacks.length === 1 ? "" : "s"} expire
+                  {expiringPacks[0]?.currentPeriodEnd
+                    ? ` on ${formatDate(expiringPacks[0].currentPeriodEnd)}`
+                    : ""}
+                  . Move files to local storage, use your own S3 bucket, or buy
+                  another pack to avoid losing data.
+                </p>
+              </div>
+            </div>
+          )}
+
           <StorageBar
             label="Personal"
             usedBytes={storage.usedBytes}
@@ -318,24 +496,100 @@ function BillingContent({
           )}
 
           <p className="text-xs text-muted-foreground">
-            5 GB included per seat. Teams pool storage across seats (e.g. 5
-            seats = 25 GB shared).
+            5 GB included per seat
+            {storage.addonBytes > 0
+              ? ` + ${formatBytes(storage.addonBytes)} from storage packs`
+              : ""}
+            . Teams pool storage across seats (e.g. 5 seats = 25 GB shared).
           </p>
         </CardContent>
       </Card>
 
-      {/* Add-on Storage Placeholder */}
-      <Card className="border-dashed">
-        <CardContent className="flex items-center gap-4 py-6">
-          <Package className="w-8 h-8 text-muted-foreground/50" />
-          <div>
-            <p className="text-sm font-medium text-muted-foreground">
-              Need more storage?
+      {/* Storage Packs */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <HardDrive className="w-5 h-5" />
+            Storage Packs
+          </CardTitle>
+          <CardDescription>
+            Add 10 GB of cloud storage for $5/mo per pack. Buy for yourself or
+            gift to someone you sponsor.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {addons.length > 0 && (
+            <div className="space-y-2">
+              {addons.map((addon) => {
+                const isCancelled = addon.status === "cancelled";
+                let label = "10 GB pack — $5/mo";
+                if (addon.type === "received") {
+                  label = `10 GB pack — gifted by ${addon.purchaserName ?? addon.purchaserEmail ?? "sponsor"}`;
+                } else if (addon.type === "gifted") {
+                  label = `10 GB pack → ${addon.beneficiaryName ?? addon.beneficiaryEmail ?? "sponsee"}`;
+                }
+
+                return (
+                  <div
+                    key={addon.id}
+                    className="flex items-center justify-between px-3 py-2 rounded-md border"
+                  >
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2">
+                        <Package className="w-4 h-4 text-muted-foreground shrink-0" />
+                        <p className="text-sm font-medium truncate">{label}</p>
+                        {isCancelled && (
+                          <Badge variant="outline" className="text-xs shrink-0">
+                            Cancels{" "}
+                            {addon.currentPeriodEnd
+                              ? formatDate(addon.currentPeriodEnd)
+                              : "soon"}
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
+                    {!isCancelled && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive shrink-0"
+                        onClick={() => handleCancelAddon(addon.id)}
+                        disabled={cancellingAddonId === addon.id}
+                      >
+                        {cancellingAddonId === addon.id ? (
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                        ) : (
+                          <X className="w-4 h-4" />
+                        )}
+                      </Button>
+                    )}
+                  </div>
+                );
+              })}
+              <p className="text-xs text-muted-foreground pt-1">
+                {activePackCount} active pack{activePackCount === 1 ? "" : "s"}{" "}
+                &middot; ${activePackCount * 5}/mo
+              </p>
+            </div>
+          )}
+
+          {hasAccess && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => handleBuyStoragePack()}
+              disabled={loading}
+            >
+              <Plus className="w-4 h-4 mr-1.5" />
+              Add 10 GB Pack — $5/mo
+            </Button>
+          )}
+
+          {!hasAccess && addons.length === 0 && (
+            <p className="text-sm text-muted-foreground">
+              Subscribe to Pro to purchase storage packs.
             </p>
-            <p className="text-xs text-muted-foreground/70">
-              Additional 10 GB packs for $5/mo — coming soon.
-            </p>
-          </div>
+          )}
         </CardContent>
       </Card>
 
@@ -405,19 +659,32 @@ function BillingContent({
                           {seat.userEmail}
                         </p>
                       </div>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive"
-                        onClick={() => handleUnsponsor(seat)}
-                        disabled={removingId === seat.id}
-                      >
-                        {removingId === seat.id ? (
-                          <Loader2 className="w-4 h-4 animate-spin" />
-                        ) : (
-                          <X className="w-4 h-4" />
-                        )}
-                      </Button>
+                      <div className="flex items-center gap-1 shrink-0">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-8 px-2 text-xs text-muted-foreground"
+                          onClick={() => handleBuyStoragePack(seat.userId)}
+                          disabled={loading}
+                          title="Gift a 10 GB storage pack"
+                        >
+                          <Package className="w-3.5 h-3.5 mr-1" />
+                          Gift Storage
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive"
+                          onClick={() => handleUnsponsor(seat)}
+                          disabled={removingId === seat.id}
+                        >
+                          {removingId === seat.id ? (
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                          ) : (
+                            <X className="w-4 h-4" />
+                          )}
+                        </Button>
+                      </div>
                     </div>
                   );
                 })}
@@ -437,10 +704,15 @@ function BillingContent({
 export default function BillingPage() {
   const [usagePromise] = useState(() => fetchUsage());
   const [seatsPromise] = useState(() => fetchSeats());
+  const [addonsPromise] = useState(() => fetchAddons());
 
   return (
     <Suspense fallback={<BillingSkeleton />}>
-      <BillingContent usagePromise={usagePromise} seatsPromise={seatsPromise} />
+      <BillingContent
+        usagePromise={usagePromise}
+        seatsPromise={seatsPromise}
+        addonsPromise={addonsPromise}
+      />
     </Suspense>
   );
 }

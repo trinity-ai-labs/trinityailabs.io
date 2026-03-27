@@ -12,6 +12,7 @@ import {
   checkQuota,
   incrementUsage,
   decrementUsage,
+  clearOverQuotaIfUnderLimit,
 } from "@/lib/storage-quota";
 
 // POST /api/assets/presign — get presigned URL for upload or download
@@ -96,6 +97,7 @@ export async function POST(req: Request) {
     }
     if (deleteSize && Number(deleteSize) > 0) {
       await decrementUsage(scope, scopeId, Number(deleteSize));
+      await clearOverQuotaIfUnderLimit(scope, scopeId);
     }
     return NextResponse.json({ ok: true });
   }
@@ -131,7 +133,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ url, key });
   }
 
-  // ── Download ────────────────────────────────────────────────────────
+  // ── Download — always allowed (reads are never blocked, even over quota)
   const key = buildStorageKey(scope, scopeId, projectId, fileName);
   const url = await presignDownload(key);
   return NextResponse.json({ url, key });
