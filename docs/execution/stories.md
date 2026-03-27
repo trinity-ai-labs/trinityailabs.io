@@ -43,7 +43,7 @@ A checklist of conditions that must be met for the story to be considered comple
 - **Story ID** — unique identifier (e.g., 1.2.3 for PRD 1, Phase 2, Story 3)
 - **Difficulty** — 1 (trivial) to 5 (very complex)
 - **Surface area** — small, medium, or large (how much code is affected)
-- **Story type** — `story`, `checkpoint`, or `quality_checkpoint`
+- **Story type** — `standard`, `release_checkpoint`, or `quality_checkpoint`
 - **Dependencies** — other stories that must complete first
 - **Tags** — custom labels (including `repo:name` tags for multi-repo projects)
 

@@ -17,7 +17,7 @@ Use quality checkpoints mid-phase when you want to ensure code quality before mo
 
 ### Release Checkpoints
 
-Release checkpoints (`checkpoint` story type) do everything quality checkpoints do, plus:
+Release checkpoints (`release_checkpoint` story type) do everything quality checkpoints do, plus:
 
 - **Release notes** — generated automatically
 - **Per-repo versioning** — each repo gets an auto-incremented semver tag (v0.1 -> v0.2)
@@ -55,11 +55,24 @@ If your project has `use_release_branches` enabled, release checkpoints create a
 
 Stories get a `released` flag when their code reaches the base branch via the checkpoint chain.
 
-## PRDs vs Releases
+## Releases
+
+Releases are first-class entities that group one or more PRDs into a shippable unit. When you link PRDs to a release, Trinity automatically creates a release checkpoint story that depends on all stories in the linked PRDs.
+
+**Release lifecycle:** Created → Ready → Releasing → Released
+
+Key concepts:
+
+- **PRD linking** — each PRD belongs to at most one active release
+- **Release dependencies** — releases can depend on other releases (a DAG). A release can't start releasing until all its dependencies are released.
+- **Synthetic checkpoint stories** — created automatically when PRDs are linked. These run the full checkpoint pipeline when all linked stories are complete.
+- **Execution scope** — each release gets its own coordinator and worker pool
+
+### PRDs vs Releases
 
 Don't confuse these two concepts:
 
 - **PRDs** are plan iterations identified by simple integers (1, 2, 3)
-- **Versions/Releases** are semver tags (v0.1, v1.0) managed per-repo by checkpoints
+- **Releases** group PRDs into shippable units with semver tags (v0.1, v1.0) managed per-repo by checkpoints
 
 In the UI, plan iterations are always called "PRDs", never "Versions".

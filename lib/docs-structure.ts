@@ -129,8 +129,13 @@ export const DOC_SECTIONS: DocSection[] = [
         pageTitle: "Execution Gates",
       },
       {
+        slug: "releases",
+        title: "Releases",
+        pageTitle: "Releases",
+      },
+      {
         slug: "checkpoints",
-        title: "Checkpoints & Releases",
+        title: "Checkpoints",
         pageTitle: "Checkpoints & Releases",
       },
     ],

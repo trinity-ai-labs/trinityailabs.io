@@ -5,7 +5,7 @@ Execution is where Trinity's AI agents build your project. The coordinator manag
 ## Starting Execution
 
 1. Navigate to **Run**
-2. Select which PRD to execute (if you have multiple)
+2. Select which release to execute (if you have multiple)
 3. Click **Start**
 
 The run dialog lets you configure this execution:
@@ -29,7 +29,7 @@ Runs without stopping. Makes reasonable assumptions for unclear requirements and
 
 ## The Coordinator
 
-Each PRD gets its own coordinator instance. The coordinator:
+Each release gets its own coordinator instance. The coordinator:
 
 - **Scans** for stories that are ready to execute
 - **Assigns** stories to available workers
@@ -131,7 +131,7 @@ The Run page shows:
 
 The sidebar task indicator shows what's happening:
 
-- Which PRD is executing
+- Which release is executing
 - Current pipeline phase for active stories
 - Gate notifications
 
@@ -145,15 +145,15 @@ Click **Stop** on the Run page to stop the coordinator. This:
 
 It does NOT cancel in-progress stories. To force-stop everything, use the kill option.
 
-## Concurrent PRD Execution
+## Concurrent Release Execution
 
-You can run multiple PRDs simultaneously. Each gets independent:
+You can run multiple releases simultaneously. Each gets independent:
 
 - Coordinator instance
 - Worker pool
 - Job queue
 
-This is useful for parallel feature tracks that don't depend on each other.
+This is useful for parallel releases that don't depend on each other.
 
 ## Retry and Recovery
 
