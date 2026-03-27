@@ -248,6 +248,23 @@ export async function ensureBugReportsTables() {
   bugReportsEnsured = true;
 }
 
+let quotaNotificationsEnsured = false;
+
+export async function ensureQuotaNotificationsTable() {
+  if (quotaNotificationsEnsured) return;
+  await db.execute(`
+    CREATE TABLE IF NOT EXISTS quota_notifications (
+      id TEXT PRIMARY KEY,
+      scope TEXT NOT NULL,
+      scope_id TEXT NOT NULL,
+      type TEXT NOT NULL,
+      sent_at TEXT DEFAULT (datetime('now')),
+      UNIQUE(scope, scope_id, type)
+    )
+  `);
+  quotaNotificationsEnsured = true;
+}
+
 let storageUsageEnsured = false;
 
 export async function ensureStorageUsageTable() {

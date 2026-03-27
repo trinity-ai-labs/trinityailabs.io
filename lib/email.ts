@@ -147,6 +147,78 @@ export async function sendBugReportEmail(report: {
   });
 }
 
+export async function sendQuotaGraceEmail(
+  to: string,
+  name: string,
+  usedGb: string,
+  quotaGb: string,
+  daysRemaining: number,
+) {
+  const isUrgent = daysRemaining <= 2;
+  await getResend().emails.send({
+    from: FROM_ADDRESS,
+    to,
+    subject: isUrgent
+      ? `Urgent: ${daysRemaining} day${daysRemaining === 1 ? "" : "s"} until files are removed`
+      : "You're over your storage quota",
+    html: `
+      <div style="font-family: system-ui, sans-serif; max-width: 480px; margin: 0 auto; padding: 40px 20px;">
+        <h1 style="font-size: 24px; font-weight: 600; margin-bottom: 16px;">
+          ${isUrgent ? "Action Required" : "Storage Quota Exceeded"}
+        </h1>
+        <p style="color: #666; margin-bottom: 16px;">
+          Hi ${escapeHtml(name)}, you're using <strong>${escapeHtml(usedGb)}</strong> of your
+          <strong>${escapeHtml(quotaGb)}</strong> storage quota.
+        </p>
+        <p style="color: ${isUrgent ? "#dc2626" : "#666"}; margin-bottom: 24px; font-weight: ${isUrgent ? "600" : "normal"};">
+          You have ${daysRemaining} day${daysRemaining === 1 ? "" : "s"} to free up space before files
+          are automatically removed.
+        </p>
+        <p style="color: #666; margin-bottom: 16px;">To keep your files safe:</p>
+        <ul style="color: #666; margin-bottom: 24px;">
+          <li>Move projects to local storage (personal projects only)</li>
+          <li>Use your own S3-compatible bucket</li>
+          <li>Buy a storage pack ($5/mo for 10 GB)</li>
+          <li>Delete files you no longer need</li>
+        </ul>
+        <a href="https://trinityailabs.com/dashboard/billing" style="display: inline-block; background: linear-gradient(to right, #10b981, #06b6d4); color: white; text-decoration: none; padding: 12px 24px; border-radius: 8px; font-weight: 500;">
+          Manage Storage
+        </a>
+      </div>
+    `,
+  });
+}
+
+export async function sendQuotaPrunedEmail(
+  to: string,
+  name: string,
+  fileCount: number,
+  freedGb: string,
+) {
+  await getResend().emails.send({
+    from: FROM_ADDRESS,
+    to,
+    subject: `${fileCount} file${fileCount === 1 ? "" : "s"} removed from your storage`,
+    html: `
+      <div style="font-family: system-ui, sans-serif; max-width: 480px; margin: 0 auto; padding: 40px 20px;">
+        <h1 style="font-size: 24px; font-weight: 600; margin-bottom: 16px;">Files Automatically Removed</h1>
+        <p style="color: #666; margin-bottom: 16px;">
+          Hi ${escapeHtml(name)}, your storage quota was exceeded for more than 7 days.
+          To bring your account back under the limit, <strong>${fileCount} file${fileCount === 1 ? "" : "s"}</strong>
+          (${escapeHtml(freedGb)}) were automatically removed.
+        </p>
+        <p style="color: #666; margin-bottom: 24px;">
+          Older and less-used files were prioritized for removal. To prevent this in the future,
+          consider buying a storage pack or moving files to local/BYO storage.
+        </p>
+        <a href="https://trinityailabs.com/dashboard/billing" style="display: inline-block; background: linear-gradient(to right, #10b981, #06b6d4); color: white; text-decoration: none; padding: 12px 24px; border-radius: 8px; font-weight: 500;">
+          Manage Storage
+        </a>
+      </div>
+    `,
+  });
+}
+
 export async function sendWelcomeEmail(to: string, name: string) {
   await getResend().emails.send({
     from: FROM_ADDRESS,

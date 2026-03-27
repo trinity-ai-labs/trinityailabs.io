@@ -9,7 +9,11 @@ import {
 } from "@/lib/ensure-tables";
 import { requireAccessToken } from "@/lib/device-auth";
 import { provisionPersonalDb } from "@/lib/teams";
-import { getStorageUsage, getStorageQuota } from "@/lib/storage-quota";
+import {
+  getStorageUsage,
+  getStorageQuota,
+  getOverQuotaStatus,
+} from "@/lib/storage-quota";
 
 let tablesEnsured: Promise<void> | null = null;
 
@@ -187,9 +191,10 @@ export async function GET(req: Request) {
   );
 
   // Personal storage
-  const [personalUsage, personalQuota] = await Promise.all([
+  const [personalUsage, personalQuota, personalOverQuota] = await Promise.all([
     getStorageUsage("personal", userId),
     getStorageQuota("personal", userId),
+    getOverQuotaStatus("personal", userId),
   ]);
 
   return NextResponse.json({
@@ -210,6 +215,7 @@ export async function GET(req: Request) {
       usedBytes: personalUsage.usedBytes,
       quotaBytes: personalQuota.quotaBytes,
       addonBytes: personalQuota.addonBytes,
+      overQuotaSince: personalOverQuota.overQuotaSince,
     },
   });
 }
