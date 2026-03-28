@@ -30,7 +30,7 @@ export function TableOfContents({ items }: { items: TableOfContentsItem[] }) {
   }, [items]);
 
   return (
-    <aside className="hidden xl:block w-52 shrink-0 sticky top-14 h-[calc(100vh-3.5rem)] overflow-y-auto py-12 pr-6">
+    <aside className="hidden lg:block w-52 shrink-0 sticky top-14 h-[calc(100vh-3.5rem)] overflow-y-auto py-12 pr-6">
       <div className="text-[11px] font-bold uppercase tracking-[0.08em] text-muted-foreground/60 mb-4">
         On this page
       </div>
