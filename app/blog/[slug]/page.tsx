@@ -106,7 +106,7 @@ export default async function BlogPostPage({
       />
       <div className="max-w-6xl mx-auto px-6 py-12 flex gap-10">
         {/* Main content */}
-        <article className="min-w-0 flex-1 max-w-3xl">
+        <article className="min-w-0 flex-1 max-w-3xl mx-auto lg:mx-0">
           <PostHeader post={post} />
           <div className="docs-prose">
             <MDXRemote
