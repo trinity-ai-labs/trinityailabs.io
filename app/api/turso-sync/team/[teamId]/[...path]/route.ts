@@ -131,7 +131,6 @@ async function handleProxy(req: Request, { params }: RouteParams) {
 
   // Non-pipeline requests (sync frames, info, etc.) — forward with rotation
   return proxyWithRotation(req, creds, subPath, {
-    type: "team",
     userId,
     teamId,
   });
