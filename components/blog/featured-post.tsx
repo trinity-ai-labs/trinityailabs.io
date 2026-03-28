@@ -5,7 +5,7 @@ import { ArrowRight } from "lucide-react";
 import type { BlogPost } from "@/lib/blog";
 
 function formatDate(dateStr: string): string {
-  return new Date(dateStr).toLocaleDateString("en-US", {
+  return new Date(dateStr + "T12:00:00").toLocaleDateString("en-US", {
     month: "long",
     day: "numeric",
     year: "numeric",
