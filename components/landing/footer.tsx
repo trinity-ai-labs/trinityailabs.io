@@ -23,6 +23,7 @@ const footerLinks = [
     title: "Resources",
     links: [
       { label: "Documentation", href: "/docs" },
+      { label: "Blog", href: "/blog" },
       { label: "FAQ", href: "#faq" },
     ],
   },
@@ -44,11 +45,18 @@ export function Footer() {
           {/* Brand column */}
           <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-2.5 mb-4">
-              <Image src="/logo.png" alt="Trinity" width={28} height={28} className="rounded-lg" />
+              <Image
+                src="/logo.png"
+                alt="Trinity"
+                width={28}
+                height={28}
+                className="rounded-lg"
+              />
               <span className="font-mono font-bold">trinity</span>
             </div>
             <p className="text-sm text-muted-foreground mb-4 max-w-xs">
-              The next-generation IDE. Plan, execute, review, ship — autonomously.
+              The next-generation IDE. Plan, execute, review, ship —
+              autonomously.
             </p>
             <div className="flex items-center gap-3">
               <a
@@ -94,15 +102,27 @@ export function Footer() {
 
         {/* Bottom bar */}
         <div className="pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-          <div>&copy; {new Date().getFullYear()} Trinity AI Labs. All rights reserved.</div>
+          <div>
+            &copy; {new Date().getFullYear()} Trinity AI Labs. All rights
+            reserved.
+          </div>
           <div className="flex items-center gap-6">
-            <a href="/privacy" className="hover:text-foreground transition-colors">
+            <a
+              href="/privacy"
+              className="hover:text-foreground transition-colors"
+            >
               Privacy
             </a>
-            <a href="/terms" className="hover:text-foreground transition-colors">
+            <a
+              href="/terms"
+              className="hover:text-foreground transition-colors"
+            >
               Terms
             </a>
-            <a href="mailto:info@trinityailabs.com" className="hover:text-foreground transition-colors">
+            <a
+              href="mailto:info@trinityailabs.com"
+              className="hover:text-foreground transition-colors"
+            >
               Contact
             </a>
           </div>
