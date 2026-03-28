@@ -16,8 +16,8 @@ const PUBLIC = path.join(__dirname, "..", "public", "blog");
 const graphics = [
   { id: "cover",        file: "covers/ralph-wiggum-loop-evolved.png", width: 1200, height: 630 },
   { id: "prd-releases", file: "inline/ralph-wiggum-prd-releases.png", width: 1200, height: 500 },
-  { id: "pipeline",     file: "inline/ralph-wiggum-pipeline.png",     width: 1200, height: 460 },
-  { id: "gates",        file: "inline/ralph-wiggum-gates.png",        width: 1200, height: 460 },
+  { id: "pipeline",     file: "inline/ralph-wiggum-pipeline.png",     width: 1200, height: 480 },
+  { id: "gates",        file: "inline/ralph-wiggum-gates.png",        width: 1200, height: 480 },
   { id: "parallel",     file: "inline/ralph-wiggum-parallel.png",     width: 1200, height: 460 },
   { id: "knowledge",    file: "inline/ralph-wiggum-knowledge.png",    width: 1200, height: 460 },
 ];

@@ -53,7 +53,7 @@
   }
 
   #cover .side-left { background: var(--bg); }
-  #cover .side-right { background: linear-gradient(135deg, rgba(16,185,129,0.05), rgba(6,182,212,0.05)); }
+  #cover .side-right { background: rgb(34, 39, 46); }
 
   #cover .terminal {
     background: #0d0d0d;
@@ -77,9 +77,9 @@
   #cover .terminal-dot.g { background: #28c840; }
 
   #cover .terminal-body {
-    padding: 20px;
+    padding: 24px;
     font-family: 'SF Mono', 'Fira Code', monospace;
-    font-size: 14px;
+    font-size: 18px;
     line-height: 1.7;
   }
   #cover .terminal-body .prompt { color: var(--emerald); }
@@ -93,10 +93,10 @@
 
   #cover .label {
     margin-top: 20px;
-    font-size: 14px;
+    font-size: 16px;
     color: var(--text-muted);
     text-transform: uppercase;
-    letter-spacing: 2px;
+    letter-spacing: 3px;
   }
 
   /* Arrow */
@@ -117,7 +117,7 @@
   }
   #cover .arrow-circle svg { width: 28px; height: 28px; }
   #cover .arrow-label {
-    font-size: 11px;
+    font-size: 14px;
     color: var(--emerald);
     text-transform: uppercase;
     letter-spacing: 3px;
@@ -132,7 +132,7 @@
   #cover .pipeline-agent {
     display: flex; align-items: center; gap: 14px;
     padding: 14px 18px;
-    background: var(--card);
+    background: #141414;
     border: 1px solid var(--border);
     border-radius: 10px;
     transition: all 0.2s;
@@ -144,8 +144,8 @@
     font-size: 16px; font-weight: 700;
     flex-shrink: 0;
   }
-  #cover .agent-name { font-size: 15px; font-weight: 600; color: var(--text); }
-  #cover .agent-desc { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  #cover .agent-name { font-size: 18px; font-weight: 600; color: var(--text); }
+  #cover .agent-desc { font-size: 14px; color: var(--text-muted); margin-top: 2px; }
   #cover .agent-connector {
     width: 2px; height: 8px;
     background: var(--border-accent);
@@ -166,9 +166,9 @@
   }
 
   .before-after-label {
-    font-size: 11px;
+    font-size: 15px;
     text-transform: uppercase;
-    letter-spacing: 3px;
+    letter-spacing: 4px;
     font-weight: 600;
     margin-bottom: 20px;
     text-align: center;
@@ -190,11 +190,11 @@
     text-align: center;
   }
   #prd-releases .prd-single .tag {
-    font-size: 11px; text-transform: uppercase; letter-spacing: 2px;
+    font-size: 14px; text-transform: uppercase; letter-spacing: 2px;
     color: var(--text-muted); margin-bottom: 8px;
   }
   #prd-releases .prd-single .title {
-    font-size: 16px; font-weight: 600; color: var(--text);
+    font-size: 20px; font-weight: 600; color: var(--text);
   }
   #prd-releases .arrow-down {
     color: var(--text-dim); font-size: 24px;
@@ -206,8 +206,8 @@
     border-radius: var(--radius);
     text-align: center;
   }
-  #prd-releases .code-pile .icon { font-size: 28px; margin-bottom: 8px; }
-  #prd-releases .code-pile .title { font-size: 14px; color: var(--text-muted); }
+  #prd-releases .code-pile .icon { font-size: 32px; margin-bottom: 8px; }
+  #prd-releases .code-pile .title { font-size: 17px; color: var(--text-muted); }
 
   /* Divider */
   #prd-releases .vs-divider {
@@ -218,7 +218,7 @@
     background: var(--border-accent);
   }
   #prd-releases .vs-text {
-    font-size: 12px; color: var(--text-dim);
+    font-size: 15px; color: var(--text-dim);
     text-transform: uppercase; letter-spacing: 2px;
   }
 
@@ -235,15 +235,15 @@
     display: flex; gap: 10px; margin-bottom: 4px;
   }
   #prd-releases .prd-chip {
-    padding: 10px 20px;
+    padding: 12px 24px;
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: 8px;
-    font-size: 13px; font-weight: 600; color: var(--text);
+    font-size: 17px; font-weight: 600; color: var(--text);
   }
   #prd-releases .funnel-arrow {
     display: flex; flex-direction: column; align-items: center;
-    color: var(--emerald); font-size: 10px;
+    color: var(--emerald); font-size: 13px;
     letter-spacing: 1px; text-transform: uppercase;
   }
   #prd-releases .funnel-arrow .lines {
@@ -261,20 +261,20 @@
     text-align: center;
   }
   #prd-releases .release-tag .version {
-    font-size: 22px; font-weight: 700; color: var(--emerald);
+    font-size: 28px; font-weight: 700; color: var(--emerald);
     font-family: 'SF Mono', monospace;
   }
   #prd-releases .release-tag .subtitle {
-    font-size: 12px; color: var(--text-muted); margin-top: 4px;
+    font-size: 15px; color: var(--text-muted); margin-top: 4px;
   }
   #prd-releases .lifecycle {
     display: flex; align-items: center; gap: 8px;
     margin-top: 8px;
   }
   #prd-releases .lifecycle-step {
-    padding: 6px 14px;
+    padding: 8px 16px;
     border-radius: 6px;
-    font-size: 11px; font-weight: 600;
+    font-size: 14px; font-weight: 600;
     font-family: 'SF Mono', monospace;
   }
   #prd-releases .lifecycle-step.created { background: rgba(96,165,250,0.1); color: var(--blue); border: 1px solid rgba(96,165,250,0.2); }
@@ -286,7 +286,7 @@
      3. Multi-Agent Pipeline (1200×460)
      ═══════════════════════════════════════════════════════════════ */
   #pipeline {
-    width: 1200px; height: 460px;
+    width: 1200px; height: 480px;
     background: var(--bg);
     display: flex;
     align-items: center;
@@ -297,35 +297,38 @@
   }
 
   .pipeline-card {
-    width: 230px;
+    width: 240px;
+    min-height: 280px;
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: var(--radius);
     padding: 24px 20px;
     position: relative;
+    display: flex;
+    flex-direction: column;
   }
   .pipeline-card .card-header {
     display: flex; align-items: center; gap: 10px;
     margin-bottom: 16px;
   }
   .pipeline-card .card-icon {
-    width: 40px; height: 40px;
+    width: 44px; height: 44px;
     border-radius: 10px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 18px; font-weight: 800;
+    font-size: 20px; font-weight: 800;
   }
   .pipeline-card .card-title {
-    font-size: 16px; font-weight: 700; color: var(--text);
+    font-size: 20px; font-weight: 700; color: var(--text);
   }
   .pipeline-card .card-subtitle {
-    font-size: 11px; text-transform: uppercase; letter-spacing: 1px;
+    font-size: 13px; text-transform: uppercase; letter-spacing: 1px;
   }
   .pipeline-card ul {
     list-style: none; padding: 0;
   }
   .pipeline-card ul li {
-    font-size: 12px; color: var(--text-muted);
-    padding: 5px 0;
+    font-size: 15px; color: var(--text-muted);
+    padding: 6px 0;
     border-top: 1px solid var(--border);
     display: flex; align-items: center; gap: 8px;
   }
@@ -348,10 +351,10 @@
 
   .pipeline-badge {
     position: absolute;
-    top: -8px; right: -8px;
-    padding: 3px 8px;
+    top: -10px; right: -10px;
+    padding: 5px 10px;
     border-radius: 6px;
-    font-size: 10px; font-weight: 700;
+    font-size: 12px; font-weight: 700;
     text-transform: uppercase; letter-spacing: 1px;
   }
 
@@ -359,23 +362,23 @@
      4. Execution Gates (1200×460)
      ═══════════════════════════════════════════════════════════════ */
   #gates {
-    width: 1200px; height: 460px;
+    width: 1200px; height: 480px;
     background: var(--bg);
-    padding: 40px 50px;
+    padding: 40px 40px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 32px;
+    gap: 24px;
   }
 
   #gates .modes-row {
-    display: flex; gap: 20px; justify-content: center;
+    display: flex; gap: 24px; justify-content: center;
   }
 
   .mode-card {
-    width: 360px;
-    padding: 24px;
+    width: 520px;
+    padding: 28px;
     background: var(--card);
     border-radius: var(--radius);
     border: 1px solid var(--border);
@@ -391,10 +394,10 @@
     box-shadow: 0 0 12px;
   }
   .mode-card .mode-name {
-    font-size: 18px; font-weight: 700; color: var(--text);
+    font-size: 22px; font-weight: 700; color: var(--text);
   }
   .mode-card .mode-desc {
-    font-size: 13px; color: var(--text-muted);
+    font-size: 15px; color: var(--text-muted);
     margin-bottom: 14px; line-height: 1.5;
   }
 
@@ -403,9 +406,9 @@
     flex-wrap: nowrap;
   }
   .mode-pipeline .stage {
-    padding: 5px 7px;
+    padding: 6px 9px;
     border-radius: 5px;
-    font-size: 9px; font-weight: 600;
+    font-size: 11px; font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.3px;
     background: var(--card-raised);
@@ -421,21 +424,41 @@
   .mode-pipeline .gate-icon {
     font-size: 8px;
   }
-  .mode-pipeline .arrow { color: var(--text-dim); font-size: 10px; flex-shrink: 0; }
+  .mode-pipeline .arrow { color: var(--text-dim); font-size: 13px; flex-shrink: 0; }
 
   #gates .gate-types {
     display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
   }
   .gate-chip {
-    padding: 8px 16px;
+    padding: 10px 18px;
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: 8px;
-    font-size: 12px; color: var(--text-muted);
+    font-size: 15px; color: var(--text-muted);
     display: flex; align-items: center; gap: 8px;
   }
   .gate-chip .gate-dot {
     width: 8px; height: 8px; border-radius: 50%;
+  }
+
+  .gate-categories {
+    display: flex; flex-direction: column; gap: 10px;
+    width: 100%;
+    padding: 0 40px;
+  }
+  .gate-category {
+    display: flex; align-items: center; gap: 16px;
+  }
+  .gate-cat-label {
+    font-size: 12px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 2px;
+    width: 160px;
+    flex-shrink: 0;
+    text-align: right;
+  }
+  .gate-cat-chips {
+    display: flex; gap: 8px;
+    flex-wrap: wrap;
   }
 
   /* ═══════════════════════════════════════════════════════════════
@@ -453,7 +476,7 @@
   }
 
   #parallel .section-title {
-    font-size: 12px; color: var(--text-muted);
+    font-size: 15px; color: var(--text-muted);
     text-transform: uppercase; letter-spacing: 3px;
     margin-bottom: 4px;
   }
@@ -478,7 +501,7 @@
     width: 8px; height: 8px; border-radius: 50%;
   }
   .lane-header .worker-label {
-    font-size: 11px; font-weight: 600; color: var(--text);
+    font-size: 14px; font-weight: 600; color: var(--text);
     text-transform: uppercase; letter-spacing: 1px;
   }
   .lane-body {
@@ -486,24 +509,24 @@
     display: flex; flex-direction: column; gap: 10px;
   }
   .lane-story {
-    font-size: 13px; font-weight: 600; color: var(--text);
+    font-size: 16px; font-weight: 600; color: var(--text);
   }
   .lane-branch {
     display: flex; align-items: center; gap: 6px;
-    font-size: 11px; color: var(--text-muted);
+    font-size: 13px; color: var(--text-muted);
     font-family: 'SF Mono', monospace;
   }
-  .lane-branch .branch-icon { font-size: 12px; }
+  .lane-branch .branch-icon { font-size: 14px; }
   .lane-status {
     display: flex; align-items: center; gap: 6px;
-    font-size: 11px;
+    font-size: 14px;
   }
   .lane-status .status-dot {
     width: 6px; height: 6px; border-radius: 50%;
   }
 
   #parallel .footer-stat {
-    font-size: 14px; color: var(--text-muted);
+    font-size: 17px; color: var(--text-muted);
     display: flex; align-items: center; gap: 8px;
   }
   #parallel .footer-stat strong {
@@ -536,19 +559,19 @@
     align-items: flex-start;
   }
   .run-card .run-number {
-    width: 36px; height: 36px;
+    width: 42px; height: 42px;
     border-radius: 8px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 14px; font-weight: 800;
+    font-size: 18px; font-weight: 800;
     flex-shrink: 0;
   }
   .run-card .run-content { flex: 1; }
   .run-card .run-title {
-    font-size: 14px; font-weight: 600; color: var(--text);
+    font-size: 17px; font-weight: 600; color: var(--text);
     margin-bottom: 4px;
   }
   .run-card .run-desc {
-    font-size: 12px; color: var(--text-muted); line-height: 1.5;
+    font-size: 14px; color: var(--text-muted); line-height: 1.5;
   }
   .run-connector-v {
     width: 2px; height: 12px;
@@ -576,7 +599,7 @@
     font-size: 16px;
   }
   .vault-header .vault-title {
-    font-size: 15px; font-weight: 700; color: var(--text);
+    font-size: 19px; font-weight: 700; color: var(--text);
   }
   .vault-entries {
     padding: 12px 16px;
@@ -589,19 +612,19 @@
   }
   .vault-entry:last-child { border-bottom: none; }
   .vault-entry .entry-type {
-    padding: 3px 8px;
+    padding: 4px 10px;
     border-radius: 4px;
-    font-size: 9px; font-weight: 700;
+    font-size: 11px; font-weight: 700;
     text-transform: uppercase; letter-spacing: 1px;
     flex-shrink: 0;
   }
   .vault-entry .entry-text {
-    font-size: 12px; color: var(--text-muted);
+    font-size: 14px; color: var(--text-muted);
   }
   .vault-counter {
-    padding: 12px 20px;
+    padding: 14px 20px;
     border-top: 1px solid var(--border);
-    font-size: 12px; color: var(--text-dim);
+    font-size: 14px; color: var(--text-dim);
     text-align: center;
   }
   .vault-counter strong { color: var(--emerald); }
@@ -817,76 +840,52 @@
      4. Execution Gates (1200×460)
      ════════════════════════════════════════════════════════════════ -->
 <div id="gates" class="graphic">
+  <!-- Modes row -->
   <div class="modes-row">
-    <!-- Full Auto -->
     <div class="mode-card" style="border-color: rgba(52,211,153,0.2);">
       <div class="mode-header">
         <div class="mode-light" style="background:var(--emerald); box-shadow: 0 0 12px var(--emerald);"></div>
-        <div class="mode-name">Full Auto</div>
+        <div class="mode-name">Autopilot</div>
       </div>
-      <div class="mode-desc">Agents execute, review, document, and merge without intervention. Best for trusted, well-specced stories.</div>
-      <div class="mode-pipeline">
-        <div class="stage">Analyst</div>
-        <div class="arrow">→</div>
-        <div class="stage">Impl</div>
-        <div class="arrow">→</div>
-        <div class="stage">Audit</div>
-        <div class="arrow">→</div>
-        <div class="stage">Doc</div>
-        <div class="arrow">→</div>
-        <div class="stage" style="color:var(--emerald); border-color:rgba(52,211,153,0.3);">✓ Merged</div>
-      </div>
+      <div class="mode-desc">Full pipeline runs end-to-end without intervention. Analyze, implement, audit, document, PR, merge.</div>
     </div>
 
-    <!-- Gated -->
     <div class="mode-card" style="border-color: rgba(250,204,21,0.2);">
       <div class="mode-header">
         <div class="mode-light" style="background:var(--yellow); box-shadow: 0 0 12px var(--yellow);"></div>
-        <div class="mode-name">Gated</div>
-      </div>
-      <div class="mode-desc">Agents pause at configurable checkpoints for your approval. Review the analysis, approve the audit.</div>
-      <div class="mode-pipeline">
-        <div class="stage">Analyst</div>
-        <div class="arrow">→</div>
-        <div class="stage gated">⏸ Gate</div>
-        <div class="arrow">→</div>
-        <div class="stage">Impl</div>
-        <div class="arrow">→</div>
-        <div class="stage">Audit</div>
-        <div class="arrow">→</div>
-        <div class="stage gated">⏸ Gate</div>
-      </div>
-    </div>
-
-    <!-- Manual -->
-    <div class="mode-card" style="border-color: rgba(192,132,252,0.2);">
-      <div class="mode-header">
-        <div class="mode-light" style="background:var(--purple); box-shadow: 0 0 12px var(--purple);"></div>
         <div class="mode-name">Manual</div>
       </div>
-      <div class="mode-desc">Full control at every stage. The agents do the work, you make every decision. For critical features.</div>
-      <div class="mode-pipeline">
-        <div class="stage" style="color:var(--purple); border-color:rgba(192,132,252,0.3);">Analyst</div>
-        <div class="arrow">→</div>
-        <div class="stage gated" style="color:var(--purple); border-color:rgba(192,132,252,0.3);">⏸</div>
-        <div class="arrow">→</div>
-        <div class="stage" style="color:var(--purple); border-color:rgba(192,132,252,0.3);">Impl</div>
-        <div class="arrow">→</div>
-        <div class="stage gated" style="color:var(--purple); border-color:rgba(192,132,252,0.3);">⏸</div>
-        <div class="arrow">→</div>
-        <div class="stage" style="color:var(--purple); border-color:rgba(192,132,252,0.3);">Audit</div>
-        <div class="arrow">→</div>
-        <div class="stage gated" style="color:var(--purple); border-color:rgba(192,132,252,0.3);">⏸</div>
-      </div>
+      <div class="mode-desc">Pipeline pauses at gates for your approval. Toggle per-story: auto-clarify, auto-PR, auto-merge, auto-approve checkpoints.</div>
     </div>
   </div>
 
-  <div class="gate-types">
-    <div class="gate-chip"><div class="gate-dot" style="background:var(--blue)"></div> Deviation Approval</div>
-    <div class="gate-chip"><div class="gate-dot" style="background:var(--orange)"></div> Missing Assets</div>
-    <div class="gate-chip"><div class="gate-dot" style="background:var(--yellow)"></div> Missing Details</div>
-    <div class="gate-chip"><div class="gate-dot" style="background:var(--purple)"></div> Quality Checkpoint</div>
-    <div class="gate-chip"><div class="gate-dot" style="background:var(--emerald)"></div> Release Approval</div>
+  <!-- Gate categories -->
+  <div class="gate-categories">
+    <div class="gate-category">
+      <div class="gate-cat-label" style="color:var(--blue);">Before Pipeline</div>
+      <div class="gate-cat-chips">
+        <div class="gate-chip"><div class="gate-dot" style="background:var(--blue)"></div> Deviation Approval</div>
+        <div class="gate-chip"><div class="gate-dot" style="background:var(--orange)"></div> Missing Assets</div>
+        <div class="gate-chip"><div class="gate-dot" style="background:var(--yellow)"></div> Missing Details</div>
+        <div class="gate-chip"><div class="gate-dot" style="background:var(--red)"></div> Missing Secret</div>
+        <div class="gate-chip"><div class="gate-dot" style="background:var(--cyan)"></div> External Deps</div>
+      </div>
+    </div>
+    <div class="gate-category">
+      <div class="gate-cat-label" style="color:var(--purple);">After Pipeline</div>
+      <div class="gate-cat-chips">
+        <div class="gate-chip"><div class="gate-dot" style="background:var(--purple)"></div> PR Review</div>
+        <div class="gate-chip"><div class="gate-dot" style="background:var(--yellow)"></div> Story Blocked</div>
+      </div>
+    </div>
+    <div class="gate-category">
+      <div class="gate-cat-label" style="color:var(--emerald);">Release-Level</div>
+      <div class="gate-cat-chips">
+        <div class="gate-chip"><div class="gate-dot" style="background:var(--emerald)"></div> Checkpoint Approval</div>
+        <div class="gate-chip"><div class="gate-dot" style="background:var(--blue)"></div> Quality Checkpoint</div>
+        <div class="gate-chip"><div class="gate-dot" style="background:var(--emerald)"></div> Release to Base</div>
+      </div>
+    </div>
   </div>
 </div>
 

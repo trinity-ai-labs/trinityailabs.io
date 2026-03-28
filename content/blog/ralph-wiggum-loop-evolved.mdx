@@ -95,22 +95,27 @@ Trinity gives you deterministic [execution gates](/docs/execution/gates) that pa
 - **Deviation approval** when the Analyst proposes an alternative to your specified tech stack
 - **Missing asset checks** when stories reference images you haven't uploaded
 - **Missing business details** when a story needs context like company name or API keys
+- **Missing secrets** when execution needs API keys that aren't configured
+- **External dependencies** when a story requires services you haven't set up
+- **PR review** after implementation, before merge
 - **Checkpoint approval** before a release ships
-- **Quality checkpoint approval** before code merges
+- **Quality checkpoint** for non-release quality assurance
+- **Story blocked** when the audit finds critical issues
+- **Release to base** when merging release branch to production
 
 And here's the key: **it's fully configurable, per story.**
 
 <ComparisonTable
   headers={["", "Ralph Loop", "Trinity"]}
   rows={[
-    ["Supervision", "Runs unsupervised", "Full auto, gated, or manual"],
+    ["Supervision", "Runs unsupervised", "Autopilot or Manual with configurable gates"],
     ["Scope", "All or nothing", "Per-story configuration"],
     ["Control", "Human stops the loop manually", "Typed gates at specific pipeline stages"],
     ["Flexibility", "Same process for every task", "Critical features get oversight, routine ones fly"],
   ]}
 />
 
-![Three oversight modes — Full Auto, Gated, and Manual — with five gate types for different checkpoints.](/blog/inline/ralph-wiggum-gates.png)
+![Two execution modes — Autopilot runs end-to-end, Manual pauses at configurable gates — with 10 gate types for different checkpoints.](/blog/inline/ralph-wiggum-gates.png)
 
 You decide the balance. Auth system rewrite? Gate everything. Docs update? Let it fly. The same project, the same pipeline, different levels of trust for different stories.
 
