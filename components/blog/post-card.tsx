@@ -3,14 +3,7 @@ import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight } from "lucide-react";
 import type { BlogPost } from "@/lib/blog";
-
-function formatDate(dateStr: string): string {
-  return new Date(dateStr + "T12:00:00").toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
-}
+import { formatBlogDate } from "@/lib/blog-format";
 
 export function PostCard({ post }: { post: BlogPost }) {
   return (
@@ -45,7 +38,7 @@ export function PostCard({ post }: { post: BlogPost }) {
           {post.description}
         </p>
         <div className="flex items-center justify-between text-xs text-muted-foreground">
-          <time dateTime={post.date}>{formatDate(post.date)}</time>
+          <time dateTime={post.date}>{formatBlogDate(post.date, "short")}</time>
           <span className="flex items-center gap-1 text-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity">
             Read more
             <ArrowRight className="w-3 h-3" />

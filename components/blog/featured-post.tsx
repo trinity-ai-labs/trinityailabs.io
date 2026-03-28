@@ -3,14 +3,7 @@ import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight } from "lucide-react";
 import type { BlogPost } from "@/lib/blog";
-
-function formatDate(dateStr: string): string {
-  return new Date(dateStr + "T12:00:00").toLocaleDateString("en-US", {
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  });
-}
+import { formatBlogDate } from "@/lib/blog-format";
 
 export function FeaturedPost({ post }: { post: BlogPost }) {
   return (
@@ -52,7 +45,7 @@ export function FeaturedPost({ post }: { post: BlogPost }) {
                 {post.author.name}
               </span>
               <span className="w-1 h-1 rounded-full bg-muted-foreground/50" />
-              <time dateTime={post.date}>{formatDate(post.date)}</time>
+              <time dateTime={post.date}>{formatBlogDate(post.date)}</time>
               <span className="w-1 h-1 rounded-full bg-muted-foreground/50" />
               <span>{post.readingTime}</span>
             </div>

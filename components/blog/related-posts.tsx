@@ -2,14 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import type { BlogPost } from "@/lib/blog";
-
-function formatDate(dateStr: string): string {
-  return new Date(dateStr + "T12:00:00").toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
-}
+import { formatBlogDate } from "@/lib/blog-format";
 
 export function RelatedPosts({ posts }: { posts: BlogPost[] }) {
   if (posts.length === 0) return null;
@@ -43,7 +36,7 @@ export function RelatedPosts({ posts }: { posts: BlogPost[] }) {
                 {post.title}
               </h3>
               <p className="text-xs text-muted-foreground mt-1.5">
-                {formatDate(post.date)} &middot; {post.readingTime}
+                {formatBlogDate(post.date, "short")} &middot; {post.readingTime}
               </p>
             </div>
           </Link>

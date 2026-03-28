@@ -2,14 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import type { BlogPost } from "@/lib/blog";
-
-function formatDate(dateStr: string): string {
-  return new Date(dateStr + "T12:00:00").toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-}
+import { formatBlogDate } from "@/lib/blog-format";
 
 export function PostHeader({ post }: { post: BlogPost }) {
   return (
@@ -49,7 +42,7 @@ export function PostHeader({ post }: { post: BlogPost }) {
         )}
         <span className="font-medium text-foreground">{post.author.name}</span>
         <span className="w-1 h-1 rounded-full bg-muted-foreground/50" />
-        <time dateTime={post.date}>{formatDate(post.date)}</time>
+        <time dateTime={post.date}>{formatBlogDate(post.date)}</time>
         <span className="w-1 h-1 rounded-full bg-muted-foreground/50" />
         <span>{post.readingTime}</span>
         <Badge variant="secondary" className="ml-1">
