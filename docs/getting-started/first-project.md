@@ -98,7 +98,8 @@ After your first PRD completes:
 
 - **Add features** with the Architect flow — describe what you want and Trinity generates new stories
 - **Create a new PRD** for the next development iteration
-- **Run Diagnose** to check project health and find areas for improvement
+- **Run Align** to check project health and find areas for improvement
+- **Run Audit** to scan your codebase for quality gaps and security risks
 - **Check Metrics** to understand execution efficiency
 
 ## Tips for Success

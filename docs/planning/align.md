@@ -1,15 +1,15 @@
-# Align & Diagnose
+# Align
 
-This feature adapts to your project's phase, offering two modes:
+Align checks your project's health and adapts to your project's phase:
 
-- **Align** (pre-PRD) — evaluates your roadmap for consistency, completeness, and clarity before generating your first PRD
-- **Diagnose** (post-PRD) — performs a health check on your project, identifying issues, risks, and areas for improvement
+- **Pre-PRD** — evaluates your roadmap for consistency, completeness, and clarity before generating your first PRD
+- **Post-PRD** — performs a health check on your project, identifying drift, gaps, scope issues, and areas for improvement
 
 Trinity automatically selects the right mode based on whether your project has a PRD yet.
 
 ## Align Mode (Pre-PRD)
 
-Available before you've generated your first PRD. Navigate to **Plan** and click **Align**.
+Available before you've generated your first PRD. Navigate to **Align** in the sidebar.
 
 ### How It Works
 
@@ -24,26 +24,24 @@ Align scans your roadmap sections and evaluates them for:
 
 Select findings and click **Refine Roadmap** to go back to your onboarding roadmap with the selected issues highlighted, so you can address them before generating a PRD.
 
-## Diagnose Mode (Post-PRD)
+## Align Mode (Post-PRD)
 
-Available after your first PRD is generated. Navigate to **Plan** and click **Diagnose**.
+Available after your first PRD is generated. Navigate to **Align** in the sidebar.
 
-You can run a diagnosis in two ways:
+You can run alignment in two ways:
 
 ### Zero-Input Mode
 
 Trinity scans the entire project without any specific concern. It examines:
 
-- Code quality and consistency
-- Architecture health
-- Dependency freshness
-- Test coverage
-- Security posture
-- Performance patterns
+- PRD structure and story health
+- Drift between roadmap intent and current execution state
+- Scope gaps or overlaps
+- Dependency issues and blocking patterns
 
 ### Specific Concern Mode
 
-Type a specific concern into the chat (e.g., "The API response times have been slow" or "We're seeing memory leaks in production"). Trinity focuses its analysis on that area while still checking for related issues.
+Type a specific concern into the chat (e.g., "The API stories seem disconnected from the auth phase" or "We're behind on the core features"). Trinity focuses its analysis on that area while still checking for related issues.
 
 ## Understanding Results
 
@@ -67,7 +65,7 @@ Each finding includes:
 
 A high-level narrative summarizing the project's state and the most important actions to take.
 
-## Acting on Diagnose Findings
+## Acting on Findings
 
 Select findings and click **Implement** to generate stories that address the issues. The finding context is passed to the Architect flow, so generated stories are specifically targeted at the problem.
 
@@ -83,22 +81,23 @@ After the initial analysis, you can ask follow-up questions in the chat:
 
 The chat maintains context from the analysis, so follow-ups are informed by the full scan results.
 
-## When to Use Each Mode
+## When to Use Align
 
-**Align** — run before generating your first PRD to catch roadmap issues early. Cheaper to fix scope problems before stories are created.
+**Pre-PRD** — run before generating your first PRD to catch roadmap issues early. Cheaper to fix scope problems before stories are created.
 
-**Diagnose** — good times to run:
+**Post-PRD** — good times to run:
 
 - **Before a new PRD** — understand the current state before planning new work
 - **After a checkpoint** — verify the release is healthy
 - **Periodically** — catch issues before they compound
-- **When something feels off** — if performance degrades or bugs increase, run a specific-concern diagnosis
+- **When something feels off** — if execution isn't progressing as expected, run a specific-concern check
 
-## Diagnose vs. Auditor
+## Align vs. Audit vs. Auditor
 
-The Diagnose feature is different from the Auditor agent in the story pipeline:
+These three features serve different purposes:
 
-- **Diagnose** — project-wide health check you run manually
-- **Auditor** — per-story code review that runs automatically during execution
+- **Align** — project-wide roadmap and execution health check you run manually from the sidebar
+- **Audit** — on-demand codebase quality scanner that analyzes source code for gaps, risks, and improvements (see the [Codebase Audit Tracking](/insights/audit-tracking) page)
+- **Auditor** — per-story code review agent that runs automatically during the execution pipeline
 
-They complement each other: Diagnose catches systemic issues, while the Auditor catches story-level problems.
+They complement each other: Align catches planning and scope issues, Audit catches codebase-level quality gaps, and the Auditor catches story-level problems during execution.

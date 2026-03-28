@@ -97,9 +97,9 @@ export const DOC_SECTIONS: DocSection[] = [
         pageTitle: "Architect",
       },
       {
-        slug: "diagnose",
-        title: "Diagnose",
-        pageTitle: "Project Diagnosis",
+        slug: "align",
+        title: "Align",
+        pageTitle: "Project Alignment",
       },
       {
         slug: "graph",

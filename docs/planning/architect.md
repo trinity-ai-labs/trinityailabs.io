@@ -77,11 +77,11 @@ You can also reach Architect from the Knowledge Base:
 
 This creates stories with an `audit_source` reference, linking them back to the originating audit. After the stories execute and merge, Trinity automatically re-checks the audit items.
 
-## From Diagnose
+## From Align
 
-After running a diagnosis, findings can be sent to Architect:
+After running an alignment check, findings can be sent to Architect:
 
-1. Run **Diagnose** from the planning dashboard
+1. Run **Align** from the sidebar
 2. Review the findings
 3. Click **Send to Architect** on findings you want to address
 

@@ -40,8 +40,8 @@ const CHAPTER_DESCRIPTIONS: Record<string, string> = {
     "4-phase AI pipeline: Architect, Story Writer, Dependency Mapper, Calibrator.",
   "add-feature":
     "Describe features in natural language. Trinity generates structured stories.",
-  diagnose:
-    "Zero-input health checks with AI-powered findings and actionable fixes.",
+  align:
+    "Phase-adaptive project health checks — roadmap quality pre-PRD, execution health post-PRD.",
   graph:
     "Visual dependency graph with layout management and cross-PRD views.",
   stories:
