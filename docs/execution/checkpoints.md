@@ -57,16 +57,7 @@ Stories get a `released` flag when their code reaches the base branch via the ch
 
 ## Releases
 
-Releases are first-class entities that group one or more PRDs into a shippable unit. When you link PRDs to a release, Trinity automatically creates a release checkpoint story that depends on all stories in the linked PRDs.
-
-**Release lifecycle:** Created → Ready → Releasing → Released
-
-Key concepts:
-
-- **PRD linking** — each PRD belongs to at most one active release
-- **Release dependencies** — releases can depend on other releases (a DAG). A release can't start releasing until all its dependencies are released.
-- **Synthetic checkpoint stories** — created automatically when PRDs are linked. These run the full checkpoint pipeline when all linked stories are complete.
-- **Execution scope** — each release gets its own coordinator and worker pool
+Releases are first-class entities that group one or more PRDs into a shippable unit. When you link PRDs to a release, Trinity automatically creates a release checkpoint story that depends on all stories in the linked PRDs. See the [Releases](/knowledge?book=user-guide&section=execution&chapter=releases&page=releases) page for full details on creating releases, linking PRDs, managing dependencies, and the release lifecycle.
 
 ### PRDs vs Releases
 

@@ -4,7 +4,7 @@ Releases group one or more PRDs into a shippable unit. They provide the executio
 
 ## Creating a Release
 
-1. Navigate to **Releases** in the sidebar
+1. Click **Releases** in the sidebar
 2. Click **Create Release**
 3. Fill in:
    - **Name** — a label for this release (e.g., "MVP", "Beta 2")

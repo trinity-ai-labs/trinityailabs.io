@@ -2,6 +2,8 @@
 
 Execution is where Trinity's AI agents build your project. The coordinator manages the process, assigning stories to workers that execute them through the agent pipeline.
 
+Execution is **release-scoped** — you must [create a release](/knowledge?book=user-guide&section=execution&chapter=releases&page=releases) and link at least one PRD before you can start. Each release gets its own coordinator, worker pool, and job queue.
+
 ## Starting Execution
 
 1. Navigate to **Run**

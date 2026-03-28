@@ -9,7 +9,7 @@ Trinity automatically selects the right mode based on whether your project has a
 
 ## Align Mode (Pre-PRD)
 
-Available before you've generated your first PRD. Navigate to **Align** in the sidebar.
+Available before you've generated your first PRD. Click **Align** in the sidebar.
 
 ### How It Works
 
@@ -26,7 +26,7 @@ Select findings and click **Refine Roadmap** to go back to your onboarding roadm
 
 ## Align Mode (Post-PRD)
 
-Available after your first PRD is generated. Navigate to **Align** in the sidebar.
+Available after your first PRD is generated. Click **Align** in the sidebar.
 
 You can run alignment in two ways:
 
@@ -96,8 +96,8 @@ The chat maintains context from the analysis, so follow-ups are informed by the 
 
 These three features serve different purposes:
 
-- **Align** — project-wide roadmap and execution health check you run manually from the sidebar
-- **Audit** — on-demand codebase quality scanner that analyzes source code for gaps, risks, and improvements (see the [Codebase Audit Tracking](/insights/audit-tracking) page)
+- **Align** — project-wide roadmap and execution health check, accessible from the sidebar
+- **Audit** — on-demand codebase quality scanner accessible from the sidebar, analyzes source code for gaps, risks, and improvements (see the [Codebase Audit Tracking](/knowledge?book=user-guide&section=insights&chapter=audit-tracking&page=audit-tracking) page)
 - **Auditor** — per-story code review agent that runs automatically during the execution pipeline
 
 They complement each other: Align catches planning and scope issues, Audit catches codebase-level quality gaps, and the Auditor catches story-level problems during execution.

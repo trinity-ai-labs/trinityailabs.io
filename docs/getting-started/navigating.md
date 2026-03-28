@@ -12,14 +12,29 @@ At the top of the sidebar, you'll find the active project name. Click it to swit
 
 ### Main Navigation
 
-- **Plan** — PRD management, planning dashboard, story graph
-- **Run** — execution control, active stories, gate approvals
+Items appear progressively as your project advances through phases:
+
+- **Roadmap** — onboarding roadmap (visible during onboarding only)
+- **Dashboard** — PRD management, planning dashboard, story graph
 - **Stories** — browse and filter all stories across PRDs
-- **Knowledge** — project knowledge base (vault)
-- **Activity** — global activity feed with filters (project, category, actor)
-- **Recaps** — activity summaries by time period
+- **Run** — execution control, active stories, gate approvals
+- **Releases** — create and manage releases that group PRDs into shippable units
+- **Architect** — add features or modify stories through a conversational interface
+- **Align** — project health checks (roadmap review pre-PRD, drift detection post-PRD)
+- **Audit** — on-demand codebase quality scanner for gaps, risks, and improvements
+- **Recaps** — activity summaries by time period, PDF report export
 - **Metrics** — execution analytics and cost tracking
-- **Settings** — project and app configuration
+
+### Global Navigation
+
+These items are always visible at the bottom of the sidebar, regardless of project phase:
+
+- **Activity** — global activity feed with filters (project, category, actor)
+- **Knowledge** — project knowledge base (vault)
+- **Gotchas** — curated pitfalls library organized by language, framework, and tool
+- **Teams** — team management and invitations
+- **Settings** — app-wide and per-project configuration
+- **Team Settings** — team-wide defaults (visible to team owners in team scope only)
 
 ### Task Indicator
 
@@ -34,7 +49,7 @@ The planning dashboard is your command center for PRD management:
 - **PRD tabs** — switch between PRDs using numbered tabs at the top
 - **Phase progress** — visual progress bars for each phase
 - **Stats cards** — story counts, completion rates, dependency status
-- **Action buttons** — generate PRD, add feature, align, audit
+- **Generate PRD** button — create a new plan
 
 ### Story Graph
 
@@ -54,6 +69,27 @@ The run page shows execution state:
 - **Active stories** — currently executing with pipeline phase indicators
 - **Gate queue** — stories paused at gates waiting for your input
 - **Worker status** — how many workers are active and what they're doing
+
+### Releases Page
+
+The Releases page organizes releases into columns by lifecycle status:
+
+- **In Progress** — releases being built (`created` status)
+- **Ready to Release** — all stories complete, awaiting release process
+- **Releasing** — release checkpoint running (audit, notes, tagging)
+- **Released** — completed releases (historical record)
+
+Click any release card to open its detail panel with status controls, PRD linker, and dependency editor.
+
+### Audit Page
+
+The Audit page lets you run on-demand codebase quality scans:
+
+- **Run audit** — trigger a comprehensive scan of your codebase
+- **Chat interface** — ask questions about findings or focus on specific areas
+- **Checklist tracking** — audit items are tracked as checklists that auto-update when stories address them
+- **History** — browse previous audit reports
+- **Implement** — send findings to Architect to generate fix stories
 
 ### Story Detail
 
@@ -82,13 +118,20 @@ A floating help button appears in the bottom-right corner of every page. Click i
 
 ## Common Actions
 
+### Creating a Release
+
+1. Navigate to **Releases**
+2. Click **Create Release**
+3. Enter a name, version, and optional description
+4. Link one or more PRDs
+5. Go to **Run** to start execution for the release
+
 ### Adding a Feature
 
-1. Navigate to **Plan**
-2. Click **Architect**
-3. Describe what you want in the chat interface
-4. Review the generated stories
-5. Confirm to add them to your PRD
+1. Navigate to **Architect** in the sidebar
+2. Describe what you want in the chat interface
+3. Review the generated stories
+4. Confirm to add them to your PRD
 
 ### Approving a Gate
 
@@ -103,6 +146,14 @@ A floating help button appears in the bottom-right corner of every page. Click i
 2. Use the search bar at the top
 3. Results show matching pages across all books
 4. Click a result to navigate directly to that page
+
+### Running a Codebase Audit
+
+1. Navigate to **Audit** in the sidebar
+2. Click **Run Audit** to start a scan
+3. Optionally type a focus area in the chat
+4. Review findings — each has a severity, category, and recommendation
+5. Click **Implement** to send findings to Architect for story generation
 
 ### Exporting a Report
 

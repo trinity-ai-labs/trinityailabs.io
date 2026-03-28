@@ -1,12 +1,16 @@
 # Codebase Audit Tracking
 
-When you import an existing project into Trinity, the codebase analysis can create audit pages that track issues and gaps found in your code. These audit pages live in the knowledge base and use markdown checklists to track what's been addressed.
+Trinity has a standalone **Audit** feature accessible from the sidebar. It lets you run on-demand codebase quality scans at any time — not just during import. Audit pages track issues and gaps found in your code using markdown checklists in the knowledge base.
 
 ## How It Works
 
 ### 1. Analysis Creates Audit Pages
 
-During the "Import Existing Project" flow, Trinity scans your codebase and identifies areas that need attention — missing tests, security gaps, architectural issues, etc. These findings are saved as audit pages in the knowledge base with checklist items:
+You can trigger an audit in two ways:
+- **From the sidebar** — click **Audit** and run a scan. You can optionally provide a focus area in the chat (e.g., "security" or "API validation").
+- **During import** — the "Import Existing Project" flow automatically scans your codebase.
+
+Either way, Trinity identifies areas that need attention — missing tests, security gaps, architectural issues, etc. These findings are saved as audit pages in the knowledge base with checklist items:
 
 ```markdown
 - [ ] Add input validation to user registration endpoint
@@ -16,7 +20,7 @@ During the "Import Existing Project" flow, Trinity scans your codebase and ident
 
 ### 2. Create Stories from Audit Items
 
-From an audit page, click **"Implement"** to create a new story pre-filled with the audit recommendations. The story gets an `audit_source` reference linking it back to the originating audit page.
+From an audit page, click **"Implement"** to send findings to the Architect flow, which generates stories pre-filled with the audit recommendations. Each story gets an `audit_source` reference linking it back to the originating audit page.
 
 ### 3. Auto-Check After Merge
 

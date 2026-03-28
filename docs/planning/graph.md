@@ -1,6 +1,6 @@
 # Dependency Graph
 
-The Graph page (`/graph`) provides an interactive visualization of your story dependencies, making it easy to understand the execution order and relationships between stories.
+The story dependency graph provides an interactive visualization of your story dependencies, making it easy to understand the execution order and relationships between stories. Access it from the **Stories** page by switching to the graph view.
 
 ## Overview
 

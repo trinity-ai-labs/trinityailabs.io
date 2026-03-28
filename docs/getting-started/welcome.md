@@ -72,25 +72,31 @@ Agents read from and write to the vault, creating a feedback loop where discover
 
 The sidebar is your main navigation. It shows:
 
-- **Projects** — switch between projects
-- **Plan** — view and manage your PRDs
-- **Run** — monitor and control execution
+- **Dashboard** — planning dashboard, PRD management, story graph
 - **Stories** — browse all stories across PRDs
-- **Knowledge** — access the vault
+- **Run** — monitor and control execution
+- **Releases** — create and manage releases that group PRDs into shippable units
+- **Architect** — add features or modify stories through a conversational interface
+- **Align** — run project health checks (pre-PRD roadmap review or post-PRD drift detection)
+- **Audit** — scan your codebase for quality gaps, security issues, and improvements
+- **Recaps** — view activity summaries and export PDF reports
+- **Metrics** — execution analytics and cost tracking
 - **Activity** — global activity feed with filters
-- **Recaps** — view activity summaries
-- **Metrics** — execution analytics
-- **Settings** — configure Trinity
+- **Knowledge** — access the project knowledge base (vault)
+- **Gotchas** — browse the pitfalls library (languages, frameworks, tools)
+- **Teams** — manage team members and invitations
+- **Settings** — configure Trinity (app-wide and per-project)
 
 ### Typical Workflow
 
 1. **Create a project** using the onboarding wizard or by importing an existing codebase
 2. **Generate a PRD** to plan your first set of features
 3. **Review the plan** — adjust stories, dependencies, and priorities as needed
-4. **Start execution** — Trinity's coordinator assigns stories to workers
-5. **Monitor progress** — watch stories flow through the pipeline, approve gates as they appear
-6. **Review results** — check recaps, metrics, and the knowledge base
-7. **Iterate** — add features, create new PRDs, and keep building
+4. **Create a release** — group your PRD(s) into a release that scopes execution
+5. **Start execution** — Trinity's coordinator assigns stories to workers within the release
+6. **Monitor progress** — watch stories flow through the pipeline, approve gates as they appear
+7. **Review results** — check recaps, metrics, and the knowledge base
+8. **Iterate** — add features, create new PRDs and releases, and keep building
 
 ## What's Next
 

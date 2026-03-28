@@ -71,9 +71,20 @@ Make sure the plan makes sense before starting execution. You can:
 - Add or remove dependencies
 - Skip stories you don't want executed
 
-## Step 5: Start Execution
+## Step 5: Create a Release
 
-Navigate to the **Run** page and click **Start**. Trinity will check that **Claude Code CLI** is installed — if it's missing, you'll see install instructions right in the modal. See the [Prerequisites](/knowledge?book=user-guide&section=getting-started&chapter=prerequisites&page=prerequisites) page for the full Claude Code setup walkthrough.
+Before you can start execution, you need to create a release. Releases group one or more PRDs into a shippable unit and scope the execution — each release gets its own coordinator and worker pool.
+
+1. Navigate to **Releases** in the sidebar
+2. Click **Create Release**
+3. Give it a name (e.g., "MVP") and optionally a version (e.g., "v0.1")
+4. Link your PRD — this auto-creates a release checkpoint story that gates the final release
+
+You can always add more PRDs to a release later, or create additional releases for parallel work.
+
+## Step 6: Start Execution
+
+Navigate to the **Run** page, select your release, and click **Start**. Trinity will check that **Claude Code CLI** is installed — if it's missing, you'll see install instructions right in the modal. See the [Prerequisites](/knowledge?book=user-guide&section=getting-started&chapter=prerequisites&page=prerequisites) page for the full Claude Code setup walkthrough.
 
 Once started, the coordinator:
 
@@ -83,7 +94,7 @@ Once started, the coordinator:
 
 You can configure the number of parallel workers and automation settings in the run modal.
 
-## Step 6: Monitor Progress
+## Step 7: Monitor Progress
 
 While execution runs, you can:
 
@@ -92,12 +103,13 @@ While execution runs, you can:
 - **Browse the Knowledge Base** — agents write learnings as they work
 - **View Recaps** — daily summaries of what was accomplished
 
-## Step 7: Iterate
+## Step 8: Iterate
 
-After your first PRD completes:
+After your first release ships:
 
 - **Add features** with the Architect flow — describe what you want and Trinity generates new stories
 - **Create a new PRD** for the next development iteration
+- **Create a new release** to scope the next batch of work
 - **Run Align** to check project health and find areas for improvement
 - **Run Audit** to scan your codebase for quality gaps and security risks
 - **Check Metrics** to understand execution efficiency

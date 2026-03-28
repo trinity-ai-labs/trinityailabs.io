@@ -52,13 +52,13 @@ Click **Generate PRD** to create a new plan. This launches the 4-phase planning 
 
 Progress is shown in the sidebar task indicator with phase-aware labels.
 
-### Architect
+### Related Sidebar Features
 
-Opens the Architect flow to add new stories to an existing PRD. See the [Architect guide](/knowledge?book=user-guide&section=planning&chapter=add-feature&page=add-feature) for details.
+Several features complement the planning dashboard and are accessible from the sidebar:
 
-### Align
-
-Runs a health check on your project. See the [Align guide](/knowledge?book=user-guide&section=planning&chapter=align&page=align) for details.
+- **[Architect](/knowledge?book=user-guide&section=planning&chapter=architect&page=architect)** — add new features, modify existing stories, or create new PRDs through a conversational interface
+- **[Align](/knowledge?book=user-guide&section=planning&chapter=align&page=align)** — run a health check on your project (roadmap review pre-PRD, drift detection post-PRD)
+- **[Audit](/knowledge?book=user-guide&section=insights&chapter=audit-tracking&page=audit-tracking)** — scan your codebase for quality gaps, security issues, and improvements
 
 ## Working with the Story Graph
 
@@ -103,6 +103,6 @@ Later PRDs receive context about what was built in earlier ones, including:
 
 Stories can depend on stories from other PRDs using the `N:X.Y.Z` format (e.g., `1:1.2.1` depends on story 1.2.1 from PRD 1). This is useful when new features build directly on work from a previous iteration.
 
-### Concurrent PRD Execution
+### Concurrent Execution via Releases
 
-Multiple PRDs can execute simultaneously — each gets its own coordinator instance. This lets you work on independent feature tracks in parallel.
+Multiple PRDs can execute simultaneously when linked to different releases. Each release gets its own coordinator instance. This lets you work on independent feature tracks in parallel. See [Releases](/knowledge?book=user-guide&section=execution&chapter=releases&page=releases) for details.

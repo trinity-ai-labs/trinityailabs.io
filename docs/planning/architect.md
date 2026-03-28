@@ -4,8 +4,7 @@ The Architect flow lets you add new stories to an existing PRD, modify existing 
 
 ## Accessing Architect
 
-1. Navigate to **Plan**
-2. Click the **Architect** button
+Click **Architect** in the sidebar. You can also reach Architect from audit pages and align findings (see below).
 
 ## The Conversation
 
