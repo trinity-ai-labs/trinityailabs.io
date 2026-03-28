@@ -227,7 +227,9 @@
   color: oklch(0.72 0.17 163);
   text-decoration: none;
   font-weight: 500;
-  transition: color 0.15s, text-decoration-color 0.15s;
+  transition:
+    color 0.15s,
+    text-decoration-color 0.15s;
   text-underline-offset: 3px;
 }
 
@@ -545,4 +547,26 @@
 
 .docs-def-content {
   color: oklch(0.85 0 0);
+}
+
+/* ------------------------------------------------------------------ */
+/* Blog — additional styles for MDX components                        */
+/* ------------------------------------------------------------------ */
+
+/* Hide scrollbar for category filter */
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+/* Step list content inherits prose styles */
+.blog-step-content > *:first-child {
+  margin-top: 0;
+}
+
+.blog-step-content > *:last-child {
+  margin-bottom: 0;
 }
