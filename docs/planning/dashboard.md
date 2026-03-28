@@ -56,9 +56,9 @@ Progress is shown in the sidebar task indicator with phase-aware labels.
 
 Opens the Architect flow to add new stories to an existing PRD. See the [Architect guide](/knowledge?book=user-guide&section=planning&chapter=add-feature&page=add-feature) for details.
 
-### Diagnose
+### Align
 
-Runs a health check on your project. See the [Diagnose guide](/knowledge?book=user-guide&section=planning&chapter=diagnose&page=diagnose) for details.
+Runs a health check on your project. See the [Align guide](/knowledge?book=user-guide&section=planning&chapter=align&page=align) for details.
 
 ## Working with the Story Graph
 
