@@ -108,7 +108,7 @@ Create the file at `content/blog/{slug}.mdx` where `{slug}` is a short, keyword-
 ---
 title: ""
 description: ""
-date: "YYYY-MM-DD"
+date: "YYYY-MM-DDT00:00:00Z"
 author:
   name: "Lorenzo Wynberg"
   role: "Founder"

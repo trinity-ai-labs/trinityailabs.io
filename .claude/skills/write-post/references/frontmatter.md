@@ -43,12 +43,14 @@ draft: false                                     # Exclude from production build
 - Example: "How Trinity's 4-phase agent pipeline moves from planning to merged PR without human intervention."
 
 ### date (required)
-- Format: `YYYY-MM-DD`
+- Format: `YYYY-MM-DDTHH:MM:SSZ` (UTC timestamp)
+- Example: `"2026-03-27T00:00:00Z"`
 - Publication date — posts are sorted by this
 - Use the actual publication date, not the date you started writing
+- Always use UTC (`Z` suffix) to avoid timezone ambiguity
 
 ### updated (optional)
-- Format: `YYYY-MM-DD`
+- Format: `YYYY-MM-DDTHH:MM:SSZ` (UTC timestamp)
 - Set when you significantly update a post
 - Used in sitemap `lastModified` and JSON-LD `dateModified`
 
