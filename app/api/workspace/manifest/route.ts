@@ -9,6 +9,7 @@ import {
 } from "@/lib/ensure-tables";
 import { requireAccessToken } from "@/lib/device-auth";
 import { provisionPersonalDb } from "@/lib/teams";
+import { createDatabaseToken } from "@/lib/turso-admin";
 import {
   getStorageUsage,
   getStorageQuota,
@@ -50,7 +51,7 @@ export async function GET(req: Request) {
   let user: Record<string, unknown>;
   try {
     const userResult = await db.execute({
-      sql: `SELECT id, email, name, handle, role, turso_db_url, turso_auth_token FROM user WHERE id = ?`,
+      sql: `SELECT id, email, name, handle, role, turso_db_url, turso_auth_token, turso_db_name FROM user WHERE id = ?`,
       args: [userId],
     });
     if (!userResult.rows.length) {
@@ -74,20 +75,37 @@ export async function GET(req: Request) {
     };
   }
 
-  // Provision personal DB lazily if not yet done (non-blocking)
+  // Provision personal DB lazily if not yet done
   if (!user.turso_db_url) {
     try {
       await provisionPersonalDb(userId);
       const updated = await db.execute({
-        sql: "SELECT turso_db_url, turso_auth_token FROM user WHERE id = ?",
+        sql: "SELECT turso_db_url, turso_auth_token, turso_db_name FROM user WHERE id = ?",
         args: [userId],
       });
       if (updated.rows.length) {
         user.turso_db_url = updated.rows[0].turso_db_url;
         user.turso_auth_token = updated.rows[0].turso_auth_token;
+        user.turso_db_name = updated.rows[0].turso_db_name;
       }
     } catch (err) {
       console.error("Personal DB provisioning failed (non-fatal):", err);
+    }
+  }
+
+  // Refresh Turso token on every manifest fetch (tokens expire after 7 days)
+  if (user.turso_db_name) {
+    try {
+      const freshToken = await createDatabaseToken(
+        user.turso_db_name as string,
+      );
+      user.turso_auth_token = freshToken;
+      await db.execute({
+        sql: "UPDATE user SET turso_auth_token = ? WHERE id = ?",
+        args: [freshToken, userId],
+      });
+    } catch (err) {
+      console.error("Turso token refresh failed (non-fatal):", err);
     }
   }
 
