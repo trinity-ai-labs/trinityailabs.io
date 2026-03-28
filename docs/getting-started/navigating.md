@@ -16,6 +16,7 @@ At the top of the sidebar, you'll find the active project name. Click it to swit
 - **Run** — execution control, active stories, gate approvals
 - **Stories** — browse and filter all stories across PRDs
 - **Knowledge** — project knowledge base (vault)
+- **Activity** — global activity feed with filters (project, category, actor)
 - **Recaps** — activity summaries by time period
 - **Metrics** — execution analytics and cost tracking
 - **Settings** — project and app configuration

@@ -77,6 +77,7 @@ The sidebar is your main navigation. It shows:
 - **Run** — monitor and control execution
 - **Stories** — browse all stories across PRDs
 - **Knowledge** — access the vault
+- **Activity** — global activity feed with filters
 - **Recaps** — view activity summaries
 - **Metrics** — execution analytics
 - **Settings** — configure Trinity

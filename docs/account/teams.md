@@ -104,7 +104,13 @@ Leave comments on stories, epics, and other entities. Comments sync across all t
 
 ### Activity Feed
 
-The **Activity** page in the sidebar shows a chronological feed of actions across the project — story status changes, PRD updates, checkpoint approvals, and more. Each entry shows who did what and when.
+The **Activity** page in the sidebar is a global standalone feed showing all actions across your projects. Filter by:
+
+- **Project** — narrow to a specific project
+- **Category** — Execution, Stories, Projects, Assets, Planning, Releases, Teams, or Comments
+- **Actor** — filter by team member or system actions
+
+In team scope, the feed shows activity from all team members. In personal scope, it shows only your own actions. Each entry shows who did what, when, and on which entity — with links to jump directly to the relevant story, release, or project.
 
 ### Presence
 
