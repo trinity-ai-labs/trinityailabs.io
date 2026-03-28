@@ -111,7 +111,7 @@ export default async function BlogPostPage({
           <div className="docs-prose">
             <MDXRemote
               source={post.raw}
-              options={{ mdxOptions: mdxOptions as never }}
+              options={{ mdxOptions: mdxOptions as never, blockJS: false }}
               components={mdxComponents}
             />
           </div>
