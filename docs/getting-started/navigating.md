@@ -23,7 +23,7 @@ At the top of the sidebar, you'll find the active project name. Click it to swit
 
 ### Task Indicator
 
-The sidebar shows a task indicator when background operations are running (e.g., PRD generation, diagnose). It displays the current phase and progress.
+The sidebar shows a task indicator when background operations are running (e.g., PRD generation, align). It displays the current phase and progress.
 
 ## Page Layouts
 
@@ -34,7 +34,7 @@ The planning dashboard is your command center for PRD management:
 - **PRD tabs** — switch between PRDs using numbered tabs at the top
 - **Phase progress** — visual progress bars for each phase
 - **Stats cards** — story counts, completion rates, dependency status
-- **Action buttons** — generate PRD, add feature, align (pre-PRD) / diagnose (post-PRD)
+- **Action buttons** — generate PRD, add feature, align, audit
 
 ### Story Graph
 
