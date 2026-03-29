@@ -10,7 +10,6 @@ import { Menu, X, User, LogOut, LayoutDashboard } from "lucide-react";
 
 const navLinks = [
   { label: "Features", href: "#features" },
-  { label: "How It Works", href: "#how-it-works" },
   { label: "Pricing", href: "#pricing" },
   { label: "Docs", href: "/docs" },
   { label: "Blog", href: "/blog" },
