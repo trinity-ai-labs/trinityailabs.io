@@ -1,6 +1,4 @@
-import type { ClassifiedStatement, HranaValue } from "../sql-classifier";
-import type { ValidationContext } from "../validate-writes";
-import type { ValidationResult } from "./index";
+import type { RuleValidator } from "./index";
 import { ALLOW } from "./index";
 
 /**
@@ -11,10 +9,4 @@ import { ALLOW } from "./index";
  * is already prevented by the proxy's scope routing. No per-row ownership
  * checks needed — all team members collaborate on shared data.
  */
-export async function validatePassthrough(
-  _stmt: ClassifiedStatement,
-  _args: HranaValue[],
-  _ctx: ValidationContext,
-): Promise<ValidationResult> {
-  return ALLOW;
-}
+export const validatePassthrough: RuleValidator = async () => ALLOW;

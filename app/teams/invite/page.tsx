@@ -21,23 +21,14 @@ function InviteContent() {
 
   const [status, setStatus] = useState<
     "loading" | "ready" | "accepting" | "accepted" | "error"
-  >("loading");
-  const [error, setError] = useState("");
+  >(token ? "ready" : "error");
+  const [error, setError] = useState(
+    token ? "" : "No invite token provided.",
+  );
   const [teamInfo, setTeamInfo] = useState<{
     teamId: string;
     teamName: string;
   } | null>(null);
-
-  useEffect(() => {
-    if (!token) {
-      setStatus("error");
-      setError("No invite token provided.");
-      return;
-    }
-    // We need the team ID from the invite. Fetch it by checking invites.
-    // For now, just set ready — the accept endpoint validates the token.
-    setStatus("ready");
-  }, [token]);
 
   useEffect(() => {
     if (!isPending && !session) {

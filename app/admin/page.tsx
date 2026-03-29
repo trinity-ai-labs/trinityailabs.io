@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, use, Suspense, useCallback } from "react";
+import { useState, use, Suspense } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   ChartContainer,

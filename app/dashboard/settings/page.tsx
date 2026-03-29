@@ -56,22 +56,29 @@ export default function SettingsPage() {
       .catch(() => {});
   }, []);
 
-  // Check handle availability with debounce
+  // Derived validation (avoids sync setState in effect)
+  const trimmedHandle = handle.toLowerCase().trim();
+  const isOriginalHandle = trimmedHandle === originalHandle;
+  const shortHandleError =
+    trimmedHandle.length > 0 && trimmedHandle.length < 3
+      ? "At least 3 characters"
+      : "";
+  const displayHandleError = isOriginalHandle
+    ? ""
+    : shortHandleError || handleError;
+  const displayHandleAvailable =
+    trimmedHandle.length < 3 || isOriginalHandle ? null : handleAvailable;
+  const displayCheckingHandle =
+    trimmedHandle.length >= 3 && !isOriginalHandle && checkingHandle;
+
+  // Debounced availability check — async only, no sync setState
   useEffect(() => {
     if (handleTimerRef.current) clearTimeout(handleTimerRef.current);
     const value = handle.toLowerCase().trim();
-    if (value === originalHandle) {
-      setHandleAvailable(null);
-      setHandleError("");
-      return;
-    }
-    if (value.length < 3) {
-      setHandleAvailable(null);
-      setHandleError(value.length > 0 ? "At least 3 characters" : "");
-      return;
-    }
-    setCheckingHandle(true);
+    if (value === originalHandle || value.length < 3) return;
+
     handleTimerRef.current = setTimeout(async () => {
+      setCheckingHandle(true);
       try {
         const res = await fetch(
           `/api/handle?handle=${encodeURIComponent(value)}`,
@@ -218,16 +225,16 @@ export default function SettingsPage() {
                 />
                 {handle.length >= 3 && handle !== originalHandle && (
                   <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm">
-                    {checkingHandle
+                    {displayCheckingHandle
                       ? "..."
-                      : handleAvailable
+                      : displayHandleAvailable
                         ? "\u2713"
                         : "\u2717"}
                   </span>
                 )}
               </div>
-              {handleError && (
-                <p className="text-xs text-destructive mt-1">{handleError}</p>
+              {displayHandleError && (
+                <p className="text-xs text-destructive mt-1">{displayHandleError}</p>
               )}
             </div>
             {handleMessage && (
@@ -238,8 +245,8 @@ export default function SettingsPage() {
               disabled={
                 handleSaving ||
                 handle === originalHandle ||
-                checkingHandle ||
-                handleAvailable === false
+                displayCheckingHandle ||
+                displayHandleAvailable === false
               }
               variant="outline"
             >

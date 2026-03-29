@@ -15,7 +15,6 @@ import {
   Users,
   MessageSquare,
 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 
 const showcaseFeatures = [
   {
@@ -128,13 +127,6 @@ const features = [
     title: "Comments & Activity",
     description:
       "Threaded discussions on stories and PRDs. Activity feed tracks who changed what. Change history for audit trails.",
-  },
-];
-
-const comingSoon = [
-  {
-    title: "Cloud Execution",
-    description: "Managed VMs — no local machine needed",
   },
 ];
 

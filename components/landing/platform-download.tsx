@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Download, Apple } from "lucide-react";
 import {
@@ -11,11 +11,9 @@ import {
 } from "@/lib/platform";
 
 export function PlatformDownload({ size = "lg" }: { size?: "default" | "lg" }) {
-  const [platform, setPlatform] = useState<Platform>("unknown");
-
-  useEffect(() => {
-    setPlatform(detectPlatform());
-  }, []);
+  const [platform] = useState<Platform>(() =>
+    typeof window !== "undefined" ? detectPlatform() : "unknown",
+  );
 
   const label =
     platform === "unknown"

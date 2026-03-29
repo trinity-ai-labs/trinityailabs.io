@@ -11,7 +11,7 @@ import {
   ensureStorageUsageTable,
   ensureStorageAddonsTable,
 } from "@/lib/ensure-tables";
-import { deleteObject } from "@/lib/r2";
+// deleteObject will be needed when server-side R2 deletion is implemented (see TODO below)
 
 const FALLBACK_DAYS = 14; // 7 grace + 7 extra for desktop AI prune
 
@@ -123,8 +123,6 @@ async function pruneScope(target: OverQuotaScope): Promise<number> {
   // and let the desktop handle the DB cleanup on next sync.
   //
   // TODO: When we have a server-side asset index, implement full R2 deletion here.
-
-  const freedBytes = target.overageBytes;
 
   // For now, just clear the over_quota_since flag to prevent repeated runs.
   // The desktop app should run the actual AI prune on next login.

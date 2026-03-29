@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef, Suspense } from "react";
+import { useEffect, useState, useRef, useCallback, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { Input } from "@/components/ui/input";
@@ -20,32 +20,15 @@ function DesktopAuthContent() {
   const codeFromUrl = searchParams.get("code");
 
   const [code, setCode] = useState(codeFromUrl ?? "");
-  const [status, setStatus] = useState<Status>("loading");
+  const [status, setStatus] = useState<Status>(
+    codeFromUrl ? "loading" : "enter-code",
+  );
   const [error, setError] = useState("");
   const confirmedRef = useRef(false);
 
   const { data: session, isPending } = authClient.useSession();
 
-  useEffect(() => {
-    if (isPending) return;
-
-    if (!session) {
-      const callback = codeFromUrl
-        ? `/desktop?code=${codeFromUrl}`
-        : "/desktop";
-      router.replace(`/login?callbackUrl=${encodeURIComponent(callback)}`);
-      return;
-    }
-
-    if (codeFromUrl && !confirmedRef.current) {
-      confirmedRef.current = true;
-      confirmCode(codeFromUrl);
-    } else if (!codeFromUrl) {
-      setStatus("enter-code");
-    }
-  }, [codeFromUrl, session, isPending, router]);
-
-  async function confirmCode(deviceCode: string) {
+  const confirmCode = useCallback(async (deviceCode: string) => {
     setStatus("confirming");
     try {
       // Use the server-side confirm route that doesn't need cookies
@@ -70,7 +53,25 @@ function DesktopAuthContent() {
       setError("Network error — please try again");
       setStatus("error");
     }
-  }
+  }, [session]);
+
+  useEffect(() => {
+    if (isPending) return;
+
+    if (!session) {
+      const callback = codeFromUrl
+        ? `/desktop?code=${codeFromUrl}`
+        : "/desktop";
+      router.replace(`/login?callbackUrl=${encodeURIComponent(callback)}`);
+      return;
+    }
+
+    if (codeFromUrl && !confirmedRef.current) {
+      confirmedRef.current = true;
+      // Schedule to avoid sync setState in effect body
+      Promise.resolve().then(() => confirmCode(codeFromUrl));
+    }
+  }, [codeFromUrl, session, isPending, router, confirmCode]);
 
   function handleSubmitCode(e: React.FormEvent) {
     e.preventDefault();

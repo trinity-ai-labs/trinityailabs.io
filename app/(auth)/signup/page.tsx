@@ -34,16 +34,26 @@ function SignUpForm() {
       .catch(() => null);
   }, [inviteToken]);
 
+  // Derived validation for short handles (avoids sync setState in effect)
+  const trimmedHandle = handle.toLowerCase().trim();
+  const shortHandleError =
+    trimmedHandle.length > 0 && trimmedHandle.length < 3
+      ? "At least 3 characters"
+      : "";
+  const displayHandleError = shortHandleError || handleError;
+  const displayHandleAvailable =
+    trimmedHandle.length < 3 ? null : handleAvailable;
+  const displayCheckingHandle =
+    trimmedHandle.length >= 3 && checkingHandle;
+
+  // Debounced availability check — async only, no sync setState
   useEffect(() => {
     if (handleTimerRef.current) clearTimeout(handleTimerRef.current);
     const value = handle.toLowerCase().trim();
-    if (value.length < 3) {
-      setHandleAvailable(null);
-      setHandleError(value.length > 0 ? "At least 3 characters" : "");
-      return;
-    }
-    setCheckingHandle(true);
+    if (value.length < 3) return;
+
     handleTimerRef.current = setTimeout(async () => {
+      setCheckingHandle(true);
       try {
         const res = await fetch(
           `/api/handle?handle=${encodeURIComponent(value)}`,
@@ -187,12 +197,12 @@ function SignUpForm() {
             />
             {handle.length >= 3 && (
               <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm">
-                {checkingHandle ? "..." : handleAvailable ? "\u2713" : "\u2717"}
+                {displayCheckingHandle ? "..." : displayHandleAvailable ? "\u2713" : "\u2717"}
               </span>
             )}
           </div>
-          {handleError && (
-            <p className="text-xs text-destructive mt-1">{handleError}</p>
+          {displayHandleError && (
+            <p className="text-xs text-destructive mt-1">{displayHandleError}</p>
           )}
         </div>
 
@@ -235,7 +245,7 @@ function SignUpForm() {
 
         <Button
           type="submit"
-          disabled={loading || !handleAvailable || checkingHandle}
+          disabled={loading || !displayHandleAvailable || displayCheckingHandle}
           className="w-full font-mono bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white"
         >
           {loading ? "Creating account..." : "Create Account"}

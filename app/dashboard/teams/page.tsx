@@ -84,28 +84,33 @@ export default function TeamsPage() {
   }, []);
 
   useEffect(() => {
-    fetchTeams();
-    // Fetch storage data for all teams
-    fetch("/api/dashboard/usage")
-      .then((r) => (r.ok ? r.json() : null))
-      .then((data) => {
-        if (data?.teams) {
-          setTeamStorage(
-            data.teams.map(
-              (t: {
-                id: string;
-                storageUsedBytes: number;
-                storageQuotaBytes: number;
-              }) => ({
-                id: t.id,
-                storageUsedBytes: t.storageUsedBytes,
-                storageQuotaBytes: t.storageQuotaBytes,
-              }),
-            ),
-          );
+    const loadData = async () => {
+      await fetchTeams();
+      try {
+        const r = await fetch("/api/dashboard/usage");
+        if (r.ok) {
+          const data = await r.json();
+          if (data?.teams) {
+            setTeamStorage(
+              data.teams.map(
+                (t: {
+                  id: string;
+                  storageUsedBytes: number;
+                  storageQuotaBytes: number;
+                }) => ({
+                  id: t.id,
+                  storageUsedBytes: t.storageUsedBytes,
+                  storageQuotaBytes: t.storageQuotaBytes,
+                }),
+              ),
+            );
+          }
         }
-      })
-      .catch(() => {});
+      } catch {
+        // Storage data is non-critical
+      }
+    };
+    loadData();
   }, [fetchTeams]);
 
   async function handleCreateTeam(e: React.FormEvent) {

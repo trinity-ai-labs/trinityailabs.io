@@ -13,7 +13,7 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { StorageBar, formatBytes } from "@/components/dashboard/storage-bar";
-import { Users, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 type DashboardUsage = {
   subscription: {
