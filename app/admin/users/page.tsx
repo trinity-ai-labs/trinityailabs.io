@@ -12,6 +12,16 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { MoreHorizontal, Eye, Gift, XCircle } from "lucide-react";
 
 interface UserRow {
@@ -80,6 +90,7 @@ function UsersTable({
 }) {
   const router = useRouter();
   const users = use(usersPromise);
+  const [cancellingSubId, setCancellingSubId] = useState<string | null>(null);
 
   async function compUser(userId: string) {
     await fetch(`/api/admin/users/${userId}/comp`, { method: "POST" });
@@ -90,6 +101,7 @@ function UsersTable({
     await fetch(`/api/admin/subscriptions/${subId}/cancel`, {
       method: "POST",
     });
+    setCancellingSubId(null);
     onRefresh();
   }
 
@@ -149,7 +161,9 @@ function UsersTable({
                   <DropdownMenuItem
                     variant="destructive"
                     onClick={() =>
-                      cancelSub(user.lemonsqueezy_subscription_id!)
+                      setCancellingSubId(
+                        user.lemonsqueezy_subscription_id!,
+                      )
                     }
                   >
                     <XCircle className="w-4 h-4 mr-2" />
@@ -164,12 +178,39 @@ function UsersTable({
   ];
 
   return (
-    <DataTable
-      columns={columns}
-      data={users}
-      searchKey="email"
-      searchPlaceholder="Search by email..."
-    />
+    <>
+      <DataTable
+        columns={columns}
+        data={users}
+        searchKey="email"
+        searchPlaceholder="Search by email..."
+      />
+      <AlertDialog
+        open={!!cancellingSubId}
+        onOpenChange={(open) => !open && setCancellingSubId(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Cancel subscription?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will cancel the user&apos;s active subscription via Lemon
+              Squeezy. This action cannot be easily undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Keep Active</AlertDialogCancel>
+            <AlertDialogAction
+              variant="destructive"
+              onClick={() => {
+                if (cancellingSubId) cancelSub(cancellingSubId);
+              }}
+            >
+              Cancel Subscription
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   );
 }
 

@@ -11,6 +11,16 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { Users, Plus, Mail, Trash2, Crown, Copy, Check } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { StorageBar, formatBytes } from "@/components/dashboard/storage-bar";
 
 type Team = {
@@ -61,6 +71,8 @@ export default function TeamsPage() {
   const [error, setError] = useState("");
   const [copied, setCopied] = useState(false);
   const [teamStorage, setTeamStorage] = useState<TeamStorage[]>([]);
+  const [removingMemberId, setRemovingMemberId] = useState<string | null>(null);
+  const [confirmDeleteTeam, setConfirmDeleteTeam] = useState(false);
 
   const fetchTeams = useCallback(async () => {
     const res = await fetch("/api/teams");
@@ -158,6 +170,7 @@ export default function TeamsPage() {
       { method: "DELETE" },
     );
     if (res.ok) {
+      setRemovingMemberId(null);
       await selectTeam(selectedTeam.team.id);
       await fetchTeams();
     }
@@ -165,13 +178,11 @@ export default function TeamsPage() {
 
   async function handleDeleteTeam() {
     if (!selectedTeam) return;
-    if (!confirm("Are you sure? This will delete the team and all its data."))
-      return;
-
     const res = await fetch(`/api/teams/${selectedTeam.team.id}`, {
       method: "DELETE",
     });
     if (res.ok) {
+      setConfirmDeleteTeam(false);
       setSelectedTeam(null);
       await fetchTeams();
     }
@@ -307,7 +318,7 @@ export default function TeamsPage() {
                     variant="ghost"
                     size="sm"
                     className="text-destructive hover:text-destructive"
-                    onClick={handleDeleteTeam}
+                    onClick={() => setConfirmDeleteTeam(true)}
                   >
                     <Trash2 className="w-4 h-4" />
                   </Button>
@@ -346,7 +357,9 @@ export default function TeamsPage() {
                               variant="ghost"
                               size="sm"
                               className="h-7 w-7 p-0 text-muted-foreground hover:text-destructive"
-                              onClick={() => handleRemoveMember(member.user_id)}
+                              onClick={() =>
+                                setRemovingMemberId(member.user_id)
+                              }
                             >
                               <Trash2 className="w-3.5 h-3.5" />
                             </Button>
@@ -424,6 +437,55 @@ export default function TeamsPage() {
           </Card>
         </>
       )}
+
+      {/* Remove member confirmation */}
+      <AlertDialog
+        open={!!removingMemberId}
+        onOpenChange={(open) => !open && setRemovingMemberId(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Remove team member?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This person will lose access to all team projects and data. They
+              can be re-invited later.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              variant="destructive"
+              onClick={() => {
+                if (removingMemberId) handleRemoveMember(removingMemberId);
+              }}
+            >
+              Remove
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Delete team confirmation */}
+      <AlertDialog
+        open={confirmDeleteTeam}
+        onOpenChange={setConfirmDeleteTeam}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete team?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will permanently delete the team and all its data. This
+              cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction variant="destructive" onClick={handleDeleteTeam}>
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

@@ -6,6 +6,16 @@ import { DataTable } from "@/components/ui/data-table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Trash2 } from "lucide-react";
 
 interface Invite {
@@ -48,9 +58,11 @@ function InvitesTable({
   onRefresh: () => void;
 }) {
   const invites = use(invitesPromise);
+  const [revokingId, setRevokingId] = useState<string | null>(null);
 
   async function revokeInvite(id: string) {
     await fetch(`/api/admin/invites/${id}`, { method: "DELETE" });
+    setRevokingId(null);
     onRefresh();
   }
 
@@ -99,7 +111,7 @@ function InvitesTable({
           <Button
             variant="ghost"
             size="icon-sm"
-            onClick={() => revokeInvite(invite.id)}
+            onClick={() => setRevokingId(invite.id)}
           >
             <Trash2 className="w-4 h-4 text-destructive" />
           </Button>
@@ -109,12 +121,39 @@ function InvitesTable({
   ];
 
   return (
-    <DataTable
-      columns={columns}
-      data={invites}
-      searchKey="email"
-      searchPlaceholder="Search by email..."
-    />
+    <>
+      <DataTable
+        columns={columns}
+        data={invites}
+        searchKey="email"
+        searchPlaceholder="Search by email..."
+      />
+      <AlertDialog
+        open={!!revokingId}
+        onOpenChange={(open) => !open && setRevokingId(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Revoke invite?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will permanently delete the pending invite. The recipient
+              will no longer be able to use it.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              variant="destructive"
+              onClick={() => {
+                if (revokingId) revokeInvite(revokingId);
+              }}
+            >
+              Revoke
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   );
 }
 

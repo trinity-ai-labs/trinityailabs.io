@@ -5,6 +5,16 @@ import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { ArrowLeft } from "lucide-react";
 
 interface UserDetail {
@@ -78,6 +88,13 @@ function UserDetailContent({
   const [user, setUser] = useState(initialData.user);
   const [subscription, setSubscription] = useState(initialData.subscription);
   const [acting, setActing] = useState(false);
+  const [pendingAction, setPendingAction] = useState<{
+    title: string;
+    description: string;
+    label: string;
+    url: string;
+    method: string;
+  } | null>(null);
 
   async function act(url: string, method = "POST") {
     setActing(true);
@@ -189,7 +206,14 @@ function UserDetailContent({
                   size="sm"
                   disabled={acting}
                   onClick={() =>
-                    act(`/api/admin/subscriptions/${subId}/cancel`)
+                    setPendingAction({
+                      title: "Cancel subscription?",
+                      description:
+                        "This will cancel the user's active subscription via Lemon Squeezy.",
+                      label: "Cancel Subscription",
+                      url: `/api/admin/subscriptions/${subId}/cancel`,
+                      method: "POST",
+                    })
                   }
                 >
                   Cancel
@@ -220,7 +244,16 @@ function UserDetailContent({
                 variant="destructive"
                 size="sm"
                 disabled={acting}
-                onClick={() => act(`/api/admin/users/${id}/comp`, "DELETE")}
+                onClick={() =>
+                  setPendingAction({
+                    title: "Revoke comp access?",
+                    description:
+                      "This will immediately remove the user's complimentary subscription.",
+                    label: "Revoke",
+                    url: `/api/admin/users/${id}/comp`,
+                    method: "DELETE",
+                  })
+                }
               >
                 Revoke Comp
               </Button>
@@ -228,6 +261,32 @@ function UserDetailContent({
           </div>
         </CardContent>
       </Card>
+
+      <AlertDialog
+        open={!!pendingAction}
+        onOpenChange={(open) => !open && setPendingAction(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{pendingAction?.title}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {pendingAction?.description}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              variant="destructive"
+              onClick={() => {
+                if (pendingAction) act(pendingAction.url, pendingAction.method);
+                setPendingAction(null);
+              }}
+            >
+              {pendingAction?.label}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
