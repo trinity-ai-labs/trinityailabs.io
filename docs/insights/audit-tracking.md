@@ -7,7 +7,6 @@ Trinity has a standalone **Audit** feature accessible from the sidebar. It lets 
 ### 1. Analysis Creates Audit Pages
 
 You can trigger an audit in two ways:
-
 - **From the sidebar** — click **Audit** and run a scan. You can optionally provide a focus area in the chat (e.g., "security" or "API validation").
 - **During import** — the "Import Existing Project" flow automatically scans your codebase.
 

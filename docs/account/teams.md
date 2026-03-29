@@ -20,21 +20,21 @@ Switching scopes changes which projects are shown. Execution continues in the ba
 
 ## Team Roles
 
-| Role       | Can do                                                                                                             |
-| ---------- | ------------------------------------------------------------------------------------------------------------------ |
-| **Owner**  | Everything — manage members, billing, secrets, delete projects, approve checkpoints, configure permissions         |
+| Role | Can do |
+|------|--------|
+| **Owner** | Everything — manage members, billing, secrets, delete projects, approve checkpoints, configure permissions |
 | **Member** | Edit PRDs, run stories, respond to story gates, create projects (plus any actions granted by permission overrides) |
 
 ### Configurable Permissions
 
 Some actions can be opened up to all team members via permission overrides. Team owners configure these at the team level, and can further override per-project:
 
-| Permission              | Default    | Description                                           |
-| ----------------------- | ---------- | ----------------------------------------------------- |
-| **Approve Checkpoints** | Owner only | Who can approve release and quality checkpoint gates  |
-| **Manage Secrets**      | Owner only | Who can create, edit, delete, or reveal secret values |
-| **Delete Projects**     | Owner only | Who can archive (soft-delete) projects                |
-| **Reclaim Jobs**        | Owner only | Who can reclaim stuck execution jobs                  |
+| Permission | Default | Description |
+|-----------|---------|-------------|
+| **Approve Checkpoints** | Owner only | Who can approve release and quality checkpoint gates |
+| **Manage Secrets** | Owner only | Who can create, edit, delete, or reveal secret values |
+| **Delete Projects** | Owner only | Who can archive (soft-delete) projects |
+| **Reclaim Jobs** | Owner only | Who can reclaim stuck execution jobs |
 
 Set these in **Team Settings** → **Permissions**, or override per-project in **Project Settings** → **Permission Overrides**.
 
@@ -67,11 +67,11 @@ Team owners can configure team-wide defaults that sit between global (personal) 
 
 ### What You Can Configure
 
-| Category        | Settings                                                                                                                                                                            |
-| --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Automation**  | Auto PR, Auto Merge, Squash Merge, Delete After Merge, Skip Asset Check, Skip Business Details Check, Auto Release to Base, Delete Release Branch, Auto-Approve Quality Checkpoints |
-| **AI Models**   | Default models for each tier (Reasoning, Standard, Fast, Micro)                                                                                                                     |
-| **Permissions** | Approve Checkpoints, Manage Secrets, Delete Projects, Reclaim Jobs (owner-only or open to all)                                                                                      |
+| Category | Settings |
+|----------|----------|
+| **Automation** | Auto PR, Auto Merge, Squash Merge, Delete After Merge, Skip Asset Check, Skip Business Details Check, Auto Release to Base, Delete Release Branch, Auto-Approve Quality Checkpoints |
+| **AI Models** | Default models for each tier (Reasoning, Standard, Fast, Micro) |
+| **Permissions** | Approve Checkpoints, Manage Secrets, Delete Projects, Reclaim Jobs (owner-only or open to all) |
 
 ### Settings Hierarchy
 
@@ -118,7 +118,7 @@ When viewing stories or other entities, you'll see avatar indicators showing whi
 
 ### Entity Timeline
 
-Each entity (story, epic, phase) has a timeline tab showing its full history — status changes, field updates, and comments in chronological order.
+Each entity (story, epic, phase, release) has a timeline tab showing its full history — who changed what, when, and why. Changes are grouped by action with expandable field-level diffs (old value → new value). Provenance badges link back to originating audit or alignment reports. System actions (from the execution pipeline) show as "Trinity".
 
 ## Moving Projects Between Scopes
 

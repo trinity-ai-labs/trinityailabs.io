@@ -15,7 +15,6 @@ When an agent detects a situation that needs human judgment, it raises a gate. T
 **What you see:** The agent's analysis of the problem, the proposed alternative technology, and reasoning for the substitution.
 
 **Actions:**
-
 - **Approve** — accept the proposed substitution, and the implementer uses the alternative
 - **Reject** — keep the original technology, and the implementer proceeds as planned
 
@@ -28,7 +27,6 @@ When an agent detects a situation that needs human judgment, it raises a gate. T
 **What you see:** Which assets the story expects and what's currently uploaded.
 
 **Actions:**
-
 - **Upload assets** — add the missing files, then resume
 - **Skip** — proceed without the assets (agents will use placeholders)
 
@@ -41,7 +39,6 @@ When an agent detects a situation that needs human judgment, it raises a gate. T
 **What you see:** Which business details are missing and why the story needs them.
 
 **Actions:**
-
 - **Fill in details** — update business details in project settings, then resume
 - **Skip** — proceed without business details
 
@@ -54,7 +51,6 @@ When an agent detects a situation that needs human judgment, it raises a gate. T
 **What you see:** Which service needs a key and why.
 
 **Actions:**
-
 - **Add the secret** — configure the key in project settings, then resume
 - **Skip** — proceed without (the story will likely fail at the service call)
 
@@ -65,7 +61,6 @@ When an agent detects a situation that needs human judgment, it raises a gate. T
 **What you see:** Which dependency is blocking and its current status.
 
 **Actions:**
-
 - **Resolve the blocker** — fix or retry the failed dependency
 - **Skip** — mark the story as skipped
 
@@ -76,7 +71,6 @@ When an agent detects a situation that needs human judgment, it raises a gate. T
 **What you see:** What external action is needed.
 
 **Actions:**
-
 - **Complete the action** — do what's needed externally, then resume
 - **Skip** — proceed without
 
@@ -85,14 +79,12 @@ When an agent detects a situation that needs human judgment, it raises a gate. T
 **When:** A checkpoint story completes its audit and is ready for release.
 
 **What you see:**
-
 - Release notes
 - Audit findings and fixes
 - Per-repo version tags that will be created
 - Preflight check results
 
 **Actions:**
-
 - **Approve** — creates version tags, merges to the integration branch, marks the checkpoint as passed
 - **Skip** — marks the checkpoint as passed without tagging or releasing
 
@@ -103,7 +95,6 @@ When an agent detects a situation that needs human judgment, it raises a gate. T
 **What you see:** Audit findings, fixes applied, and remaining issues.
 
 **Actions:**
-
 - **Approve** — marks the checkpoint as passed
 - **Skip** — same as approve but indicates you're acknowledging unresolved issues
 
