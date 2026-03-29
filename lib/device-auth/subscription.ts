@@ -7,7 +7,7 @@ interface SubscriptionStatus {
 }
 
 export async function getSubscriptionStatus(
-  userId: string
+  userId: string,
 ): Promise<SubscriptionStatus | null> {
   await ensureSubscriptionsTable();
   const result = await db.execute({

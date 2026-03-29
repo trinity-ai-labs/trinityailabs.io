@@ -5,7 +5,7 @@ import { resumeSubscription } from "@/lib/lemonsqueezy";
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const session = await getAdminSession(req.headers);
   if (!session) {

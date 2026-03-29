@@ -46,7 +46,7 @@ function SignUpForm() {
     handleTimerRef.current = setTimeout(async () => {
       try {
         const res = await fetch(
-          `/api/handle?handle=${encodeURIComponent(value)}`
+          `/api/handle?handle=${encodeURIComponent(value)}`,
         );
         const data = await res.json();
         if (!res.ok) {
@@ -175,7 +175,9 @@ function SignUpForm() {
               type="text"
               value={handle}
               onChange={(e) =>
-                setHandle(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""))
+                setHandle(
+                  e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""),
+                )
               }
               placeholder="your-handle"
               className="pl-7"
@@ -185,11 +187,7 @@ function SignUpForm() {
             />
             {handle.length >= 3 && (
               <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm">
-                {checkingHandle
-                  ? "..."
-                  : handleAvailable
-                    ? "\u2713"
-                    : "\u2717"}
+                {checkingHandle ? "..." : handleAvailable ? "\u2713" : "\u2717"}
               </span>
             )}
           </div>

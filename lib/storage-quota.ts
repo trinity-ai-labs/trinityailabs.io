@@ -116,7 +116,11 @@ const GRACE_PERIOD_DAYS = 7;
 export async function getOverQuotaStatus(
   scope: string,
   scopeId: string,
-): Promise<{ blocked: boolean; overQuotaSince: string | null; daysRemaining: number | null }> {
+): Promise<{
+  blocked: boolean;
+  overQuotaSince: string | null;
+  daysRemaining: number | null;
+}> {
   await ensureTable();
   const result = await db.execute({
     sql: "SELECT over_quota_since FROM storage_usage WHERE scope = ? AND scope_id = ?",

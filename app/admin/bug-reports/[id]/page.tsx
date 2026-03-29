@@ -7,10 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, Loader2, ExternalLink } from "lucide-react";
 import Image from "next/image";
-import {
-  BUG_REPORT_STATUSES,
-  STATUS_VARIANTS,
-} from "@/lib/bug-reports";
+import { BUG_REPORT_STATUSES, STATUS_VARIANTS } from "@/lib/bug-reports";
 
 interface BugReport {
   id: string;
@@ -36,7 +33,6 @@ interface Attachment {
   file_size: number | null;
   url: string;
 }
-
 
 export default function BugReportDetailPage({
   params,

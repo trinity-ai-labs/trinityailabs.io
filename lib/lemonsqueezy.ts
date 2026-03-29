@@ -17,8 +17,7 @@ export async function createCheckoutUrl(
     customData?: Record<string, string>;
   },
 ): Promise<string> {
-  const variantId =
-    options?.variantId ?? process.env.LEMONSQUEEZY_VARIANT_ID;
+  const variantId = options?.variantId ?? process.env.LEMONSQUEEZY_VARIANT_ID;
 
   const res = await fetch(`${API_URL}/checkouts`, {
     method: "POST",
@@ -69,7 +68,7 @@ export async function createCheckoutUrl(
 }
 
 export async function createCustomerPortalUrl(
-  customerId: string
+  customerId: string,
 ): Promise<string> {
   const res = await fetch(`${API_URL}/customers/${customerId}`, {
     headers: headers(),
@@ -104,7 +103,7 @@ export async function cancelSubscription(subscriptionId: string) {
 
 export async function pauseSubscription(
   subscriptionId: string,
-  mode: "void" | "free" = "void"
+  mode: "void" | "free" = "void",
 ) {
   const res = await fetch(`${API_URL}/subscriptions/${subscriptionId}`, {
     method: "PATCH",
@@ -126,7 +125,7 @@ export async function pauseSubscription(
 
 export async function updateSubscriptionQuantity(
   subscriptionId: string,
-  quantity: number
+  quantity: number,
 ) {
   const res = await fetch(`${API_URL}/subscriptions/${subscriptionId}`, {
     method: "PATCH",

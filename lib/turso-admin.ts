@@ -28,7 +28,7 @@ interface TursoToken {
 }
 
 export async function createDatabase(
-  name: string
+  name: string,
 ): Promise<{ dbName: string; dbUrl: string }> {
   const res = await fetch(`${API_BASE}/organizations/${ORG}/databases`, {
     method: "POST",
@@ -44,7 +44,7 @@ export async function createDatabase(
     if (res.status === 409) {
       const existing = await fetch(
         `${API_BASE}/organizations/${ORG}/databases/${name}`,
-        { headers: headers() }
+        { headers: headers() },
       );
       if (existing.ok) {
         const data = (await existing.json()) as { database: TursoDatabase };
@@ -65,15 +65,13 @@ export async function createDatabase(
   };
 }
 
-export async function createDatabaseToken(
-  dbName: string
-): Promise<string> {
+export async function createDatabaseToken(dbName: string): Promise<string> {
   const res = await fetch(
     `${API_BASE}/organizations/${ORG}/databases/${dbName}/auth/tokens?expiration=7d`,
     {
       method: "POST",
       headers: headers(),
-    }
+    },
   );
 
   if (!res.ok) {
@@ -91,7 +89,7 @@ export async function revokeDatabaseTokens(dbName: string): Promise<void> {
     {
       method: "POST",
       headers: headers(),
-    }
+    },
   );
 
   if (!res.ok) {
@@ -106,7 +104,7 @@ export async function deleteDatabase(dbName: string): Promise<void> {
     {
       method: "DELETE",
       headers: headers(),
-    }
+    },
   );
 
   if (!res.ok) {

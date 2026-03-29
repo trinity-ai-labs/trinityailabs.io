@@ -7,10 +7,7 @@ import { DataTable } from "@/components/ui/data-table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Eye } from "lucide-react";
-import {
-  BUG_REPORT_STATUSES,
-  STATUS_VARIANTS,
-} from "@/lib/bug-reports";
+import { BUG_REPORT_STATUSES, STATUS_VARIANTS } from "@/lib/bug-reports";
 
 interface BugReportRow {
   id: string;

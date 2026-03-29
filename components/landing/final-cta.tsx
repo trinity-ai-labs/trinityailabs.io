@@ -2,7 +2,10 @@ import { PlatformDownload } from "./platform-download";
 
 export function FinalCTA() {
   return (
-    <section id="downloads" className="py-24 border-t border-border relative overflow-hidden">
+    <section
+      id="downloads"
+      className="py-24 border-t border-border relative overflow-hidden"
+    >
       {/* Gradient background */}
       <div className="absolute inset-0 bg-gradient-to-b from-emerald-500/5 via-cyan-500/5 to-transparent" />
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-gradient-to-b from-emerald-500/10 to-transparent rounded-full blur-3xl" />

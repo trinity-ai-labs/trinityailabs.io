@@ -39,8 +39,8 @@ export function Themes() {
             Four themes. Your style.
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Switch between Light, Dark, and two Cyber themes designed for developers
-            who want their tools to look as good as they work.
+            Switch between Light, Dark, and two Cyber themes designed for
+            developers who want their tools to look as good as they work.
           </p>
         </div>
 
@@ -61,7 +61,9 @@ export function Themes() {
               </div>
               <div className="p-4">
                 <h3 className="font-semibold">{theme.name}</h3>
-                <p className="text-sm text-muted-foreground">{theme.description}</p>
+                <p className="text-sm text-muted-foreground">
+                  {theme.description}
+                </p>
               </div>
             </div>
           ))}

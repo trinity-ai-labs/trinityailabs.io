@@ -57,7 +57,10 @@ export async function POST(req: NextRequest) {
     args: [handle, session.user.id],
   });
   if (existing.rows.length > 0)
-    return NextResponse.json({ error: "Handle already taken" }, { status: 409 });
+    return NextResponse.json(
+      { error: "Handle already taken" },
+      { status: 409 },
+    );
 
   await db.execute({
     sql: "UPDATE user SET handle = ? WHERE id = ?",

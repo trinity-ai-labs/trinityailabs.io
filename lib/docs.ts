@@ -81,9 +81,7 @@ function preProcessMarkdown(md: string): string {
     }
 
     // Detect standalone tip lines with "Tip:" prefix (often in existing docs)
-    const tipLineMatch = line.match(
-      /^\*\*Tip:\*\*\s+(.+)/,
-    );
+    const tipLineMatch = line.match(/^\*\*Tip:\*\*\s+(.+)/);
     if (tipLineMatch && !calloutMatch) {
       output.push(
         `<div class="docs-callout docs-callout-tip">`,
@@ -97,7 +95,9 @@ function preProcessMarkdown(md: string): string {
     }
 
     // Detect definition-style blocks: **When:** / **What you see:** / **Actions:**
-    const defMatch = line.match(/^\*\*(When|What you see|Actions|Auto-approve):\*\*\s*(.*)/);
+    const defMatch = line.match(
+      /^\*\*(When|What you see|Actions|Auto-approve):\*\*\s*(.*)/,
+    );
     if (defMatch) {
       const label = defMatch[1];
       const content = defMatch[2];

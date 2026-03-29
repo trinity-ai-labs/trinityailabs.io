@@ -27,7 +27,9 @@ export function Testimonials() {
     <section className="py-24 border-t border-border">
       <div className="max-w-6xl mx-auto px-6">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">What developers are saying</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            What developers are saying
+          </h2>
           <p className="text-muted-foreground">
             Placeholder — real testimonials coming after early access
           </p>

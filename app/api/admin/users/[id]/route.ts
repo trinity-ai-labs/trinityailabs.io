@@ -8,7 +8,7 @@ import {
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const session = await getAdminSession(req.headers);
   if (!session) {

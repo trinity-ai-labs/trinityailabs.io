@@ -38,7 +38,7 @@ export default function SetupHandlePage() {
     handleTimerRef.current = setTimeout(async () => {
       try {
         const res = await fetch(
-          `/api/handle?handle=${encodeURIComponent(value)}`
+          `/api/handle?handle=${encodeURIComponent(value)}`,
         );
         const data = await res.json();
         if (!res.ok) {
@@ -103,7 +103,7 @@ export default function SetupHandlePage() {
               value={handle}
               onChange={(e) =>
                 setHandle(
-                  e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, "")
+                  e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""),
                 )
               }
               placeholder="your-handle"
@@ -115,11 +115,7 @@ export default function SetupHandlePage() {
             />
             {handle.length >= 3 && (
               <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm">
-                {checkingHandle
-                  ? "..."
-                  : handleAvailable
-                    ? "\u2713"
-                    : "\u2717"}
+                {checkingHandle ? "..." : handleAvailable ? "\u2713" : "\u2717"}
               </span>
             )}
           </div>

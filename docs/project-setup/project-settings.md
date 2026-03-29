@@ -31,6 +31,7 @@ Each repo can have its own branching rules:
 - **PR target** — where pull requests are opened against
 
 Template variables available:
+
 - `{prefix}` — configurable prefix
 - `{prd}` — PRD number
 - `{phase}` — phase slug
@@ -99,10 +100,10 @@ View and manage project target platforms. Targets are set during onboarding but 
 
 Configure where project assets (images, documents, uploaded files) are stored:
 
-| Option | Description |
-|--------|-------------|
-| **Local Only** | Files stored on disk. Not available for team projects since assets must be accessible to all members. |
-| **Trinity Cloud** | Managed storage via Trinity's R2 infrastructure. No configuration needed. Default for team projects. |
+| Option                | Description                                                                                                  |
+| --------------------- | ------------------------------------------------------------------------------------------------------------ |
+| **Local Only**        | Files stored on disk. Not available for team projects since assets must be accessible to all members.        |
+| **Trinity Cloud**     | Managed storage via Trinity's R2 infrastructure. No configuration needed. Default for team projects.         |
 | **BYO S3-Compatible** | Bring your own S3-compatible storage — AWS S3, Cloudflare R2, Backblaze B2, DigitalOcean Spaces, MinIO, etc. |
 
 ### Storage Limits (Trinity Cloud)
@@ -111,8 +112,8 @@ Every Pro seat includes **5 GB** of managed cloud storage. For teams, storage is
 
 If you need more space, add-on storage packs are available:
 
-| Pack | Price |
-|------|-------|
+| Pack      | Price    |
+| --------- | -------- |
 | **10 GB** | $5/month |
 
 Packs stack — buy as many as you need. BYO S3 users are not subject to any Trinity storage limits since files are stored in your own bucket.
@@ -120,6 +121,7 @@ Packs stack — buy as many as you need. BYO S3 users are not subject to any Tri
 ### BYO S3 Configuration
 
 For BYO S3, configure:
+
 - **Endpoint URL** — the S3-compatible API endpoint
 - **Region** — bucket region (use `auto` for Cloudflare R2)
 - **Bucket name** — the storage bucket

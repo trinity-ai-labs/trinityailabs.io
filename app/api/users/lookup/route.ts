@@ -12,7 +12,10 @@ export async function GET(req: NextRequest) {
 
   const q = req.nextUrl.searchParams.get("q")?.trim();
   if (!q) {
-    return NextResponse.json({ error: "Query parameter 'q' is required" }, { status: 400 });
+    return NextResponse.json(
+      { error: "Query parameter 'q' is required" },
+      { status: 400 },
+    );
   }
 
   await ensureUserColumns();
@@ -27,8 +30,12 @@ export async function GET(req: NextRequest) {
 
   if (!result.rows.length) {
     return NextResponse.json(
-      { error: isEmail ? "No user found with that email" : "No user found with that handle" },
-      { status: 404 }
+      {
+        error: isEmail
+          ? "No user found with that email"
+          : "No user found with that handle",
+      },
+      { status: 404 },
     );
   }
 

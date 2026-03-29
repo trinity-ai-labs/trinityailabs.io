@@ -17,12 +17,12 @@ Releases group one or more PRDs into a shippable unit. They provide the executio
 
 Releases progress through four statuses:
 
-| Status | Meaning |
-|--------|---------|
-| **Created** | Work in progress — stories are being built |
-| **Ready** | All stories complete, ready for release process |
+| Status        | Meaning                                            |
+| ------------- | -------------------------------------------------- |
+| **Created**   | Work in progress — stories are being built         |
+| **Ready**     | All stories complete, ready for release process    |
 | **Releasing** | Release checkpoint running (audit, notes, tagging) |
-| **Released** | Done — repos tagged, release notes published |
+| **Released**  | Done — repos tagged, release notes published       |
 
 Transition between statuses using the buttons in the release detail panel.
 

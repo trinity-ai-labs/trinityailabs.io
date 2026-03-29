@@ -87,12 +87,12 @@ Settings are stored as `provider:model` strings (e.g., `anthropic:claude-opus-4-
 
 ### Defaults
 
-| Tier | Default Model |
-|------|--------------|
-| Reasoning | Claude Opus 4.6 |
-| Standard | Claude Sonnet 4.6 |
-| Fast | Claude Sonnet 4.6 |
-| Micro | Claude Haiku 4.5 |
+| Tier      | Default Model     |
+| --------- | ----------------- |
+| Reasoning | Claude Opus 4.6   |
+| Standard  | Claude Sonnet 4.6 |
+| Fast      | Claude Sonnet 4.6 |
+| Micro     | Claude Haiku 4.5  |
 
 ## Dynamic Tier Resolution
 
@@ -116,12 +116,12 @@ This provides resilience when using alternative providers — you get automatic 
 
 Each model tier has associated timeout limits:
 
-| Tier | Timeout |
-|------|---------|
-| Micro | 5 minutes |
-| Fast (Short) | 15 minutes |
+| Tier               | Timeout    |
+| ------------------ | ---------- |
+| Micro              | 5 minutes  |
+| Fast (Short)       | 15 minutes |
 | Standard (Default) | 30 minutes |
-| Reasoning (Long) | 1 hour |
+| Reasoning (Long)   | 1 hour     |
 
 Operations that exceed their timeout are cancelled and marked as failed.
 

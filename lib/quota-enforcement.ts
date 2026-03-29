@@ -69,7 +69,8 @@ export async function enforceAllQuotas(): Promise<{
         sql: "SELECT COUNT(*) as cnt FROM team_members WHERE team_id = ?",
         args: [scopeId],
       });
-      quotaBytes = Number(memberResult.rows[0].cnt || 1) * 5 * 1024 * 1024 * 1024;
+      quotaBytes =
+        Number(memberResult.rows[0].cnt || 1) * 5 * 1024 * 1024 * 1024;
     }
 
     if (usedBytes <= quotaBytes) {

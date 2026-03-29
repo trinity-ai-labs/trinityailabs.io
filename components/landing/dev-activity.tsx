@@ -58,7 +58,8 @@ export function DevActivity(props: DevActivityProps) {
           </h2>
           <p className="text-muted-foreground text-lg max-w-xl mx-auto">
             Trinity is in beta — but we&apos;re building at full speed. These
-            numbers are pulled straight from our GitHub repo, updated every hour.
+            numbers are pulled straight from our GitHub repo, updated every
+            hour.
           </p>
         </div>
 

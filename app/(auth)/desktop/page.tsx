@@ -6,7 +6,13 @@ import { authClient } from "@/lib/auth-client";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-type Status = "loading" | "need-login" | "enter-code" | "confirming" | "success" | "error";
+type Status =
+  | "loading"
+  | "need-login"
+  | "enter-code"
+  | "confirming"
+  | "success"
+  | "error";
 
 function DesktopAuthContent() {
   const searchParams = useSearchParams();
@@ -101,7 +107,11 @@ function DesktopAuthContent() {
             stroke="currentColor"
             strokeWidth={2}
           >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M5 13l4 4L19 7"
+            />
           </svg>
         </div>
         <h1 className="text-2xl font-bold mb-2">Authorized!</h1>
@@ -137,7 +147,9 @@ function DesktopAuthContent() {
       <h1 className="text-2xl font-bold mb-2">Authorize Trinity Desktop</h1>
       <p className="text-sm text-muted-foreground mb-2">
         Signed in as{" "}
-        <span className="font-medium text-foreground">{session?.user?.email}</span>
+        <span className="font-medium text-foreground">
+          {session?.user?.email}
+        </span>
       </p>
       <p className="text-sm text-muted-foreground mb-6">
         Enter the code shown in the Trinity desktop app.

@@ -120,7 +120,7 @@ function InvitesTable({
 
 export default function AdminInvitesPage() {
   const [invitesPromise, setInvitesPromise] = useState(() =>
-    fetchInvitesData()
+    fetchInvitesData(),
   );
   const [email, setEmail] = useState("");
   const [freeAccess, setFreeAccess] = useState(false);

@@ -213,13 +213,13 @@ Trinity detects Docker usage during the onboarding wizard and shows a reminder i
 
 ## When Checks Happen
 
-| Action | What's checked |
-|--------|---------------|
-| Create new project | Git (installed + configured), GitHub CLI (authenticated) |
+| Action                  | What's checked                                           |
+| ----------------------- | -------------------------------------------------------- |
+| Create new project      | Git (installed + configured), GitHub CLI (authenticated) |
 | Import existing project | Git (installed + configured), GitHub CLI (authenticated) |
-| Start execution run | Claude Code CLI (installed) |
-| Delete project | GitHub CLI `delete_repo` scope |
-| Docker projects | Docker Desktop (running) |
+| Start execution run     | Claude Code CLI (installed)                              |
+| Delete project          | GitHub CLI `delete_repo` scope                           |
+| Docker projects         | Docker Desktop (running)                                 |
 
 If a check fails, you'll see an inline alert with the exact command to run. After running the command, click **Check Again** to verify.
 

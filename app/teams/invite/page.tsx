@@ -58,7 +58,7 @@ function InviteContent() {
     try {
       // First, find which team this invite belongs to
       const lookupRes = await fetch(
-        `/api/teams/invite/lookup?token=${encodeURIComponent(token)}`
+        `/api/teams/invite/lookup?token=${encodeURIComponent(token)}`,
       );
       if (!lookupRes.ok) {
         const data = await lookupRes.json();
@@ -147,7 +147,10 @@ function InviteContent() {
             </Button>
           )}
           {(status === "accepted" || status === "error") && (
-            <Button variant="outline" onClick={() => router.push("/dashboard/teams")}>
+            <Button
+              variant="outline"
+              onClick={() => router.push("/dashboard/teams")}
+            >
               Go to Dashboard
             </Button>
           )}

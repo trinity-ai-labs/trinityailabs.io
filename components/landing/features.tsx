@@ -151,8 +151,9 @@ export function Features() {
             development environment
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Planning. Execution. Review. Knowledge. Releases. Team collaboration.
-            Comments. Activity feeds. Metrics. Reports. One environment.
+            Planning. Execution. Review. Knowledge. Releases. Team
+            collaboration. Comments. Activity feeds. Metrics. Reports. One
+            environment.
           </p>
         </div>
 
@@ -166,7 +167,9 @@ export function Features() {
               } items-center gap-8 md:gap-12`}
             >
               <div className="flex-1 space-y-4">
-                <h3 className="text-xl md:text-2xl font-semibold">{feature.title}</h3>
+                <h3 className="text-xl md:text-2xl font-semibold">
+                  {feature.title}
+                </h3>
                 <p className="text-muted-foreground leading-relaxed">
                   {feature.description}
                 </p>

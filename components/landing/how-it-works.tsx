@@ -33,7 +33,10 @@ const steps = [
 
 export function HowItWorks() {
   return (
-    <section id="how-it-works" className="py-24 border-t border-border bg-muted/20">
+    <section
+      id="how-it-works"
+      className="py-24 border-t border-border bg-muted/20"
+    >
       <div className="max-w-6xl mx-auto px-6">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">How It Works</h2>
@@ -53,7 +56,9 @@ export function HowItWorks() {
                   <step.icon className="w-5 h-5" />
                 </div>
                 <div>
-                  <span className="text-xs font-mono text-emerald-400">Step {i + 1}</span>
+                  <span className="text-xs font-mono text-emerald-400">
+                    Step {i + 1}
+                  </span>
                   <h3 className="text-lg font-semibold">{step.title}</h3>
                 </div>
               </div>
@@ -61,7 +66,9 @@ export function HowItWorks() {
                 {step.description}
               </p>
               <div className="rounded-lg border border-border bg-background/50 p-4 font-mono text-xs">
-                <pre className="text-muted-foreground whitespace-pre-wrap">{step.code}</pre>
+                <pre className="text-muted-foreground whitespace-pre-wrap">
+                  {step.code}
+                </pre>
               </div>
             </div>
           ))}

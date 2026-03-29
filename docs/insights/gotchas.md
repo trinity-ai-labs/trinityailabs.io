@@ -82,11 +82,11 @@ Each gotcha entry typically includes:
 
 ## Gotchas vs. Knowledge Base
 
-| Gotchas | Knowledge Base |
-|---------|---------------|
-| Technology-specific pitfalls | Project-specific documentation |
-| Shared across projects | Scoped to one project |
-| Accumulated from execution | Built during onboarding + execution |
+| Gotchas                              | Knowledge Base                        |
+| ------------------------------------ | ------------------------------------- |
+| Technology-specific pitfalls         | Project-specific documentation        |
+| Shared across projects               | Scoped to one project                 |
+| Accumulated from execution           | Built during onboarding + execution   |
 | Read-mostly (agents learn from them) | Read-write (agents update frequently) |
 
 Both are stored in the same underlying database and accessed through the same vault system. The distinction is in the `book_type` field: `gotchas` vs. `knowledge`.
@@ -105,11 +105,14 @@ Format entries clearly — agents read them programmatically, so structure matte
 # Short descriptive title
 
 ## Problem
+
 What goes wrong and when.
 
 ## Example
+
 Code showing the issue.
 
 ## Fix
+
 How to avoid or resolve it.
 ```

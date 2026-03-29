@@ -11,7 +11,7 @@ export async function POST() {
   } catch {
     return NextResponse.json(
       { error: "Failed to create device code" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

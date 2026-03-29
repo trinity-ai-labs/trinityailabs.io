@@ -6,7 +6,10 @@ function generateCode(): string {
   return crypto.randomBytes(4).toString("hex").toUpperCase();
 }
 
-export async function createDeviceCode(): Promise<{ code: string; expiresAt: string }> {
+export async function createDeviceCode(): Promise<{
+  code: string;
+  expiresAt: string;
+}> {
   await ensureDeviceCodesTable();
   const code = generateCode();
   const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString();
@@ -19,7 +22,10 @@ export async function createDeviceCode(): Promise<{ code: string; expiresAt: str
   return { code, expiresAt };
 }
 
-export async function approveDeviceCode(code: string, userId: string): Promise<boolean> {
+export async function approveDeviceCode(
+  code: string,
+  userId: string,
+): Promise<boolean> {
   await ensureDeviceCodesTable();
   const result = await db.execute({
     sql: `UPDATE device_codes SET status = 'approved', user_id = ?
@@ -42,7 +48,7 @@ export async function consumeDeviceCode(code: string): Promise<string | null> {
 }
 
 export async function getDeviceCodeStatus(
-  code: string
+  code: string,
 ): Promise<"pending" | "approved" | "used" | "expired" | "not_found"> {
   await ensureDeviceCodesTable();
   const result = await db.execute({
@@ -58,6 +64,6 @@ export async function getDeviceCodeStatus(
 export async function cleanupExpiredCodes(): Promise<void> {
   await ensureDeviceCodesTable();
   await db.execute(
-    "DELETE FROM device_codes WHERE created_at < datetime('now', '-1 hour')"
+    "DELETE FROM device_codes WHERE created_at < datetime('now', '-1 hour')",
   );
 }

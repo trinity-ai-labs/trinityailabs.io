@@ -2,12 +2,7 @@
 
 import { useState, use, Suspense } from "react";
 import { useRouter } from "next/navigation";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
@@ -169,7 +164,7 @@ function UserDetailContent({
                 <Row
                   label="Current Period End"
                   value={new Date(
-                    subscription.current_period_end
+                    subscription.current_period_end,
                   ).toLocaleDateString()}
                 />
               )}
@@ -185,9 +180,7 @@ function UserDetailContent({
                   variant="outline"
                   size="sm"
                   disabled={acting}
-                  onClick={() =>
-                    act(`/api/admin/subscriptions/${subId}/pause`)
-                  }
+                  onClick={() => act(`/api/admin/subscriptions/${subId}/pause`)}
                 >
                   Pause
                 </Button>
@@ -207,9 +200,7 @@ function UserDetailContent({
               <Button
                 size="sm"
                 disabled={acting}
-                onClick={() =>
-                  act(`/api/admin/subscriptions/${subId}/resume`)
-                }
+                onClick={() => act(`/api/admin/subscriptions/${subId}/resume`)}
               >
                 Resume
               </Button>
@@ -241,13 +232,7 @@ function UserDetailContent({
   );
 }
 
-function Row({
-  label,
-  value,
-}: {
-  label: string;
-  value: React.ReactNode;
-}) {
+function Row({ label, value }: { label: string; value: React.ReactNode }) {
   return (
     <div className="flex items-center justify-between">
       <span className="text-sm text-muted-foreground">{label}</span>

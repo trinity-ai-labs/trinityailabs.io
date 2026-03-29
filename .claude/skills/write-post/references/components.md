@@ -14,11 +14,13 @@ Highlighted callout block for tips, notes, important info, or warnings.
 
 ```mdx
 <Callout type="tip">
-  You can run `npm run check` before committing to catch formatting and type errors early.
+  You can run `npm run check` before committing to catch formatting and type
+  errors early.
 </Callout>
 
 <Callout type="warning">
-  Never force-push to the main branch while agents are executing — it will invalidate their worktrees.
+  Never force-push to the main branch while agents are executing — it will
+  invalidate their worktrees.
 </Callout>
 ```
 
@@ -34,11 +36,13 @@ Styled pull quote with attribution. Emerald left border accent.
 
 ```mdx
 <Quote author="Sarah Chen" role="Staff Engineer at Acme">
-  We went from shipping bi-weekly to shipping daily. The audit step alone saved us 10 hours a week in code review.
+  We went from shipping bi-weekly to shipping daily. The audit step alone saved
+  us 10 hours a week in code review.
 </Quote>
 
 <Quote>
-  The best IDE isn't the one that writes code fastest — it's the one that ships features most reliably.
+  The best IDE isn't the one that writes code fastest — it's the one that ships
+  features most reliably.
 </Quote>
 ```
 
@@ -56,16 +60,19 @@ Numbered step-by-step sequence with emerald gradient indicators and connecting l
     ### Create a new project
 
     Open Trinity and click **New Project**. Select the repos you want to include.
+
   </Step>
   <Step>
     ### Write your PRD
 
     Describe what you want to build in plain language. Trinity's planning pipeline will structure it into stories.
+
   </Step>
   <Step>
     ### Start execution
 
     Review the generated stories, then hit **Execute**. Agents will work through each story in parallel.
+
   </Step>
 </StepList>
 ```
@@ -82,11 +89,13 @@ Highlighted feature box with an icon, title, and description. Emerald border acc
 
 ```mdx
 <FeatureHighlight icon="shield" title="Automatic Auditing">
-  Every story goes through an Auditor agent that checks code quality, test coverage, and adherence to your project's conventions before it can be merged.
+  Every story goes through an Auditor agent that checks code quality, test
+  coverage, and adherence to your project's conventions before it can be merged.
 </FeatureHighlight>
 
 <FeatureHighlight icon="zap" title="Parallel Execution">
-  Stories without dependencies run simultaneously in isolated worktrees. No waiting, no conflicts.
+  Stories without dependencies run simultaneously in isolated worktrees. No
+  waiting, no conflicts.
 </FeatureHighlight>
 ```
 
@@ -129,13 +138,13 @@ Responsive image grid with click-to-expand lightbox.
     {
       src: "/blog/covers/dashboard-overview.png",
       alt: "Trinity dashboard showing active stories",
-      caption: "The main dashboard with 3 stories in progress"
+      caption: "The main dashboard with 3 stories in progress",
     },
     {
       src: "/blog/covers/execution-pipeline.png",
       alt: "Execution pipeline visualization",
-      caption: "Stories flowing through the 4-phase pipeline"
-    }
+      caption: "Stories flowing through the 4-phase pipeline",
+    },
   ]}
 />
 ```
@@ -158,6 +167,7 @@ Responsive YouTube or Vimeo embed with lazy loading.
 ```
 
 Supports URL formats:
+
 - `https://www.youtube.com/watch?v=...`
 - `https://youtu.be/...`
 - `https://vimeo.com/...`
@@ -190,14 +200,14 @@ Fenced code blocks are automatically syntax-highlighted with Shiki (github-dark-
 ````mdx
 ```typescript
 const stories = await getAllStories(projectId);
-const ready = stories.filter(s => s.status === "ready");
+const ready = stories.filter((s) => s.status === "ready");
 await executeInParallel(ready);
 ```
 ````
 
 For code blocks with a filename header, wrap in the CodeBlock component:
 
-```mdx
+````mdx
 <CodeBlock filename="src/lib/pipeline.ts">
 ```typescript
 export async function runPipeline(story: Story) {
@@ -206,7 +216,8 @@ export async function runPipeline(story: Story) {
   await audit(story);
   await document(story);
 }
-```
+````
+
 </CodeBlock>
 ```
 
@@ -217,41 +228,48 @@ export async function runPipeline(story: Story) {
 These all work inside MDX and are styled by the `docs-prose` class:
 
 ### Images
+
 ```mdx
 ![Alt text describing the image](/blog/covers/my-image.png)
 ```
+
 Images are automatically wrapped with `next/image` for optimization.
 
 ### Links
+
 ```mdx
 [Link text](/docs/getting-started/welcome)
 [External link](https://github.com/example)
 ```
+
 External links automatically open in a new tab.
 
 ### Tables
+
 ```mdx
-| Feature | Status |
-|---------|--------|
+| Feature            | Status  |
+| ------------------ | ------- |
 | Worktree isolation | Shipped |
-| Multi-repo support | Beta |
+| Multi-repo support | Beta    |
 ```
 
 ### Blockquotes
+
 ```mdx
 > This is a standard blockquote for shorter, inline quotes.
 ```
+
 For attributed quotes with styling, use the `<Quote>` component instead.
 
 ---
 
 ## Component Pairing Recommendations
 
-| Content Scenario | Recommended Components |
-|-----------------|----------------------|
-| Tutorial / how-to | StepList, CodeBlock, Callout (tips) |
-| Feature announcement | FeatureHighlight, ImageGallery, Quote |
-| Comparison post | ComparisonTable, Callout, Quote |
-| Deep dive / technical | CodeBlock, Callout, StepList |
-| Case study | Quote, ImageGallery, ComparisonTable |
-| Vision / thought leadership | Quote, FeatureHighlight, Callout |
+| Content Scenario            | Recommended Components                |
+| --------------------------- | ------------------------------------- |
+| Tutorial / how-to           | StepList, CodeBlock, Callout (tips)   |
+| Feature announcement        | FeatureHighlight, ImageGallery, Quote |
+| Comparison post             | ComparisonTable, Callout, Quote       |
+| Deep dive / technical       | CodeBlock, Callout, StepList          |
+| Case study                  | Quote, ImageGallery, ComparisonTable  |
+| Vision / thought leadership | Quote, FeatureHighlight, Callout      |

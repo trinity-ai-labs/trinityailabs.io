@@ -4,7 +4,7 @@ import { getAdminSession } from "@/lib/admin";
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const session = await getAdminSession(req.headers);
   if (!session) {

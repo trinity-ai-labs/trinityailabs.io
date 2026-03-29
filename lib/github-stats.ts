@@ -51,7 +51,7 @@ export async function getGitHubStats(): Promise<GitHubStats> {
     const createdAt = new Date(repoData.created_at);
     const now = new Date();
     const daysBuilding = Math.floor(
-      (now.getTime() - createdAt.getTime()) / (1000 * 60 * 60 * 24)
+      (now.getTime() - createdAt.getTime()) / (1000 * 60 * 60 * 24),
     );
 
     // Lines added & contributor count from contributors stats
@@ -63,7 +63,7 @@ export async function getGitHubStats(): Promise<GitHubStats> {
       linesAdded = contributorsData.reduce(
         (sum: number, c: { weeks: { a: number }[] }) =>
           sum + c.weeks.reduce((s: number, w: { a: number }) => s + w.a, 0),
-        0
+        0,
       );
     }
 

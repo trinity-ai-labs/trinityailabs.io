@@ -12,7 +12,10 @@ export async function GET(
   try {
     const res = await fetch(LATEST_URL, { next: { revalidate: 300 } });
     if (!res.ok) {
-      return NextResponse.json({ error: "No releases available" }, { status: 404 });
+      return NextResponse.json(
+        { error: "No releases available" },
+        { status: 404 },
+      );
     }
 
     const latest: { version: string } = await res.json();
@@ -31,6 +34,9 @@ export async function GET(
 
     return NextResponse.redirect(url, 302);
   } catch {
-    return NextResponse.json({ error: "Failed to fetch release info" }, { status: 502 });
+    return NextResponse.json(
+      { error: "Failed to fetch release info" },
+      { status: 502 },
+    );
   }
 }

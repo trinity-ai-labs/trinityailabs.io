@@ -22,8 +22,7 @@ const SECTION_ICONS: Record<string, React.ElementType> = {
 const CHAPTER_DESCRIPTIONS: Record<string, string> = {
   welcome:
     "Core concepts — Projects, PRDs, Stories, the Agent Pipeline, and Knowledge Base.",
-  "first-project":
-    "Step-by-step guide from launch to your first shipped PR.",
+  "first-project": "Step-by-step guide from launch to your first shipped PR.",
   navigating:
     "UI layout, sidebar navigation, project switcher, and keyboard shortcuts.",
   "onboarding-wizard":
@@ -42,16 +41,14 @@ const CHAPTER_DESCRIPTIONS: Record<string, string> = {
     "Describe features in natural language. Trinity generates structured stories.",
   align:
     "Phase-adaptive project health checks — roadmap quality pre-PRD, execution health post-PRD.",
-  graph:
-    "Visual dependency graph with layout management and cross-PRD views.",
+  graph: "Visual dependency graph with layout management and cross-PRD views.",
   stories:
     "Story structure, status lifecycle, acceptance criteria, tags, and linking.",
   running:
     "Workers, the 4-agent pipeline, git worktrees, monitoring, and retries.",
   gates:
     "8 human checkpoints: deviation approval, missing assets, blocked stories, and more.",
-  checkpoints:
-    "Quality and release checkpoints with per-repo semver tagging.",
+  checkpoints: "Quality and release checkpoints with per-repo semver tagging.",
   "knowledge-base":
     "Project vault with books, chapters, and pages. Agents write learnings after every run.",
   gotchas:

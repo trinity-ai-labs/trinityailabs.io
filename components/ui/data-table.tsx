@@ -54,9 +54,7 @@ export function DataTable<TData, TValue>({
     initialState: { pagination: { pageSize } },
     globalFilterFn: searchKey
       ? (row, _columnId, filterValue) => {
-          const value = String(
-            row.getValue(searchKey) ?? ""
-          ).toLowerCase();
+          const value = String(row.getValue(searchKey) ?? "").toLowerCase();
           return value.includes(String(filterValue).toLowerCase());
         }
       : undefined,
@@ -83,7 +81,7 @@ export function DataTable<TData, TValue>({
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                   </TableHead>
                 ))}
@@ -98,7 +96,7 @@ export function DataTable<TData, TValue>({
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}

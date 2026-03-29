@@ -17,10 +17,10 @@ export async function GET(req: NextRequest) {
   const [usersResult, subsResult, signupsResult] = await Promise.all([
     db.execute("SELECT COUNT(*) as count FROM user"),
     db.execute(
-      "SELECT status, COUNT(*) as count FROM subscriptions GROUP BY status"
+      "SELECT status, COUNT(*) as count FROM subscriptions GROUP BY status",
     ),
     db.execute(
-      `SELECT date(createdAt) as date, COUNT(*) as count FROM user WHERE createdAt >= datetime('now', '-30 days') GROUP BY date(createdAt) ORDER BY date`
+      `SELECT date(createdAt) as date, COUNT(*) as count FROM user WHERE createdAt >= datetime('now', '-30 days') GROUP BY date(createdAt) ORDER BY date`,
     ),
   ]);
 

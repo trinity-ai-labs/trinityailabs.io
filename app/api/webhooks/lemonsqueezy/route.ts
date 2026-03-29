@@ -23,15 +23,17 @@ async function handleStorageAddonEvent(
   userId: string | undefined,
 ) {
   const subId = String((event.data as Record<string, unknown>).id);
-  const customData = (event.meta as Record<string, unknown>)
-    .custom_data as Record<string, string> | undefined;
+  const customData = (event.meta as Record<string, unknown>).custom_data as
+    | Record<string, string>
+    | undefined;
 
   switch (eventName) {
     case "subscription_created":
     case "subscription_updated":
     case "subscription_resumed": {
       const customerId = String(attrs.customer_id);
-      const status = attrs.status === "active" ? "active" : String(attrs.status);
+      const status =
+        attrs.status === "active" ? "active" : String(attrs.status);
       const periodEnd = (attrs.renews_at as string) ?? null;
       const purchaserId = userId ?? "";
       const beneficiaryId = customData?.beneficiary_id ?? purchaserId;

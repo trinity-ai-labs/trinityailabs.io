@@ -5,7 +5,7 @@ import { ensureSubscriptionsTable } from "@/lib/ensure-tables";
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const session = await getAdminSession(req.headers);
   if (!session) {
@@ -28,7 +28,7 @@ export async function POST(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const session = await getAdminSession(req.headers);
   if (!session) {

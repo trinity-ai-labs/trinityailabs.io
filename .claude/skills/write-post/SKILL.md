@@ -34,6 +34,7 @@ Before writing, ask the user these questions using AskUserQuestion (all in one c
    - Announcement (what's new, why, how to use it)
 
 Also ask:
+
 - **Key points** they want covered (or leave to your judgment)
 - **Target length**: Short (~800 words), Medium (~1500 words), or Long (~2500 words)
 - **Any specific MDX components** they want used (gallery, video, comparison table, etc.)
@@ -71,6 +72,7 @@ Create the file at `content/blog/{slug}.mdx` where `{slug}` is a short, keyword-
 ### Writing Rules
 
 **Voice** (from voice.md):
+
 - Direct and confident — no hedging ("can help" → "does")
 - Active voice — "agents write PRs" not "PRs are written"
 - Specificity over generality — name the pipeline stages, show the architecture
@@ -78,6 +80,7 @@ Create the file at `content/blog/{slug}.mdx` where `{slug}` is a short, keyword-
 - Action verbs: ship, build, execute, orchestrate, plan, review
 
 **Structure** (from storytelling.md):
+
 - Apply the storytelling framework matching the user's chosen format
 - Open with a compelling hook (contrarian statement, specific result, scene-setting, or bold claim)
 - Subheadings should be mini-hooks, not generic labels
@@ -86,6 +89,7 @@ Create the file at `content/blog/{slug}.mdx` where `{slug}` is a short, keyword-
 - Close by circling back to the opener, distilling one key takeaway, and an appropriate CTA
 
 **Components** (from components.md):
+
 - Use at least 2-3 MDX components naturally throughout
 - Place Callouts after complex explanations
 - Use Quotes for emphasis or testimonials
@@ -95,6 +99,7 @@ Create the file at `content/blog/{slug}.mdx` where `{slug}` is a short, keyword-
 - Use CodeBlock with `filename` prop for code examples
 
 **SEO** (from seo.md):
+
 - Title: 50-60 chars, primary keyword near front
 - Description: 150-160 chars with a hook
 - Primary keyword in first 100 words and at least one H2
@@ -140,6 +145,7 @@ After writing the file, verify:
 7. **Brand voice** — confident, specific, no hedging or buzzwords
 
 Tell the user:
+
 - The post is saved at `content/blog/{slug}.mdx` with `draft: true`
 - They need to add a cover image at `/public/blog/covers/{slug}.png` (1200x630px)
 - When ready, set `draft: false` in the frontmatter to publish

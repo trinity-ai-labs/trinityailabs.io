@@ -3,7 +3,12 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Download, Apple } from "lucide-react";
-import { detectPlatform, getPlatformLabel, getDownloadUrl, type Platform } from "@/lib/platform";
+import {
+  detectPlatform,
+  getPlatformLabel,
+  getDownloadUrl,
+  type Platform,
+} from "@/lib/platform";
 
 export function PlatformDownload({ size = "lg" }: { size?: "default" | "lg" }) {
   const [platform, setPlatform] = useState<Platform>("unknown");
@@ -12,7 +17,10 @@ export function PlatformDownload({ size = "lg" }: { size?: "default" | "lg" }) {
     setPlatform(detectPlatform());
   }, []);
 
-  const label = platform === "unknown" ? "Download" : `Download for ${getPlatformLabel(platform)}`;
+  const label =
+    platform === "unknown"
+      ? "Download"
+      : `Download for ${getPlatformLabel(platform)}`;
   const url = getDownloadUrl(platform);
 
   return (

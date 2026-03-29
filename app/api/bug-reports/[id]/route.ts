@@ -66,7 +66,9 @@ export async function PATCH(
 
   if (
     status &&
-    !BUG_REPORT_STATUSES.includes(status as (typeof BUG_REPORT_STATUSES)[number])
+    !BUG_REPORT_STATUSES.includes(
+      status as (typeof BUG_REPORT_STATUSES)[number],
+    )
   ) {
     return NextResponse.json({ error: "Invalid status" }, { status: 400 });
   }

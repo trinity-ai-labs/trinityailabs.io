@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
   if (!result.rows.length)
     return NextResponse.json(
       { error: "No account found with that handle" },
-      { status: 404 }
+      { status: 404 },
     );
 
   return NextResponse.json({ email: result.rows[0].email as string });

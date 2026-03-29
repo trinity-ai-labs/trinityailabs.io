@@ -1,12 +1,7 @@
 "use client";
 
 import { useState, use, Suspense, useCallback } from "react";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   ChartContainer,
   ChartTooltip,
@@ -91,18 +86,14 @@ function OverviewSkeleton() {
   );
 }
 
-function OverviewContent({
-  statsPromise,
-}: {
-  statsPromise: Promise<Stats>;
-}) {
+function OverviewContent({ statsPromise }: { statsPromise: Promise<Stats> }) {
   const stats = use(statsPromise);
 
   const pieData = Object.entries(stats.subscriptionBreakdown).map(
     ([status, count]) => ({
       name: status,
       value: count,
-    })
+    }),
   );
 
   return (
@@ -198,10 +189,16 @@ function OverviewContent({
                 </ChartContainer>
                 <div className="flex flex-wrap justify-center gap-x-4 gap-y-1">
                   {pieData.map((entry) => (
-                    <div key={entry.name} className="flex items-center gap-1.5 text-xs">
+                    <div
+                      key={entry.name}
+                      className="flex items-center gap-1.5 text-xs"
+                    >
                       <span
                         className="inline-block w-2.5 h-2.5 rounded-full"
-                        style={{ backgroundColor: STATUS_COLORS[entry.name] ?? "#6b7280" }}
+                        style={{
+                          backgroundColor:
+                            STATUS_COLORS[entry.name] ?? "#6b7280",
+                        }}
                       />
                       <span className="text-muted-foreground capitalize">
                         {entry.name.replace("_", " ")}

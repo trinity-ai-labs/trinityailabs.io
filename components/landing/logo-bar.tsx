@@ -12,7 +12,9 @@ export function LogoBar() {
             </div>
             <span className="hidden sm:inline text-border">|</span>
             <div className="flex items-center gap-2">
-              <span className="font-mono">Powered by Claude, DeepSeek &amp; Ollama</span>
+              <span className="font-mono">
+                Powered by Claude, DeepSeek &amp; Ollama
+              </span>
             </div>
             <span className="hidden sm:inline text-border">|</span>
             <div className="flex items-center gap-2">

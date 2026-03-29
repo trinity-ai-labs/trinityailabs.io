@@ -24,7 +24,7 @@ export async function POST(request: Request) {
   if (!approved) {
     return NextResponse.json(
       { error: "Code is invalid, expired, or already used" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 

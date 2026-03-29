@@ -21,12 +21,12 @@ export async function POST() {
   if (!result.rows.length || !result.rows[0].lemonsqueezy_customer_id) {
     return NextResponse.json(
       { error: "No active subscription" },
-      { status: 404 }
+      { status: 404 },
     );
   }
 
   const url = await createCustomerPortalUrl(
-    result.rows[0].lemonsqueezy_customer_id as string
+    result.rows[0].lemonsqueezy_customer_id as string,
   );
   return NextResponse.json({ url });
 }

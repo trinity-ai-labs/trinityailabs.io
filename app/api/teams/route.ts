@@ -23,7 +23,7 @@ export async function POST(req: Request) {
   if (!name || typeof name !== "string" || name.trim().length < 2) {
     return NextResponse.json(
       { error: "Team name must be at least 2 characters" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -41,7 +41,7 @@ export async function POST(req: Request) {
   if (existing.rows.length > 0) {
     return NextResponse.json(
       { error: "A team with a similar name already exists" },
-      { status: 409 }
+      { status: 409 },
     );
   }
 
@@ -63,7 +63,15 @@ export async function POST(req: Request) {
   await db.execute({
     sql: `INSERT INTO teams (id, name, slug, turso_db_name, turso_db_url, encryption_key, owner_id)
           VALUES (?, ?, ?, ?, ?, ?, ?)`,
-    args: [id, name.trim(), slug, tursoDbName, tursoDbUrl, encryptionKey, session.user.id],
+    args: [
+      id,
+      name.trim(),
+      slug,
+      tursoDbName,
+      tursoDbUrl,
+      encryptionKey,
+      session.user.id,
+    ],
   });
 
   // Add owner as member with Turso token

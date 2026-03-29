@@ -13,8 +13,11 @@ export function Problem() {
           Spreadsheets for metrics. Five tools. You&apos;re the glue.
         </p>
         <p className="text-lg text-muted-foreground mb-12 max-w-2xl mx-auto leading-relaxed">
-          IDE stands for <span className="text-foreground font-semibold">Integrated Development Environment</span>.
-          It&apos;s time it lived up to its name.
+          IDE stands for{" "}
+          <span className="text-foreground font-semibold">
+            Integrated Development Environment
+          </span>
+          . It&apos;s time it lived up to its name.
         </p>
 
         {/* Pipeline visual */}
@@ -31,7 +34,9 @@ export function Problem() {
                   {i + 1}
                 </div>
                 <span className="text-sm font-semibold">{step.label}</span>
-                <span className="text-xs text-muted-foreground">{step.desc}</span>
+                <span className="text-xs text-muted-foreground">
+                  {step.desc}
+                </span>
               </div>
               {i < 3 && (
                 <div className="hidden sm:block w-8 h-px bg-gradient-to-r from-emerald-500/50 to-cyan-500/50" />

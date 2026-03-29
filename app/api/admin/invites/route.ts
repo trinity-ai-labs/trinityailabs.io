@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
   await ensureInvitesTable();
 
   const result = await db.execute(
-    "SELECT * FROM invites ORDER BY created_at DESC"
+    "SELECT * FROM invites ORDER BY created_at DESC",
   );
   return NextResponse.json({ invites: result.rows });
 }

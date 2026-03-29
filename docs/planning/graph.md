@@ -23,13 +23,13 @@ Stories are displayed as nodes in a directed acyclic graph (DAG), with edges sho
 
 ### Layout Options
 
-| Layout | Description |
-|--------|-------------|
-| Horizontal | Left-to-right flow |
-| Vertical | Top-to-bottom flow |
-| Horizontal Compact | Tighter horizontal spacing |
-| Vertical Compact | Tighter vertical spacing |
-| Custom | Manually arranged, saved per-project |
+| Layout             | Description                          |
+| ------------------ | ------------------------------------ |
+| Horizontal         | Left-to-right flow                   |
+| Vertical           | Top-to-bottom flow                   |
+| Horizontal Compact | Tighter horizontal spacing           |
+| Vertical Compact   | Tighter vertical spacing             |
+| Custom             | Manually arranged, saved per-project |
 
 Custom layouts are saved automatically when you drag nodes. You can set a default layout per PRD.
 

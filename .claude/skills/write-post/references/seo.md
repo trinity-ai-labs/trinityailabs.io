@@ -73,6 +73,7 @@ Run through this checklist for every blog post before publishing.
 - [ ] Links use relative paths: `/docs/getting-started/welcome` not full URLs
 
 **Doc sections available for linking**:
+
 - `/docs/getting-started/` — Welcome, prerequisites, first project, quickstart
 - `/docs/project-setup/` — Repos, codebase analysis, settings
 - `/docs/planning/` — PRDs, stories, dependencies, calibration

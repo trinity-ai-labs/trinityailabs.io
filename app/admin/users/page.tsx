@@ -37,7 +37,10 @@ function roleBadge(role: string | null) {
 
 function subBadge(status: string | null) {
   if (!status) return <Badge variant="outline">None</Badge>;
-  const map: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
+  const map: Record<
+    string,
+    "default" | "secondary" | "destructive" | "outline"
+  > = {
     active: "default",
     comp: "secondary",
     cancelled: "destructive",

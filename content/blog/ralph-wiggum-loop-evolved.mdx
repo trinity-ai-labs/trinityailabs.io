@@ -51,7 +51,8 @@ But here's what matters: **you choose which PRDs go into each release.** Not eve
 ![Before: one PRD produces a pile of code. After: multiple PRDs funnel into a versioned release with lifecycle management.](/blog/inline/ralph-wiggum-prd-releases.png)
 
 <Callout type="important">
-  Shipping code isn't the hard part. Shipping the *right* code at the *right* time is.
+  Shipping code isn't the hard part. Shipping the *right* code at the *right*
+  time is.
 </Callout>
 
 ## 2. Multi-agent review, not single-agent looping
@@ -65,21 +66,25 @@ Trinity runs every story through **four specialized agents** in a sequential pip
     ### Analyst
 
     Reads the story, analyzes the codebase, generates an implementation plan, detects required services, identifies risks. Read-only. No code changes.
+
   </Step>
   <Step>
     ### Implementer
 
     Executes the plan. Writes code and tests. Does not commit.
+
   </Step>
   <Step>
     ### Auditor
 
     Runs N simplify passes scaled by difficulty and surface area (1 to 7 passes), with early exit on clean code. Final pass includes a full code review and build verification.
+
   </Step>
   <Step>
     ### Documenter
 
     Commits the work, writes PR descriptions, updates roadmap progress, records learnings to the Knowledge Vault, triggers recap updates.
+
   </Step>
 </StepList>
 
@@ -109,10 +114,22 @@ And here's the key: **it's fully configurable, per story.**
 <ComparisonTable
   headers={["", "Ralph Loop", "Trinity"]}
   rows={[
-    ["Supervision", "Runs unsupervised", "Autopilot or Manual with configurable gates"],
+    [
+      "Supervision",
+      "Runs unsupervised",
+      "Autopilot or Manual with configurable gates",
+    ],
     ["Scope", "All or nothing", "Per-story configuration"],
-    ["Control", "Human stops the loop manually", "Typed gates at specific pipeline stages"],
-    ["Flexibility", "Same process for every task", "Critical features get oversight, routine ones fly"],
+    [
+      "Control",
+      "Human stops the loop manually",
+      "Typed gates at specific pipeline stages",
+    ],
+    [
+      "Flexibility",
+      "Same process for every task",
+      "Critical features get oversight, routine ones fly",
+    ],
   ]}
 />
 
@@ -129,7 +146,9 @@ Trinity runs **up to five workers in parallel**, each executing a different stor
 Conflicts happen — that's unavoidable when multiple agents touch the same codebase. Trinity handles them with a dedicated resolver agent that understands the full context of both branches. It merges intelligently, not mechanically. No manual resolution, no broken builds.
 
 <FeatureHighlight icon="zap" title="Multi-repo workspaces">
-  A single story can span multiple repositories with coordinated branching. Branch names are derived from configurable templates at runtime — not stored — so the system stays flexible. Each repo tracks its own version independently.
+  A single story can span multiple repositories with coordinated branching.
+  Branch names are derived from configurable templates at runtime — not stored —
+  so the system stays flexible. Each repo tracks its own version independently.
 </FeatureHighlight>
 
 ![Five parallel workers executing different stories simultaneously, each in its own isolated git worktree and branch.](/blog/inline/ralph-wiggum-parallel.png)
@@ -146,9 +165,7 @@ Run 1: the Auditor catches a React hydration bug caused by a specific library pa
 
 ![Knowledge compounding across runs: Run 1 catches a bug, writes it to the vault. Run 2 reads the vault and avoids the pattern. Run 47: a living knowledge base.](/blog/inline/ralph-wiggum-knowledge.png)
 
-<Quote>
-  The loop starts from scratch. The pipeline gets smarter.
-</Quote>
+<Quote>The loop starts from scratch. The pipeline gets smarter.</Quote>
 
 ## We're just getting started
 
@@ -166,7 +183,7 @@ The pipeline is the engine. But Trinity is the whole car.
 
 The Ralph Wiggum Loop deserves its place in the history of AI-assisted development. It proved the concept. It showed that AI agents, given a clear spec and persistent access to the codebase, can ship real software autonomously.
 
-Trinity is what happens when you take that proof of concept and ask: *now how do we actually run a software project with this?*
+Trinity is what happens when you take that proof of concept and ask: _now how do we actually run a software project with this?_
 
 <Quote>
   The loop proved AI can build from a PRD. Trinity proves it can ship releases.
@@ -177,5 +194,6 @@ Multiple PRDs feeding into coordinated releases. Four specialized agents instead
 From loop to pipeline. From PRD to release. From proof of concept to production system.
 
 <Callout type="tip">
-  Ready to evolve past the loop? [Download Trinity](https://trinityailabs.com) — available for macOS.
+  Ready to evolve past the loop? [Download Trinity](https://trinityailabs.com) —
+  available for macOS.
 </Callout>

@@ -10,7 +10,11 @@ interface TokenPayload {
 }
 
 export async function signAccessToken(payload: TokenPayload) {
-  return new SignJWT({ email: payload.email, name: payload.name, subscription: payload.subscription })
+  return new SignJWT({
+    email: payload.email,
+    name: payload.name,
+    subscription: payload.subscription,
+  })
     .setProtectedHeader({ alg: "HS256" })
     .setSubject(payload.sub)
     .setIssuer("trinityailabs.com")

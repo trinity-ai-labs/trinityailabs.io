@@ -16,8 +16,7 @@ export async function POST(req: NextRequest) {
   }
 
   const body = await req.json().catch(() => ({}));
-  const beneficiaryId =
-    (body.beneficiaryId as string | undefined) ?? userId;
+  const beneficiaryId = (body.beneficiaryId as string | undefined) ?? userId;
 
   await Promise.all([
     ensureSubscriptionsTable(),

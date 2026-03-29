@@ -63,7 +63,7 @@ export default function SettingsPage() {
     handleTimerRef.current = setTimeout(async () => {
       try {
         const res = await fetch(
-          `/api/handle?handle=${encodeURIComponent(value)}`
+          `/api/handle?handle=${encodeURIComponent(value)}`,
         );
         const data = await res.json();
         if (!res.ok) {
@@ -88,7 +88,7 @@ export default function SettingsPage() {
 
     const { error } = await authClient.updateUser({ name });
 
-    setMessage(error ? error.message ?? "Update failed" : "Profile updated");
+    setMessage(error ? (error.message ?? "Update failed") : "Profile updated");
     setSaving(false);
   }
 
@@ -140,7 +140,7 @@ export default function SettingsPage() {
   async function handleDeleteAccount() {
     if (
       !confirm(
-        "Are you sure you want to delete your account? This cannot be undone."
+        "Are you sure you want to delete your account? This cannot be undone.",
       )
     )
       return;
@@ -204,7 +204,7 @@ export default function SettingsPage() {
                   value={handle}
                   onChange={(e) =>
                     setHandle(
-                      e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, "")
+                      e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""),
                     )
                   }
                   className="pl-7"

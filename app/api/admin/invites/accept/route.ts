@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { ensureInvitesTable, ensureSubscriptionsTable } from "@/lib/ensure-tables";
+import {
+  ensureInvitesTable,
+  ensureSubscriptionsTable,
+} from "@/lib/ensure-tables";
 
 export async function GET(req: NextRequest) {
   const token = req.nextUrl.searchParams.get("token");
@@ -31,7 +34,7 @@ export async function POST(req: NextRequest) {
   if (!token || !userId) {
     return NextResponse.json(
       { error: "Token and userId required" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -46,7 +49,7 @@ export async function POST(req: NextRequest) {
   if (!invite) {
     return NextResponse.json(
       { error: "Invalid or already used invite" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 

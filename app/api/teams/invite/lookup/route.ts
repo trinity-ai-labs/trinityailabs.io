@@ -30,7 +30,7 @@ export async function GET(req: Request) {
   if (invite.status !== "pending") {
     return NextResponse.json(
       { error: `Invite has already been ${invite.status}` },
-      { status: 410 }
+      { status: 410 },
     );
   }
 

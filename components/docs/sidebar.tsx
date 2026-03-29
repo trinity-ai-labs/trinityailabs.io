@@ -3,14 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { DOC_SECTIONS } from "@/lib/docs-structure";
-import {
-  Rocket,
-  Settings,
-  Brain,
-  Play,
-  BarChart3,
-  Wrench,
-} from "lucide-react";
+import { Rocket, Settings, Brain, Play, BarChart3, Wrench } from "lucide-react";
 
 const SECTION_ICONS: Record<string, React.ElementType> = {
   "getting-started": Rocket,
@@ -41,9 +34,7 @@ function SidebarContent() {
       <nav className="space-y-7">
         {DOC_SECTIONS.map((section) => {
           const Icon = SECTION_ICONS[section.slug];
-          const sectionActive = pathname?.startsWith(
-            `/docs/${section.slug}`,
-          );
+          const sectionActive = pathname?.startsWith(`/docs/${section.slug}`);
 
           return (
             <div key={section.slug}>

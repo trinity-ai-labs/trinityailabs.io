@@ -20,9 +20,7 @@ export async function GET(req: NextRequest) {
   const page = Math.max(1, Number(req.nextUrl.searchParams.get("page") ?? "1"));
   const offset = (page - 1) * PAGE_SIZE;
 
-  const whereClause = search
-    ? `WHERE u.name LIKE ? OR u.email LIKE ?`
-    : "";
+  const whereClause = search ? `WHERE u.name LIKE ? OR u.email LIKE ?` : "";
   const searchParam = `%${search}%`;
   const args = search ? [searchParam, searchParam] : [];
 

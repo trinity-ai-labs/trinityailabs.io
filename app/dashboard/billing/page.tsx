@@ -291,7 +291,11 @@ function BillingContent({
   }
 
   async function handleCancelAddon(addonId: string) {
-    if (!confirm("Cancel this storage pack? It will remain active until the end of the current billing period."))
+    if (
+      !confirm(
+        "Cancel this storage pack? It will remain active until the end of the current billing period.",
+      )
+    )
       return;
 
     setCancellingAddonId(addonId);
@@ -300,9 +304,7 @@ function BillingContent({
     });
     if (res.ok) {
       setAddons((prev) =>
-        prev.map((a) =>
-          a.id === addonId ? { ...a, status: "cancelled" } : a,
-        ),
+        prev.map((a) => (a.id === addonId ? { ...a, status: "cancelled" } : a)),
       );
     }
     setCancellingAddonId(null);
@@ -317,8 +319,7 @@ function BillingContent({
   );
   const activePackCount = addons.filter((a) => a.status === "active").length;
   const futureQuota =
-    storage.quotaBytes -
-    expiringPacks.length * 10 * 1024 * 1024 * 1024;
+    storage.quotaBytes - expiringPacks.length * 10 * 1024 * 1024 * 1024;
   const willBeOverQuota =
     expiringPacks.length > 0 && storage.usedBytes > futureQuota;
 
@@ -602,8 +603,8 @@ function BillingContent({
               Sponsored Seats
             </CardTitle>
             <CardDescription>
-              Gift someone a Trinity membership by their handle or email.
-              $10/mo per seat.
+              Gift someone a Trinity membership by their handle or email. $10/mo
+              per seat.
             </CardDescription>
           </CardHeader>
           <CardContent>

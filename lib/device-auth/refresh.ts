@@ -5,7 +5,9 @@ import { ensureRefreshTokensTable } from "@/lib/ensure-tables";
 export async function createRefreshToken(userId: string): Promise<string> {
   await ensureRefreshTokensTable();
   const token = crypto.randomUUID();
-  const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
+  const expiresAt = new Date(
+    Date.now() + 30 * 24 * 60 * 60 * 1000,
+  ).toISOString();
 
   await db.execute({
     sql: "INSERT INTO refresh_tokens (token, user_id, expires_at) VALUES (?, ?, ?)",
@@ -15,7 +17,9 @@ export async function createRefreshToken(userId: string): Promise<string> {
   return token;
 }
 
-export async function consumeRefreshToken(token: string): Promise<string | null> {
+export async function consumeRefreshToken(
+  token: string,
+): Promise<string | null> {
   await ensureRefreshTokensTable();
   const result = await db.execute({
     sql: `UPDATE refresh_tokens SET revoked = 1

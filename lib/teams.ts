@@ -36,16 +36,20 @@ export async function getTeamMembership(teamId: string, userId: string) {
   return result.rows[0] ?? null;
 }
 
-export async function isTeamOwner(teamId: string, userId: string): Promise<boolean> {
+export async function isTeamOwner(
+  teamId: string,
+  userId: string,
+): Promise<boolean> {
   const member = await getTeamMembership(teamId, userId);
   return member?.role === "owner";
 }
 
 export async function provisionTursoDb(
-  name: string
+  name: string,
 ): Promise<{ dbName: string; dbUrl: string; token: string }> {
   const { dbName, dbUrl } = await createDatabase(name);
-  if (!dbName) throw new Error(`createDatabase returned empty dbName for "${name}"`);
+  if (!dbName)
+    throw new Error(`createDatabase returned empty dbName for "${name}"`);
   const token = await createDatabaseToken(dbName);
   return { dbName, dbUrl, token };
 }

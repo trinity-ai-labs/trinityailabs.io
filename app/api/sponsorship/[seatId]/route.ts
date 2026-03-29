@@ -1,13 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { getAuthUserId } from "@/lib/device-auth";
-import { ensureSponsoredSeatsTable, ensureSubscriptionsTable } from "@/lib/ensure-tables";
+import {
+  ensureSponsoredSeatsTable,
+  ensureSubscriptionsTable,
+} from "@/lib/ensure-tables";
 import { updateSubscriptionQuantity } from "@/lib/lemonsqueezy";
 
 // DELETE /api/sponsorship/:seatId — stop sponsoring
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: Promise<{ seatId: string }> }
+  { params }: { params: Promise<{ seatId: string }> },
 ) {
   const userId = await getAuthUserId(req);
   if (!userId) {
@@ -34,7 +37,10 @@ export async function DELETE(
   }
 
   if (seat.status === "cancelled") {
-    return NextResponse.json({ error: "Seat already cancelled" }, { status: 400 });
+    return NextResponse.json(
+      { error: "Seat already cancelled" },
+      { status: 400 },
+    );
   }
 
   // Get sponsor's subscription to update quantity
@@ -60,7 +66,7 @@ export async function DELETE(
         console.error("Failed to update Lemon Squeezy quantity:", err);
         return NextResponse.json(
           { error: "Failed to update billing. Please try again." },
-          { status: 500 }
+          { status: 500 },
         );
       }
     }

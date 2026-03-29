@@ -56,8 +56,8 @@ The manifest provides a lightweight tree view of all assets with just descriptio
 
 ## API
 
-| Endpoint | Method | Purpose |
-|----------|--------|---------|
-| `/api/projects/[id]/assets` | GET | List assets (`?tree=1` for nested, `?manifest=1` for lightweight) |
-| `/api/projects/[id]/assets` | POST | Upload files |
-| `/api/projects/[id]/assets/import` | POST | Import a directory |
+| Endpoint                           | Method | Purpose                                                           |
+| ---------------------------------- | ------ | ----------------------------------------------------------------- |
+| `/api/projects/[id]/assets`        | GET    | List assets (`?tree=1` for nested, `?manifest=1` for lightweight) |
+| `/api/projects/[id]/assets`        | POST   | Upload files                                                      |
+| `/api/projects/[id]/assets/import` | POST   | Import a directory                                                |

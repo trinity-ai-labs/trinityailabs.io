@@ -56,7 +56,9 @@ function ResetPasswordContent() {
 
     if (!res.ok) {
       const data = await res.json().catch(() => null);
-      setError(data?.message ?? "Failed to reset password. The link may have expired.");
+      setError(
+        data?.message ?? "Failed to reset password. The link may have expired.",
+      );
       setLoading(false);
       return;
     }
@@ -124,10 +126,7 @@ function ResetPasswordContent() {
         </div>
 
         <div>
-          <label
-            htmlFor="confirm"
-            className="block text-sm font-medium mb-1.5"
-          >
+          <label htmlFor="confirm" className="block text-sm font-medium mb-1.5">
             Confirm password
           </label>
           <Input
