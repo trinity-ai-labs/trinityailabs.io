@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, use, Suspense } from "react";
+import { useState, useEffect, use, Suspense } from "react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -132,7 +132,11 @@ function LeaderboardList({
 }
 
 export default function LeaderboardPage() {
-  const [promise] = useState(() => fetchLeaderboard());
+  const [promise, setPromise] = useState<Promise<LeaderEntry[]> | null>(null);
+
+  useEffect(() => {
+    setPromise(fetchLeaderboard());
+  }, []);
 
   return (
     <main className="min-h-screen">
@@ -168,9 +172,13 @@ export default function LeaderboardPage() {
             </p>
           </div>
 
-          <Suspense fallback={<LeaderboardSkeleton />}>
-            <LeaderboardList promise={promise} />
-          </Suspense>
+          {promise ? (
+            <Suspense fallback={<LeaderboardSkeleton />}>
+              <LeaderboardList promise={promise} />
+            </Suspense>
+          ) : (
+            <LeaderboardSkeleton />
+          )}
         </div>
       </section>
 
