@@ -14,6 +14,7 @@ import {
   Mail,
   Shield,
   Bug,
+  FlaskConical,
 } from "lucide-react";
 
 const sidebarLinks = [
@@ -21,6 +22,7 @@ const sidebarLinks = [
   { label: "Users", href: "/admin/users", icon: Users },
   { label: "Invites", href: "/admin/invites", icon: Mail },
   { label: "Bug Reports", href: "/admin/bug-reports", icon: Bug },
+  { label: "Beta", href: "/admin/beta", icon: FlaskConical },
 ];
 
 export default function AdminLayout({

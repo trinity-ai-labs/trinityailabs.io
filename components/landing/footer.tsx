@@ -25,6 +25,7 @@ const footerLinks = [
       { label: "Documentation", href: "/docs" },
       { label: "Blog", href: "/blog" },
       { label: "FAQ", href: "/#faq" },
+      { label: "Beta Program", href: "/beta" },
     ],
   },
   {

@@ -7,7 +7,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, Loader2, ExternalLink } from "lucide-react";
 import Image from "next/image";
-import { BUG_REPORT_STATUSES, STATUS_VARIANTS } from "@/lib/bug-reports";
+import {
+  BUG_REPORT_STATUSES,
+  STATUS_VARIANTS,
+  BUG_REPORT_QUALITIES,
+} from "@/lib/bug-reports";
 
 interface BugReport {
   id: string;
@@ -21,6 +25,7 @@ interface BugReport {
   route: string | null;
   status: string;
   admin_notes: string | null;
+  quality: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -46,6 +51,7 @@ export default function BugReportDetailPage({
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [status, setStatus] = useState("");
+  const [quality, setQuality] = useState<string>("");
   const [adminNotes, setAdminNotes] = useState("");
 
   useEffect(() => {
@@ -55,6 +61,7 @@ export default function BugReportDetailPage({
         setReport(data.report);
         setAttachments(data.attachments ?? []);
         setStatus(data.report.status);
+        setQuality(data.report.quality ?? "");
         setAdminNotes(data.report.admin_notes ?? "");
       })
       .finally(() => setLoading(false));
@@ -66,10 +73,14 @@ export default function BugReportDetailPage({
       const res = await fetch(`/api/bug-reports/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status, adminNotes }),
+        body: JSON.stringify({
+          status,
+          adminNotes,
+          quality: quality || null,
+        }),
       });
       if (res.ok && report) {
-        setReport({ ...report, status, admin_notes: adminNotes });
+        setReport({ ...report, status, admin_notes: adminNotes, quality });
       }
     } finally {
       setSaving(false);
@@ -171,6 +182,21 @@ export default function BugReportDetailPage({
                 {BUG_REPORT_STATUSES.map((s) => (
                   <option key={s} value={s} className="capitalize">
                     {s.replace("_", " ")}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Quality</label>
+              <select
+                value={quality}
+                onChange={(e) => setQuality(e.target.value)}
+                className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+              >
+                <option value="">Not rated</option>
+                {BUG_REPORT_QUALITIES.map((q) => (
+                  <option key={q} value={q} className="capitalize">
+                    {q}
                   </option>
                 ))}
               </select>

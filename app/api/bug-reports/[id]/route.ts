@@ -3,7 +3,7 @@ import { db } from "@/lib/db";
 import { getAdminSession } from "@/lib/admin";
 import { ensureBugReportsTables } from "@/lib/ensure-tables";
 import { presignDownload } from "@/lib/r2";
-import { BUG_REPORT_STATUSES } from "@/lib/bug-reports";
+import { BUG_REPORT_STATUSES, BUG_REPORT_QUALITIES } from "@/lib/bug-reports";
 
 /** GET — Bug report detail with attachments (admin only). */
 export async function GET(
@@ -59,9 +59,10 @@ export async function PATCH(
   const { id } = await params;
 
   const body = await req.json();
-  const { status, adminNotes } = body as {
+  const { status, adminNotes, quality } = body as {
     status?: string;
     adminNotes?: string;
+    quality?: string | null;
   };
 
   if (
@@ -73,8 +74,18 @@ export async function PATCH(
     return NextResponse.json({ error: "Invalid status" }, { status: 400 });
   }
 
+  if (
+    quality !== undefined &&
+    quality !== null &&
+    !BUG_REPORT_QUALITIES.includes(
+      quality as (typeof BUG_REPORT_QUALITIES)[number],
+    )
+  ) {
+    return NextResponse.json({ error: "Invalid quality" }, { status: 400 });
+  }
+
   const sets: string[] = ["updated_at = datetime('now')"];
-  const args: (string | number)[] = [];
+  const args: (string | number | null)[] = [];
 
   if (status) {
     sets.push("status = ?");
@@ -83,6 +94,10 @@ export async function PATCH(
   if (adminNotes !== undefined) {
     sets.push("admin_notes = ?");
     args.push(adminNotes);
+  }
+  if (quality !== undefined) {
+    sets.push("quality = ?");
+    args.push(quality);
   }
 
   args.push(id);

@@ -257,6 +257,56 @@ export async function sendContactFormEmail(data: {
   });
 }
 
+export async function sendBetaSignupNotificationEmail(signup: {
+  email: string;
+  name: string | null;
+}) {
+  const adminEmail =
+    process.env.BUG_REPORT_NOTIFY_EMAIL ?? "info@trinityailabs.com";
+  const siteUrl = process.env.BETTER_AUTH_URL ?? "https://trinityailabs.com";
+
+  await getResend().emails.send({
+    from: FROM_ADDRESS,
+    to: adminEmail,
+    subject: `[Beta Signup] ${signup.email}`,
+    html: `
+      <div style="font-family: system-ui, sans-serif; max-width: 480px; margin: 0 auto; padding: 40px 20px;">
+        <h1 style="font-size: 24px; font-weight: 600; margin-bottom: 16px;">New Beta Signup</h1>
+        <p style="color: #666; margin-bottom: 8px;"><strong>Email:</strong> ${escapeHtml(signup.email)}</p>
+        ${signup.name ? `<p style="color: #666; margin-bottom: 8px;"><strong>Name:</strong> ${escapeHtml(signup.name)}</p>` : ""}
+        <p style="color: #666; margin-bottom: 24px;">Review and approve or reject this application in the admin panel.</p>
+        <a href="${siteUrl}/admin/beta" style="display: inline-block; background: linear-gradient(to right, #10b981, #06b6d4); color: white; text-decoration: none; padding: 12px 24px; border-radius: 8px; font-weight: 500;">
+          Review Applications
+        </a>
+      </div>
+    `,
+  });
+}
+
+export async function sendBetaRejectionEmail(to: string) {
+  await getResend().emails.send({
+    from: FROM_ADDRESS,
+    to,
+    subject: "Trinity AI Labs — Beta Application Update",
+    html: `
+      <div style="font-family: system-ui, sans-serif; max-width: 480px; margin: 0 auto; padding: 40px 20px;">
+        <h1 style="font-size: 24px; font-weight: 600; margin-bottom: 16px;">Thanks for your interest</h1>
+        <p style="color: #666; margin-bottom: 24px;">
+          We appreciate you applying to the Trinity beta program. Unfortunately, we're unable to
+          approve your application at this time.
+        </p>
+        <p style="color: #666; margin-bottom: 24px;">
+          We're rolling out access in waves and may revisit your application in the future.
+          Feel free to apply again later.
+        </p>
+        <p style="color: #999; font-size: 13px; margin-top: 32px;">
+          — The Trinity AI Labs team
+        </p>
+      </div>
+    `,
+  });
+}
+
 export async function sendWelcomeEmail(to: string, name: string) {
   await getResend().emails.send({
     from: FROM_ADDRESS,

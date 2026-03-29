@@ -16,3 +16,20 @@ export const STATUS_VARIANTS: Record<
   resolved: "default",
   closed: "destructive",
 };
+
+export const BUG_REPORT_QUALITIES = [
+  "useful",
+  "applied",
+  "junk",
+] as const;
+
+export type BugReportQuality = (typeof BUG_REPORT_QUALITIES)[number];
+
+export const QUALITY_VARIANTS: Record<
+  string,
+  "default" | "secondary" | "destructive" | "outline"
+> = {
+  useful: "secondary",
+  applied: "default",
+  junk: "destructive",
+};

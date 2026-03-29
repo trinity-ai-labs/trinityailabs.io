@@ -209,6 +209,24 @@ export async function ensureStorageAddonsTable() {
   storageAddonsEnsured = true;
 }
 
+let betaSignupsEnsured = false;
+
+export async function ensureBetaSignupsTable() {
+  if (betaSignupsEnsured) return;
+  await db.execute(`
+    CREATE TABLE IF NOT EXISTS beta_signups (
+      id TEXT PRIMARY KEY,
+      email TEXT NOT NULL UNIQUE,
+      name TEXT,
+      status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected')),
+      admin_notes TEXT,
+      created_at TEXT DEFAULT (datetime('now')),
+      reviewed_at TEXT
+    )
+  `);
+  betaSignupsEnsured = true;
+}
+
 let bugReportsEnsured = false;
 
 export async function ensureBugReportsTables() {
@@ -244,6 +262,16 @@ export async function ensureBugReportsTables() {
       )
     `),
   ]);
+
+  for (const col of [
+    "quality TEXT CHECK (quality IN ('useful', 'applied', 'junk'))",
+  ]) {
+    try {
+      await db.execute(`ALTER TABLE bug_reports ADD COLUMN ${col}`);
+    } catch {
+      // Column already exists
+    }
+  }
 
   bugReportsEnsured = true;
 }
