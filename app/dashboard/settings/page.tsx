@@ -11,6 +11,16 @@ import {
   CardDescription,
   CardContent,
 } from "@/components/ui/card";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 export default function SettingsPage() {
   const { data: session } = authClient.useSession();
@@ -31,6 +41,7 @@ export default function SettingsPage() {
   const [newPassword, setNewPassword] = useState("");
   const [pwSaving, setPwSaving] = useState(false);
   const [pwMessage, setPwMessage] = useState("");
+  const [confirmDeleteAccount, setConfirmDeleteAccount] = useState(false);
 
   // Load current handle
   useEffect(() => {
@@ -138,13 +149,6 @@ export default function SettingsPage() {
   }
 
   async function handleDeleteAccount() {
-    if (
-      !confirm(
-        "Are you sure you want to delete your account? This cannot be undone.",
-      )
-    )
-      return;
-
     await authClient.deleteUser();
     window.location.href = "/";
   }
@@ -292,11 +296,35 @@ export default function SettingsPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Button variant="destructive" onClick={handleDeleteAccount}>
+          <Button variant="destructive" onClick={() => setConfirmDeleteAccount(true)}>
             Delete Account
           </Button>
         </CardContent>
       </Card>
+
+      <AlertDialog
+        open={confirmDeleteAccount}
+        onOpenChange={setConfirmDeleteAccount}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete account?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will permanently delete your account and all associated data.
+              This cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              variant="destructive"
+              onClick={handleDeleteAccount}
+            >
+              Delete Account
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

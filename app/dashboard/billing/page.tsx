@@ -9,6 +9,16 @@ import {
   CardDescription,
   CardContent,
 } from "@/components/ui/card";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { StorageBar } from "@/components/dashboard/storage-bar";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -195,6 +205,12 @@ function BillingContent({
   const [sponsorError, setSponsorError] = useState("");
   const [leavingSponsorship, setLeavingSponsorship] = useState(false);
   const [sponsorshipLeft, setSponsorshipLeft] = useState(false);
+  const [pendingConfirm, setPendingConfirm] = useState<{
+    title: string;
+    description: string;
+    label: string;
+    onConfirm: () => void;
+  } | null>(null);
 
   const isActive =
     subscription?.status === "active" || subscription?.status === "comp";
@@ -241,35 +257,39 @@ function BillingContent({
     setSponsoring(false);
   }
 
-  async function handleUnsponsor(seat: SponsoredSeat) {
+  function requestUnsponsor(seat: SponsoredSeat) {
     const displayName = seat.userHandle
       ? `@${seat.userHandle}`
       : (seat.userName ?? seat.userEmail);
-    if (
-      !confirm(
-        `Stop sponsoring ${displayName}? They will lose their membership unless they pay for it themselves.`,
-      )
-    )
-      return;
+    setPendingConfirm({
+      title: "Stop sponsoring?",
+      description: `Stop sponsoring ${displayName}? They will lose their membership unless they pay for it themselves.`,
+      label: "Stop Sponsoring",
+      onConfirm: () => executeUnsponsor(seat.id),
+    });
+  }
 
-    setRemovingId(seat.id);
-    const res = await fetch(`/api/sponsorship/${seat.id}`, {
+  async function executeUnsponsor(seatId: string) {
+    setRemovingId(seatId);
+    const res = await fetch(`/api/sponsorship/${seatId}`, {
       method: "DELETE",
     });
     if (res.ok) {
-      setSeats((prev) => prev.filter((s) => s.id !== seat.id));
+      setSeats((prev) => prev.filter((s) => s.id !== seatId));
     }
     setRemovingId(null);
   }
 
-  async function handleLeaveSponsorship() {
-    if (
-      !confirm(
-        `Leave sponsorship from ${sponsoredBy?.sponsorName}? You'll keep access until ${sponsoredBy?.currentPeriodEnd ? formatDate(sponsoredBy.currentPeriodEnd) : "the end of the billing period"}, then you'll need your own subscription.`,
-      )
-    )
-      return;
+  function requestLeaveSponsorship() {
+    setPendingConfirm({
+      title: "Leave sponsorship?",
+      description: `Leave sponsorship from ${sponsoredBy?.sponsorName}? You'll keep access until ${sponsoredBy?.currentPeriodEnd ? formatDate(sponsoredBy.currentPeriodEnd) : "the end of the billing period"}, then you'll need your own subscription.`,
+      label: "Leave Sponsorship",
+      onConfirm: executeLeaveSponsorship,
+    });
+  }
 
+  async function executeLeaveSponsorship() {
     setLeavingSponsorship(true);
     const res = await fetch("/api/sponsorship/leave", { method: "POST" });
     if (res.ok) {
@@ -290,14 +310,17 @@ function BillingContent({
     else setLoading(false);
   }
 
-  async function handleCancelAddon(addonId: string) {
-    if (
-      !confirm(
-        "Cancel this storage pack? It will remain active until the end of the current billing period.",
-      )
-    )
-      return;
+  function requestCancelAddon(addonId: string) {
+    setPendingConfirm({
+      title: "Cancel storage pack?",
+      description:
+        "This storage pack will remain active until the end of the current billing period.",
+      label: "Cancel Pack",
+      onConfirm: () => executeCancelAddon(addonId),
+    });
+  }
 
+  async function executeCancelAddon(addonId: string) {
     setCancellingAddonId(addonId);
     const res = await fetch(`/api/billing/storage-addon/${addonId}`, {
       method: "DELETE",
@@ -355,7 +378,7 @@ function BillingContent({
               <Button
                 variant="outline"
                 size="sm"
-                onClick={handleLeaveSponsorship}
+                onClick={requestLeaveSponsorship}
                 disabled={leavingSponsorship}
               >
                 {leavingSponsorship ? (
@@ -554,7 +577,7 @@ function BillingContent({
                         variant="ghost"
                         size="sm"
                         className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive shrink-0"
-                        onClick={() => handleCancelAddon(addon.id)}
+                        onClick={() => requestCancelAddon(addon.id)}
                         disabled={cancellingAddonId === addon.id}
                       >
                         {cancellingAddonId === addon.id ? (
@@ -676,7 +699,7 @@ function BillingContent({
                           variant="ghost"
                           size="sm"
                           className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive"
-                          onClick={() => handleUnsponsor(seat)}
+                          onClick={() => requestUnsponsor(seat)}
                           disabled={removingId === seat.id}
                         >
                           {removingId === seat.id ? (
@@ -698,6 +721,32 @@ function BillingContent({
           </CardContent>
         </Card>
       )}
+
+      <AlertDialog
+        open={!!pendingConfirm}
+        onOpenChange={(open) => !open && setPendingConfirm(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{pendingConfirm?.title}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {pendingConfirm?.description}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              variant="destructive"
+              onClick={() => {
+                pendingConfirm?.onConfirm();
+                setPendingConfirm(null);
+              }}
+            >
+              {pendingConfirm?.label}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
