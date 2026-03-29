@@ -35,12 +35,21 @@ export const metadata: Metadata = {
     url: "https://trinityailabs.com",
     siteName: "Trinity AI Labs",
     type: "website",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1024,
+        height: 1024,
+        alt: "Trinity AI Labs",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Trinity AI Labs | Describe It. Ship It.",
     description:
       "Trinity builds your software while you sleep. The IDE that actually integrates everything.",
+    images: ["/og-image.png"],
   },
   robots: {
     index: true,
