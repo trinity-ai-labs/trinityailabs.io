@@ -219,6 +219,44 @@ export async function sendQuotaPrunedEmail(
   });
 }
 
+export async function sendContactFormEmail(data: {
+  category: string;
+  name: string;
+  email: string;
+  company?: string;
+  message: string;
+}) {
+  const categoryLabels: Record<string, string> = {
+    "try-trinity": "Try Trinity",
+    question: "General Question",
+    partnership: "Partnership",
+    enterprise: "Enterprise",
+    feedback: "Feedback",
+  };
+
+  const adminEmail =
+    process.env.CONTACT_NOTIFY_EMAIL ?? "info@trinityailabs.com";
+
+  await getResend().emails.send({
+    from: FROM_ADDRESS,
+    to: adminEmail,
+    replyTo: data.email,
+    subject: `[Contact] ${categoryLabels[data.category] ?? data.category} — ${data.name}`,
+    html: `
+      <div style="font-family: system-ui, sans-serif; max-width: 480px; margin: 0 auto; padding: 40px 20px;">
+        <h1 style="font-size: 24px; font-weight: 600; margin-bottom: 16px;">New Contact Form Submission</h1>
+        <p style="color: #666; margin-bottom: 8px;"><strong>Category:</strong> ${escapeHtml(categoryLabels[data.category] ?? data.category)}</p>
+        <p style="color: #666; margin-bottom: 8px;"><strong>Name:</strong> ${escapeHtml(data.name)}</p>
+        <p style="color: #666; margin-bottom: 8px;"><strong>Email:</strong> ${escapeHtml(data.email)}</p>
+        ${data.company ? `<p style="color: #666; margin-bottom: 8px;"><strong>Company:</strong> ${escapeHtml(data.company)}</p>` : ""}
+        <hr style="border: none; border-top: 1px solid #eee; margin: 16px 0;" />
+        <p style="color: #666; margin-bottom: 8px;"><strong>Message:</strong></p>
+        <p style="color: #444; white-space: pre-wrap;">${escapeHtml(data.message)}</p>
+      </div>
+    `,
+  });
+}
+
 export async function sendWelcomeEmail(to: string, name: string) {
   await getResend().emails.send({
     from: FROM_ADDRESS,
