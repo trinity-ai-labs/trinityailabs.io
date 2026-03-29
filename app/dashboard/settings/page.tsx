@@ -43,7 +43,10 @@ export default function SettingsPage() {
   const [pwMessage, setPwMessage] = useState("");
   const [confirmDeleteAccount, setConfirmDeleteAccount] = useState(false);
 
-  // Load current handle
+  const [showEmailOnLeaderboard, setShowEmailOnLeaderboard] = useState(false);
+  const [prefsLoaded, setPrefsLoaded] = useState(false);
+
+  // Load current handle + preferences
   useEffect(() => {
     fetch("/api/handle/me")
       .then((r) => r.json())
@@ -54,6 +57,18 @@ export default function SettingsPage() {
         }
       })
       .catch(() => {});
+
+    fetch("/api/preferences")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.preferences) {
+          setShowEmailOnLeaderboard(
+            data.preferences.show_email_on_leaderboard === "true",
+          );
+        }
+        setPrefsLoaded(true);
+      })
+      .catch(() => setPrefsLoaded(true));
   }, []);
 
   // Derived validation (avoids sync setState in effect)
@@ -153,6 +168,15 @@ export default function SettingsPage() {
       setNewPassword("");
     }
     setPwSaving(false);
+  }
+
+  async function toggleEmailVisibility(checked: boolean) {
+    setShowEmailOnLeaderboard(checked);
+    await fetch("/api/preferences", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ show_email_on_leaderboard: String(checked) }),
+    }).catch(() => {});
   }
 
   async function handleDeleteAccount() {
@@ -292,6 +316,35 @@ export default function SettingsPage() {
               {pwSaving ? "Changing..." : "Change Password"}
             </Button>
           </form>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Privacy</CardTitle>
+          <CardDescription>
+            Control what information is visible publicly.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <label className="flex items-center gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={showEmailOnLeaderboard}
+              onChange={(e) => toggleEmailVisibility(e.target.checked)}
+              disabled={!prefsLoaded}
+              className="rounded"
+            />
+            <div>
+              <p className="text-sm font-medium">
+                Show email on bug hunter leaderboard
+              </p>
+              <p className="text-xs text-muted-foreground">
+                Off by default. When enabled, your full email is visible on the
+                public leaderboard instead of a masked version.
+              </p>
+            </div>
+          </label>
         </CardContent>
       </Card>
 

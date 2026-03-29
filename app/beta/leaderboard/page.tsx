@@ -23,13 +23,6 @@ function fetchLeaderboard(): Promise<LeaderEntry[]> {
     .then((data) => data.leaders ?? []);
 }
 
-function maskEmail(email: string): string {
-  const [local, domain] = email.split("@");
-  if (!local || !domain) return email;
-  const visible = local.slice(0, 2);
-  return `${visible}***@${domain}`;
-}
-
 function LeaderboardSkeleton() {
   return (
     <div className="space-y-3">
@@ -70,7 +63,7 @@ function LeaderboardList({
     <div className="space-y-3">
       {leaders.map((entry, i) => {
         const rank = i + 1;
-        const displayName = entry.user_name || maskEmail(entry.user_email);
+        const displayName = entry.user_name || entry.user_email;
 
         return (
           <div
