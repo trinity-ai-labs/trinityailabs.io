@@ -26,7 +26,7 @@ The database stores everything in UTC — timezone conversion happens at display
 
 ## Automation Defaults
 
-Default settings that apply to all projects. The full settings hierarchy is: **Global → Team → Project → Job**. Team settings (if you're in a team scope) override globals, and project settings override both. See [Teams](/account/teams) for team settings details.
+Default settings that apply to all projects. The full settings hierarchy is: **Global → Team → Project → Entity → Job**. Team settings (if you're in a team scope) override globals, project settings override both, and per-entity overrides (on individual stories or releases) override project defaults. See [Teams](/account/teams) for team settings details and [Stories](/execution/stories) for per-entity overrides.
 
 ### Skip Asset Check
 

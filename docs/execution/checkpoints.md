@@ -15,14 +15,6 @@ Quality checkpoints (`quality_checkpoint` story type) run an intensive audit of 
 
 Use quality checkpoints mid-phase when you want to ensure code quality before moving on.
 
-### Release Checkpoints
-
-Release checkpoints (`release_checkpoint` story type) do everything quality checkpoints do, plus:
-
-- **Release notes** — generated automatically
-- **Per-repo versioning** — each repo gets an auto-incremented semver tag (v0.1 -> v0.2)
-- **Preflight checks** — platform-specific quality checks before release
-
 ## How They Work
 
 Checkpoints can appear anywhere in the story graph — mid-phase, at phase boundaries, or spanning multiple phases. They're flexible, not mandatory at every phase end.
@@ -41,13 +33,13 @@ You can control which repos get tagged using `repo:<name>` tags on checkpoint st
 
 When a checkpoint completes its pipeline and reaches the human gate:
 
-- **Approve** (release checkpoints) — tags affected repos with the new version and marks the story as passed
-- **Skip** — marks the story as passed without tagging
+- **Approve** — marks the checkpoint as passed (for quality checkpoints)
+- **Skip** — marks the checkpoint as passed without further action
 - **Provide feedback** — sends the checkpoint back through the feedback pipeline for fixes
 
 ## Release Branches
 
-If your project has `use_release_branches` enabled, release checkpoints create a release branch instead of merging directly. On gate approval:
+If your project has `use_release_branches` enabled, releases create a release branch instead of merging directly. On gate approval:
 
 1. Release branch merges to the integration branch
 2. Optionally auto-merges to the base branch (`auto_release_to_base`)
@@ -57,7 +49,7 @@ Stories get a `released` flag when their code reaches the base branch via the ch
 
 ## Releases
 
-Releases are first-class entities that group one or more PRDs into a shippable unit. When you link PRDs to a release, Trinity automatically creates a release checkpoint story that depends on all stories in the linked PRDs. See the [Releases](/knowledge?book=user-guide&section=execution&chapter=releases&page=releases) page for full details on creating releases, linking PRDs, managing dependencies, and the release lifecycle.
+Releases are first-class entities that group one or more PRDs into a shippable unit. Releases execute directly as their own jobs — running the checkpoint pipeline (audit, release notes, per-repo versioning, preflight checks) and walking the merge chain on approval. See the [Releases](/knowledge?book=user-guide&section=execution&chapter=releases&page=releases) page for full details on creating releases, linking PRDs, managing dependencies, and the release lifecycle.
 
 ### PRDs vs Releases
 

@@ -1,6 +1,6 @@
 # Releases
 
-Releases group one or more PRDs into a shippable unit. They provide the execution scope — all stories in linked PRDs execute together under one coordinator, and a synthetic release checkpoint story is auto-created to gate the final release.
+Releases group one or more PRDs into a shippable unit. They provide the execution scope — all stories in linked PRDs execute together under one coordinator. When all stories are merged, the release executes directly as its own job to run the checkpoint pipeline (audit, release notes, tagging).
 
 ## Creating a Release
 
@@ -43,17 +43,6 @@ Releases can depend on other releases. This creates a DAG (directed acyclic grap
 - You can also add or remove dependencies manually via the **Dependency Editor**
 - Circular dependencies are detected and blocked
 
-## Synthetic Checkpoint Stories
-
-When you link PRDs to a release, Trinity automatically creates a **release checkpoint story**:
-
-- It appears as the last story in a new "Release" phase
-- It depends on all non-checkpoint stories across the linked PRDs
-- When all stories are merged, this checkpoint runs the full audit pipeline, generates release notes, and tags repos on approval
-- If you unlink all PRDs or delete the release, the synthetic story is removed
-
-You don't need to create checkpoint stories manually — the release handles it.
-
 ## Running a Release
 
 Execution is release-scoped. To start:
@@ -78,6 +67,15 @@ Click any release card to open its detail panel:
 
 When stories in linked PRDs have active execution jobs, editing is locked to prevent conflicts.
 
+### Automation Tab
+
+Releases also have an **Automation** tab for per-release overrides. In addition to the standard automation settings (auto-PR, auto-merge, squash merge, etc.), releases support:
+
+- **Auto-release to base** — automatically merge to the base branch after release
+- **Delete release branch** — clean up the release branch after completion
+
+These overrides follow the same cascade as stories: Global → Team → Project → Entity → Job.
+
 ## Releases Page Layout
 
 The Releases page organizes releases into columns by status:
@@ -93,6 +91,6 @@ You can delete a release if:
 
 - It is **not** in `released` status (released releases are historical records)
 - No other active releases depend on it
-- No stories in linked PRDs have active execution jobs
+- It has no active execution jobs
 
 Deletion is a soft delete — the record is preserved for audit purposes but hidden from the UI.

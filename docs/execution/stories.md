@@ -43,7 +43,7 @@ A checklist of conditions that must be met for the story to be considered comple
 - **Story ID** — unique identifier (e.g., 1.2.3 for PRD 1, Phase 2, Story 3)
 - **Difficulty** — 1 (trivial) to 5 (very complex)
 - **Surface area** — small, medium, or large (how much code is affected)
-- **Story type** — `standard`, `release_checkpoint`, or `quality_checkpoint`
+- **Story type** — `standard` or `quality_checkpoint`
 - **Dependencies** — other stories that must complete first
 - **Tags** — custom labels (including `repo:name` tags for multi-repo projects)
 
@@ -125,6 +125,23 @@ You can edit stories that haven't started execution:
 - Changes save automatically
 
 Protected stories (running, completed, merged) can't be edited to prevent disrupting in-progress or finished work.
+
+## Automation Overrides
+
+Each story has an **Automation** tab where you can override automation and model settings for that specific story. These overrides sit between project-level and job-level settings in the cascade:
+
+**Global → Team → Project → Entity → Job**
+
+Available overrides:
+
+- **Auto-create PR** — automatically create a pull request after implementation
+- **Auto-merge** — merge the PR without manual approval
+- **Squash merge** — squash commits when merging
+- **Delete branch after merge** — clean up the feature branch
+- **Auto-approve quality checkpoints** — skip the human approval gate for quality checkpoints
+- **Model overrides** — use different AI models for this story (reasoning, standard, fast, micro tiers)
+
+Leave any toggle unset to inherit from the project (or team/global) default. Overrides only apply to the specific story — they don't affect other stories in the same PRD.
 
 ## Multi-Repo Stories
 
