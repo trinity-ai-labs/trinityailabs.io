@@ -135,7 +135,8 @@ export default function LeaderboardPage() {
   const [promise, setPromise] = useState<Promise<LeaderEntry[]> | null>(null);
 
   useEffect(() => {
-    setPromise(fetchLeaderboard());
+    const p = fetchLeaderboard();
+    Promise.resolve().then(() => setPromise(p));
   }, []);
 
   return (

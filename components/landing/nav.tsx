@@ -122,7 +122,7 @@ export function Nav() {
                 asChild
                 className="font-mono bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white"
               >
-                <a href="/#downloads">Download</a>
+                <Link href="/#downloads">Download</Link>
               </Button>
             </>
           )}
@@ -190,7 +190,7 @@ export function Nav() {
                 asChild
                 className="w-full font-mono bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white"
               >
-                <a href="/#downloads">Download</a>
+                <Link href="/#downloads">Download</Link>
               </Button>
             </>
           )}
