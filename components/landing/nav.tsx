@@ -9,8 +9,8 @@ import { authClient } from "@/lib/auth-client";
 import { Menu, X, User, LogOut, LayoutDashboard } from "lucide-react";
 
 const navLinks = [
-  { label: "Features", href: "#features" },
-  { label: "Pricing", href: "#pricing" },
+  { label: "Features", href: "/#features" },
+  { label: "Pricing", href: "/#pricing" },
   { label: "Docs", href: "/docs" },
   { label: "Blog", href: "/blog" },
   { label: "Contact", href: "/contact" },
@@ -122,7 +122,7 @@ export function Nav() {
                 asChild
                 className="font-mono bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white"
               >
-                <a href="#downloads">Download</a>
+                <a href="/#downloads">Download</a>
               </Button>
             </>
           )}
@@ -190,7 +190,7 @@ export function Nav() {
                 asChild
                 className="w-full font-mono bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white"
               >
-                <a href="#downloads">Download</a>
+                <a href="/#downloads">Download</a>
               </Button>
             </>
           )}
